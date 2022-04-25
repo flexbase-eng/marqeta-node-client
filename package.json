@@ -21,6 +21,13 @@
     "John Bearden <john.bearden@flexbase.app>"
   ],
   "dependencies": {
+    "@types/formdata": "^0.10.1",
+    "@types/node": ">=10.0.0",
+    "camelcase-keys": "^6.2.2",
+    "form-data": "^3.0.1",
+    "node-fetch": "^2.6.1",
+    "snakecase-keys": "^5.0.0",
+    "uuid": "^8.3.2"
   },
   "engines": {
     "node": ">=10.*"
@@ -44,15 +51,6 @@
     "prettier": "^2.3.0",
     "ts-node": "^9.1.1",
     "typescript": "^4.2.4"
-  },
-  "dependencies": {
-    "@types/formdata": "^0.10.1",
-    "@types/node": ">=10.0.0",
-    "camelcase-keys": "^6.2.2",
-    "form-data": "^3.0.1",
-    "node-fetch": "^2.6.1",
-    "snakecase-keys": "^5.0.0",
-    "uuid": "^8.3.2"
   },
   "scripts": {
     "ts": "ts-node -r dotenv/config",
