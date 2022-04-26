@@ -1,3 +1,10 @@
+import fetch from 'node-fetch'
+import path from 'path'
+import FormData = require('formdata')
+import camelCaseKeys from 'camelcase-keys'
+
+const ClientVersion = require('../package.json').version
+const PROTOCOL = 'https'
 const MARQETA_HOST = 'sandbox-api.marqeta.com/v3'
 
 /*
@@ -54,6 +61,57 @@ export class Marqeta {
     this.accessToken = Buffer
       .from(`${this.apiAppToken}:${this.apiAccessToken}`)
       .toString('base64')
+  }
+
+  /*
+   * Function to fire off a GET, PUT, POST, (method) to the uri, preceeded
+   * by the host, with the optional query params, and optional body, and
+   * puts the 'apiKey' into the headers for the call, and fires off the call
+   * to the Peach host and returns the response.
+   */
+  async fire(
+    method: string,
+    uri: string,
+    query?: { [index: string] : number | string | string[] | boolean },
+    body?: object | object[] | FormData,
+  ): Promise<{ response: any, payload?: any }> {
+    // build up the complete url from the provided 'uri' and the 'host'
+    let url = new URL(PROTOCOL+'://'+path.join(this.host, uri))
+    if (query) {
+      Object.keys(query).forEach(k => {
+        if (something(query[k])) {
+          url.searchParams.append(k, query[k].toString())
+        }
+      })
+    }
+    const isForm = isFormData(body)
+    // make the appropriate headers
+    let headers = {
+      'X_API_KEY': this.apiKey,
+      Accept: 'application/json',
+      'X-Peach-Client-Ver': ClientVersion,
+    } as any
+    if (!isForm) {
+      headers = { ...headers, 'Content-Type': 'application/json' }
+    }
+    // allow a few retries on the authentication token expiration
+    let response
+    for (let cnt = 0; cnt < 3; cnt++) {
+      // now we can make the call... see if it's a JSON body or a FormData one...
+      try {
+        response = await fetch(url, {
+          method: method,
+          body: isForm ? (body as any) : (body ? JSON.stringify(body) : undefined),
+          headers,
+        })
+        const payload = declutter(camelCaseKeys((await response?.json()), { deep: true }))
+        return { response, payload }
+      } catch (err) {
+        return { response }
+      }
+    }
+    // this will mean we retried, and still failed
+    return { response }
   }
 }
 
@@ -113,10 +171,10 @@ export function mkError(message: string): MarqetaError {
 /*
  * Marqeta has several standard fields in their responses - status, and the
  * paging URLs, and if they are unnecessary, like `null` URLs, it makes
- * sense to clear them out and "deClutter" the response data for the caller.
+ * sense to clear them out and "declutter" the response data for the caller.
  * that's what this function is doing.
  */
-export function deClutter(arg: any): any {
+export function declutter(arg: any): any {
   // see if we have anything to do at all...
   if (isEmpty(arg) || typeof arg !== 'object') {
     return arg
