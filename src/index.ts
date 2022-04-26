@@ -3,9 +3,11 @@ import path from 'path'
 import FormData = require('formdata')
 import camelCaseKeys from 'camelcase-keys'
 
-const ClientVersion = require('../package.json').version
+import { BusinessApi } from './business'
+
 const PROTOCOL = 'https'
 const MARQETA_HOST = 'sandbox-api.marqeta.com/v3'
+
 
 /*
  * These are the acceptable options to the creation of the Client:
@@ -53,7 +55,7 @@ export class Marqeta {
   apiAppToken: string
   apiAccessToken: string
   private accessToken: string
-
+  business: BusinessApi
   constructor (options?: MarqetaOptions) {
     this.host = options?.host || MARQETA_HOST
     this.apiAppToken = options?.apiAppToken!
@@ -61,6 +63,7 @@ export class Marqeta {
     this.accessToken = Buffer
       .from(`${this.apiAppToken}:${this.apiAccessToken}`)
       .toString('base64')
+    this.business = new BusinessApi(this, options)
   }
 
   /*
@@ -87,9 +90,8 @@ export class Marqeta {
     const isForm = isFormData(body)
     // make the appropriate headers
     let headers = {
-      'X_API_KEY': this.apiKey,
       Accept: 'application/json',
-      'X-Peach-Client-Ver': ClientVersion,
+      Authorization : `Basic ${this.accessToken}`
     } as any
     if (!isForm) {
       headers = { ...headers, 'Content-Type': 'application/json' }
