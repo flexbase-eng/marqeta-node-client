@@ -26,6 +26,17 @@ export interface Personal {
   home?: Address;
 }
 
+export interface BeneficialOwner {
+  title?: string;
+  dob?: string;
+  ssn?: string;
+  phone?: string;
+  firstName?: string;
+  middleName?: string;
+  lastName?: string;
+  home?: Address
+}
+
 export interface Business {
   token?: string,
   active?: string,
@@ -39,6 +50,10 @@ export interface Business {
   incorporation?: IncorporationType;
   proprietorOrOfficer?: Personal;
   identifications?: BusinessIdentifications[];
+  beneficialOwner1?: BeneficialOwner;
+  beneficialOwner2?: BeneficialOwner;
+  beneficialOwner3?: BeneficialOwner;
+  beneficialOwner4?: BeneficialOwner;
   attestorName?: string;
   attestationConsent?: string;
   attestationDate?: string;
@@ -83,6 +98,56 @@ export class BusinessApi {
     const resp = await this.client.fire(
       'GET',
       'businesses',
+      { ...searchOptions }
+    )
+    // catch 404s...
+    if (resp?.payload?.errorCode >='404000' && resp?.payload?.errorCode <= 404999) {
+      const error = resp?.payload?.errorMessage
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error,
+          status: resp?.payload?.errorCode,
+          marqetaStatus: resp?.payload?.errorCode
+        },
+      }
+    }
+    // catch all other errors...
+    if (resp?.payload?.errorCode > 404999){
+      const error = resp?.payload?.errorMessage
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error,
+          status: resp?.payload?.errorCode,
+          marqetaStatus: resp?.payload?.errorCode
+        },
+      }
+    }
+    const success = !resp?.payload?.errorCode
+    return { success, body: { ...resp.payload } }
+  }
+
+  /*
+   * Function to take the attributes of a new Business account, create that
+   * in Marqeta, and return the account information. If no attributes are
+   * provided, a new Business account will still be created and its
+   * token ID returned.
+   */
+  async create(create: {
+     business: Business
+  }): Promise<{
+    success: boolean,
+    body?: Business,
+    error?: MarqetaError,
+  }> {
+    const searchOptions = snakecaseKeys(create?.business)
+    const resp = await this.client.fire(
+      'POST',
+      'businesses',
+      {},
       { ...searchOptions }
     )
     // catch 404s...
