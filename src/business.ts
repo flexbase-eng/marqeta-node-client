@@ -26,14 +26,10 @@ export interface Personal {
   home?: Address;
 }
 
-export interface Meta {
-  [index: string] : any
-}
-
 export interface Business {
   token?: string,
   active?: string,
-  metadata?: Meta,
+  metadata?: any,
   accountHolderGroupToken?: string,
   createdTime?: string,
   lastModifiedTime?: string,
