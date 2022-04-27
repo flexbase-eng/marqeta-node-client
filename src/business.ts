@@ -1,4 +1,5 @@
 import type { Marqeta, MarqetaOptions, MarqetaError } from './'
+import snakecaseKeys from 'snakecase-keys'
 
 export interface BusinessIdentifications {
   type: string;
@@ -12,7 +13,7 @@ export interface IncorporationType {
 
 export interface Address {
   address1: string;
-  address2: string;
+  address2?: string;
   city: string;
   state: string;
   postalCode: string;
@@ -20,31 +21,32 @@ export interface Address {
 }
 
 export interface Personal {
-  firstName: string;
-  lastName: string;
-  home: Address;
+  firstName?: string;
+  lastName?: string;
+  home?: Address;
 }
 
 export interface Meta {
-  name: string;
+  [index: string] : any
 }
 
 export interface Business {
   token?: string,
-  createdTime: string,
-  metadata: Meta,
-  accountHolderGroupToken: string,
-  lastModifiedTime: string,
-  status: string,
-  attestorName: string;
-  attestationConsent: string;
-  attestationDate: string;
-  businessNameLegal: string;
-  businessNameDba: string;
-  identifications: BusinessIdentifications[];
-  incorporation: IncorporationType;
-  dateEstablished: string;
-  proprietorOrOfficer: Personal;
+  active?: string,
+  metadata?: Meta,
+  accountHolderGroupToken?: string,
+  createdTime?: string,
+  lastModifiedTime?: string,
+  status?: string,
+  businessNameLegal?: string;
+  businessNameDba?: string;
+  incorporation?: IncorporationType;
+  proprietorOrOfficer?: Personal;
+  identifications?: BusinessIdentifications[];
+  attestorName?: string;
+  attestationConsent?: string;
+  attestationDate?: string;
+  dateEstablished?: string;
 }
 
 export interface BusinessList {
@@ -52,8 +54,9 @@ export interface BusinessList {
   startIndex: bigint;
   endIndex: bigint;
   isMore: boolean;
-  data: Business[];
+  data?: Business[];
 }
+
 export class BusinessApi {
   client: Marqeta;
 
@@ -77,45 +80,42 @@ export class BusinessApi {
     sortBy?: string,
   } = {}): Promise<{
     success: boolean,
-    businesses?: BusinessList,
+    body?: BusinessList,
     error?: MarqetaError,
   }> {
+    const searchOptions = snakecaseKeys(search)
     const resp = await this.client.fire(
       'GET',
       'businesses',
-      { ...search }
+      { ...searchOptions }
     )
-    // see if there are none to show - that's a 404, but not an error
-    if (resp?.response?.status == 404) {
-      return {
-        success: true,
-        businesses: {
-          count: BigInt(0),
-          data: [],
-          endIndex: BigInt(0),
-          startIndex: BigInt(0),
-          isMore: false
-        }
-      }
-    }
-    // ...now catch the other errors...
-    if (resp?.response?.status >= 400) {
-      // build error message from all possible sources...
-      let error = resp?.payload?.error || resp?.payload?.message
-      if (resp.payload?.detail) {
-        error = `${resp.payload.title}: ${resp.payload.detail}`
-      }
+    // catch 404s...
+    if (resp?.payload?.errorCode >='404000' && resp?.payload?.errorCode <= 404999) {
+      const error = resp?.payload?.errorMessage
       return {
         success: false,
         error: {
           type: 'marqeta',
           error,
-          status: resp?.response?.status,
-          marqetaStatus: resp?.payload?.status,
+          status: resp?.payload?.errorCode,
+          marqetaStatus: resp?.payload?.errorCode
         },
       }
     }
-    const success = (resp?.payload?.status || resp?.response?.status) < 400
-    return { success, businesses: resp.payload }
+    // catch all other errors...
+    if (resp?.payload?.errorCode > 404999){
+      const error = resp?.payload?.errorMessage
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error,
+          status: resp?.payload?.errorCode,
+          marqetaStatus: resp?.payload?.errorCode
+        },
+      }
+    }
+    const success = !resp?.payload?.errorCode
+    return { success, body: { ...resp.payload } }
   }
 }

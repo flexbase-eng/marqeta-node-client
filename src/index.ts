@@ -2,12 +2,14 @@ import fetch from 'node-fetch'
 import path from 'path'
 import FormData = require('formdata')
 import camelCaseKeys from 'camelcase-keys'
+import { URL } from 'url'
+
+const ClientVersion = require('../package.json').version
 
 import { BusinessApi } from './business'
 
 const PROTOCOL = 'https'
 const MARQETA_HOST = 'sandbox-api.marqeta.com/v3'
-
 
 /*
  * These are the acceptable options to the creation of the Client:
@@ -56,6 +58,7 @@ export class Marqeta {
   apiAccessToken: string
   private accessToken: string
   business: BusinessApi
+
   constructor (options?: MarqetaOptions) {
     this.host = options?.host || MARQETA_HOST
     this.apiAppToken = options?.apiAppToken!
@@ -67,10 +70,10 @@ export class Marqeta {
   }
 
   /*
-   * Function to fire off a GET, PUT, POST, (method) to the uri, preceeded
+   * Function to fire off a GET, PUT, POST, (method) to the uri, preceded
    * by the host, with the optional query params, and optional body, and
    * puts the 'apiKey' into the headers for the call, and fires off the call
-   * to the Peach host and returns the response.
+   * to the Marqeta host and returns the response.
    */
   async fire(
     method: string,
@@ -91,7 +94,8 @@ export class Marqeta {
     // make the appropriate headers
     let headers = {
       Accept: 'application/json',
-      Authorization : `Basic ${this.accessToken}`
+      Authorization : `Basic ${this.accessToken}`,
+      'X-Marqeta-Client-Ver': ClientVersion,
     } as any
     if (!isForm) {
       headers = { ...headers, 'Content-Type': 'application/json' }
