@@ -79,9 +79,9 @@ Marqeta service exercising different parts of the API. Each is
 self-contained, and can be run with:
 
 ```bash
-$ npm run ts tests/index.test.ts
+$ npm run ts tests/business.test.ts
 
 > marqeta-node-client@0.1.0 ts
-> ts-node -r dotenv/config "tests/index.test.ts"
+> ts-node -r dotenv/config "tests/business.test.ts"
 
 Success! Marqeta Client created.

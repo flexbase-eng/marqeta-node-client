@@ -1,0 +1,117 @@
+import type { Marqeta, MarqetaOptions, MarqetaError } from './'
+import snakecaseKeys from 'snakecase-keys'
+
+export interface BusinessIdentifications {
+  type: string;
+  value: string;
+}
+
+export interface IncorporationType {
+  incorporationType: string;
+  stateOfIncorporation: string;
+}
+
+export interface Address {
+  address1: string;
+  address2?: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  country: string;
+}
+
+export interface Personal {
+  firstName?: string;
+  lastName?: string;
+  home?: Address;
+}
+
+export interface Business {
+  token?: string,
+  active?: string,
+  metadata?: any,
+  accountHolderGroupToken?: string,
+  createdTime?: string,
+  lastModifiedTime?: string,
+  status?: string,
+  businessNameLegal?: string;
+  businessNameDba?: string;
+  incorporation?: IncorporationType;
+  proprietorOrOfficer?: Personal;
+  identifications?: BusinessIdentifications[];
+  attestorName?: string;
+  attestationConsent?: string;
+  attestationDate?: string;
+  dateEstablished?: string;
+}
+
+export interface BusinessList {
+  count: bigint;
+  startIndex: bigint;
+  endIndex: bigint;
+  isMore: boolean;
+  data?: Business[];
+}
+
+export class BusinessApi {
+  client: Marqeta;
+
+  constructor(client: Marqeta, _options?: MarqetaOptions) {
+    this.client = client
+  }
+
+  /*
+   * Function to take a series of list arguments, most of which are optional,
+   * as input, pass them to Marqeta, and have them return a *paged* list of
+   * Businesses that fit the list criteria. If no list arguments are given,
+   * this returns a list of *all* the Businesses in Marqeta.
+   */
+  async list(search: {
+    count?: number,
+    startIndex?: number,
+    businessNameDba?: string,
+    businessNameLegal?: string,
+    searchType?: string,
+    fields?: string[],
+    sortBy?: string,
+  } = {}): Promise<{
+    success: boolean,
+    body?: BusinessList,
+    error?: MarqetaError,
+  }> {
+    const searchOptions = snakecaseKeys(search)
+    const resp = await this.client.fire(
+      'GET',
+      'businesses',
+      { ...searchOptions }
+    )
+    // catch 404s...
+    if (resp?.payload?.errorCode >='404000' && resp?.payload?.errorCode <= 404999) {
+      const error = resp?.payload?.errorMessage
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error,
+          status: resp?.payload?.errorCode,
+          marqetaStatus: resp?.payload?.errorCode
+        },
+      }
+    }
+    // catch all other errors...
+    if (resp?.payload?.errorCode > 404999){
+      const error = resp?.payload?.errorMessage
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error,
+          status: resp?.payload?.errorCode,
+          marqetaStatus: resp?.payload?.errorCode
+        },
+      }
+    }
+    const success = !resp?.payload?.errorCode
+    return { success, body: { ...resp.payload } }
+  }
+}
