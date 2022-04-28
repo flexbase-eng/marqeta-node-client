@@ -39,7 +39,7 @@ import { Marqeta } from '../src';
   console.log('getting list of Businesses...')
   const list = await client.business.list()
 
-  if (list?.success && list?.body?.isMore) {
+  if (list?.body?.isMore) {
     console.log(`Success! ${list.body!.count} Businesses were retrieved.`)
     const lstItem1 = list?.body?.data?.pop()
 
@@ -47,9 +47,25 @@ import { Marqeta } from '../src';
       console.log(`getting Business account by id: ${lstItem1.token}`)
       const fouA = await client.business.byTokenId(lstItem1.token)
 
-      if (fouA.success) {
+      if (fouA?.body?.token) {
         console.log('Success! The Business account was found by id: ' +
-            JSON.stringify(fouA?.body?.token))
+            JSON.stringify(fouA.body.token))
+        console.log('updating Business...')
+        const orgNameA = fouA.body.businessNameLegal
+        let upA
+
+        if (fouA.body?.businessNameLegal) {
+          fouA.body.businessNameLegal += Math.floor(Math.random() * 100) + 1
+          upA = await client.business.update(fouA.body.token, fouA.body)
+        }
+
+        if (upA?.body?.token) {
+          console.log('Success! The Business account name was updated from "' +
+              orgNameA + '" to "' + upA.body?.businessNameLegal + '"')
+        } else {
+          console.log('Error! Unable to update the Business account')
+          console.log(fouA)
+        }
       } else {
         console.log('Error! The Business account was not found by id')
         console.log(lstItem1)
@@ -75,6 +91,22 @@ import { Marqeta } from '../src';
         console.log('Success! The Business account "' +
             newA.body?.businessNameLegal + '" was found with Business id: ' +
             newA?.body?.token)
+        console.log('updating Business...')
+        const orgNameB = fouB.body.businessNameLegal
+        let upB
+
+        if (fouB.body.businessNameLegal) {
+          fouB.body.businessNameLegal += Math.floor(Math.random() * 100) + 1
+          upB = await client.business.update(fouB.body.token, fouB.body)
+        }
+
+        if (upB?.body?.token) {
+          console.log('Success! The Business account name was updated from "' +
+              orgNameB + '" to "' + upB.body?.businessNameLegal + '"')
+        } else {
+          console.log('Error! Unable to update the Business account')
+          console.log(fouB)
+        }
       } else {
         console.log('Error! Unable to get Businesses by id.')
         console.log(newA)

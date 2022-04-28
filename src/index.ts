@@ -187,14 +187,38 @@ export function declutter(arg: any): any {
   }
   let ret = { ...arg }
   // Marqeta can send back several empty fields on all responses... clean it
-  if (isEmpty(ret.nextUrl)) {
+  if (isEmpty(ret.metadata)) {
     delete ret.nextUrl
-  }
-  if (isEmpty(ret.previousUrl)) {
-    delete ret.previousUrl
   }
   if (ret.status === 200) {
     delete ret.status
+  }
+  return ret
+}
+
+/**
+ * Marqeta will return fields in a response that are invalid when used
+ * elsewhere in their API, e.g.: created_date, updated_date. These
+ * must be removed if using the json response elsewhere in Marqeta's API.
+ */
+export function cleanJson(arg: any): any {
+  // see if we have anything to do at all...
+  if (isEmpty(arg) || typeof arg !== 'object') {
+    return arg
+  }
+  let ret = { ...arg }
+  // Marqeta can send back several fields that cannot be used anywhere else...
+  if (ret?.created_time) {
+    delete ret.created_time
+  }
+  if (ret?.status) {
+    delete ret.status
+  }
+  if (isEmpty(ret?.metadata)) {
+    delete ret.metadata
+  }
+  if (ret?.last_modified_time) {
+    delete ret.last_modified_time
   }
   return ret
 }
