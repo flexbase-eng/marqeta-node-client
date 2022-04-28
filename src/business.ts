@@ -119,7 +119,7 @@ export class BusinessApi {
    * provided, a new Business account will still be created and its
    * token ID returned.
    */
-  async create(business: Business): Promise<{
+  async create(business: Partial<Business>): Promise<{
     success: boolean,
     body?: Business,
     error?: MarqetaError,
