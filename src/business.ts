@@ -145,7 +145,7 @@ export class BusinessApi {
       }
     }
     // catch all other errors...
-    if (resp?.payload?.errorCode > 404999){
+    if (resp?.payload?.errorCode > 400000){
       const error = resp?.payload?.errorMessage
       return {
         success: false,
