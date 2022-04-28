@@ -4,6 +4,7 @@ import type {
   MarqetaError,
 } from './'
 import snakecaseKeys from 'snakecase-keys'
+import { removeEmpty } from './'
 
 export interface BusinessIdentifications {
   type: string;
@@ -186,10 +187,10 @@ export class BusinessApi {
     const {
       created_time,
       status,
-      metadata,
+      active,
       last_modified_time,
       ...updateOptions
-    } = snakecaseKeys(business)
+    } = snakecaseKeys(removeEmpty(business))
     /* eslint-enable no-unused-vars */
 
     const resp = await this.client.fire('PUT',

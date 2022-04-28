@@ -197,6 +197,27 @@ export function declutter(arg: any): any {
 }
 
 /*
+ * Function to recursively remove all the 'empty' values from the provided
+ * Object and return what's left. This will cover null and undefined values
+ * but not the complete boolean falsey set.
+ */
+export function removeEmpty(obj: any) {
+  const propNames = Object.getOwnPropertyNames(obj)
+  propNames.forEach(propName => {
+    if (isEmpty(obj[propName])) {
+      delete obj[propName]
+    } else {
+      if (Array.isArray(obj[propName])) {
+        removeEmpty(obj[propName])
+      } else if (typeof obj[propName] === 'object') {
+        removeEmpty(obj[propName])
+      }
+    }
+  })
+  return obj
+}
+
+/*
  * Function that returns an Array based on the argument. If the arg is an Array,
  * then returns the argument, if it's a different type, an Array is returned
  * within the value of the argument.
