@@ -119,14 +119,12 @@ export class BusinessApi {
    * provided, a new Business account will still be created and its
    * token ID returned.
    */
-  async create(create: {
-     business: Business
-  }): Promise<{
+  async create(business: Business): Promise<{
     success: boolean,
     body?: Business,
     error?: MarqetaError,
   }> {
-    const searchOptions = snakecaseKeys(create?.business)
+    const searchOptions = snakecaseKeys(business)
     const resp = await this.client.fire('POST',
       'businesses',
       {},
