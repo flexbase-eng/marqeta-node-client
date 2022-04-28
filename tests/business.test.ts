@@ -1,6 +1,6 @@
 'use strict'
 
-import { Marqeta } from '../src/index';
+import { Marqeta } from '../src';
 (async () => {
 
   const client = new Marqeta({
@@ -40,11 +40,11 @@ import { Marqeta } from '../src/index';
   const list = await client.business.list()
 
   if (list?.success && list?.body?.isMore) {
-    console.log('Success! ' + list.body!.count + ' Businesses were retrieved.')
+    console.log(`Success! ${list.body!.count} Businesses were retrieved.`)
     const lstItem1 = list?.body?.data?.pop()
 
     if (lstItem1?.token) {
-      console.log('getting Business account by id: ' + lstItem1.token)
+      console.log(`getting Business account by id: ${lstItem1.token}`)
       const fouA = await client.business.byTokenId(lstItem1.token)
 
       if (fouA.success) {
@@ -60,12 +60,9 @@ import { Marqeta } from '../src/index';
       console.log(lstItem1)
     }
   } else if (list?.success && !list?.body?.isMore) {
-    console.log('Error! Error! Unable to get a list of Businesses. ' +
-        'Creating Business account "' + mockBusiness.businessNameLegal +
-        '" now...')
-    const newA = await client.business.create(
-      { ...mockBusiness }
-    )
+    console.log('Error! Unable to get a list of Businesses. ' +
+        'Creating Business account: "' + mockBusiness.businessNameLegal)
+    const newA = await client.business.create(mockBusiness)
 
     if (newA?.success && newA?.body?.token) {
       console.log('Success! The Business account "' +

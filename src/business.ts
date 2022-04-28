@@ -153,7 +153,7 @@ export class BusinessApi {
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('GET',
-      'businesses' + `/${businessTokenId}`,
+      `businesses/${businessTokenId}`,
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {
