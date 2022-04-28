@@ -131,33 +131,17 @@ export class BusinessApi {
       'businesses',
       {},
       { ...searchOptions })
-    // catch 404s...
-    if (resp?.payload?.errorCode >='404000' && resp?.payload?.errorCode <= 404999) {
-      const error = resp?.payload?.errorMessage
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
       return {
         success: false,
         error: {
           type: 'marqeta',
-          error,
+          error: resp?.payload?.errorMessage,
           status: resp?.payload?.errorCode,
-          marqetaStatus: resp?.payload?.errorCode
         },
       }
     }
-    // catch all other errors...
-    if (resp?.payload?.errorCode > 400000){
-      const error = resp?.payload?.errorMessage
-      return {
-        success: false,
-        error: {
-          type: 'marqeta',
-          error,
-          status: resp?.payload?.errorCode,
-          marqetaStatus: resp?.payload?.errorCode
-        },
-      }
-    }
-    const success = !resp?.payload?.errorCode
-    return { success, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
   }
 }
