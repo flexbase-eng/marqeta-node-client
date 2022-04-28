@@ -95,39 +95,22 @@ export class BusinessApi {
     error?: MarqetaError,
   }> {
     const searchOptions = snakecaseKeys(search)
-    const resp = await this.client.fire(
-      'GET',
+    const resp = await this.client.fire('GET',
       'businesses',
       { ...searchOptions }
     )
-    // catch 404s...
-    if (resp?.payload?.errorCode >='404000' && resp?.payload?.errorCode <= 404999) {
-      const error = resp?.payload?.errorMessage
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
       return {
         success: false,
         error: {
           type: 'marqeta',
-          error,
+          error: resp?.payload?.errorMessage,
           status: resp?.payload?.errorCode,
-          marqetaStatus: resp?.payload?.errorCode
         },
       }
     }
-    // catch all other errors...
-    if (resp?.payload?.errorCode > 404999){
-      const error = resp?.payload?.errorMessage
-      return {
-        success: false,
-        error: {
-          type: 'marqeta',
-          error,
-          status: resp?.payload?.errorCode,
-          marqetaStatus: resp?.payload?.errorCode
-        },
-      }
-    }
-    const success = !resp?.payload?.errorCode
-    return { success, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
   }
 
   /*
@@ -144,12 +127,10 @@ export class BusinessApi {
     error?: MarqetaError,
   }> {
     const searchOptions = snakecaseKeys(create?.business)
-    const resp = await this.client.fire(
-      'POST',
+    const resp = await this.client.fire('POST',
       'businesses',
       {},
-      { ...searchOptions }
-    )
+      { ...searchOptions })
     // catch 404s...
     if (resp?.payload?.errorCode >='404000' && resp?.payload?.errorCode <= 404999) {
       const error = resp?.payload?.errorMessage
