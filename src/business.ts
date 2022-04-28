@@ -142,4 +142,30 @@ export class BusinessApi {
     }
     return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
   }
+
+  /*
+   * Function to take a Marqeta Business token Id and return the Business
+   * for that token Id.
+   */
+  async byTokenId(businessTokenId: string): Promise<{
+    success: boolean,
+    body?: Business,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('GET',
+      'businesses' + `/${businessTokenId}`,
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
 }
