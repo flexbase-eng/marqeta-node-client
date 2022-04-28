@@ -196,33 +196,6 @@ export function declutter(arg: any): any {
   return ret
 }
 
-/**
- * Marqeta will return fields in a response that are invalid when used
- * elsewhere in their API, e.g.: created_date, updated_date. These
- * must be removed if using the json response elsewhere in Marqeta's API.
- */
-export function cleanJson(arg: any): any {
-  // see if we have anything to do at all...
-  if (isEmpty(arg) || typeof arg !== 'object') {
-    return arg
-  }
-  let ret = { ...arg }
-  // Marqeta can send back several fields that cannot be used anywhere else...
-  if (ret?.created_time) {
-    delete ret.created_time
-  }
-  if (ret?.status) {
-    delete ret.status
-  }
-  if (isEmpty(ret?.metadata)) {
-    delete ret.metadata
-  }
-  if (ret?.last_modified_time) {
-    delete ret.last_modified_time
-  }
-  return ret
-}
-
 /*
  * Function that returns an Array based on the argument. If the arg is an Array,
  * then returns the argument, if it's a different type, an Array is returned

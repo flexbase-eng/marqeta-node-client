@@ -56,7 +56,7 @@ import { Marqeta } from '../src';
 
         if (fouA.body?.businessNameLegal) {
           fouA.body.businessNameLegal += Math.floor(Math.random() * 100) + 1
-          upA = await client.business.update(fouA.body.token, fouA.body)
+          upA = await client.business.update(fouA.body)
         }
 
         if (upA?.body?.token) {
@@ -97,7 +97,7 @@ import { Marqeta } from '../src';
 
         if (fouB.body.businessNameLegal) {
           fouB.body.businessNameLegal += Math.floor(Math.random() * 100) + 1
-          upB = await client.business.update(fouB.body.token, fouB.body)
+          upB = await client.business.update(fouB.body)
         }
 
         if (upB?.body?.token) {
