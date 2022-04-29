@@ -7,6 +7,7 @@ import { URL } from 'url'
 const ClientVersion = require('../package.json').version
 
 import { BusinessApi } from './business'
+import { UserApi } from './user'
 
 const PROTOCOL = 'https'
 const MARQETA_HOST = 'sandbox-api.marqeta.com/v3'
@@ -58,6 +59,7 @@ export class Marqeta {
   apiAccessToken: string
   private accessToken: string
   business: BusinessApi
+  user: UserApi
 
   constructor (options?: MarqetaOptions) {
     this.host = options?.host || MARQETA_HOST
@@ -67,6 +69,7 @@ export class Marqeta {
       .from(`${this.apiAppToken}:${this.apiAccessToken}`)
       .toString('base64')
     this.business = new BusinessApi(this, options)
+    this.user = new UserApi(this, options)
   }
 
   /*
