@@ -64,7 +64,6 @@ export class UserApi {
     body?: UserList,
     error?: MarqetaError,
   }> {
-    const searchOptions = snakecaseKeys(search)
     const resp = await this.client.fire('GET',
       'users',
       snakecaseKeys(search),
