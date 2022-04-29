@@ -175,23 +175,22 @@ export function mkError(message: string): MarqetaError {
 }
 
 /*
- * Function to recursively remove all the 'empty' values from the provided
- * Object and return what's left. This will cover null and undefined values
- * but not the complete boolean falsey set.
+ * Function to recursively remove all the 'undefined' and 'null' values from
+ * the provided Object and return what's left. This will not cover the
+ * complete boolean falsey set.
  */
-export function removeEmpty(obj: any) {
-  const propNames = Object.getOwnPropertyNames(obj)
-  propNames.forEach(propName => {
-    if (isEmpty(obj[propName])) {
-      delete obj[propName]
-    } else {
-      if (Array.isArray(obj[propName])) {
-        removeEmpty(obj[propName])
-      } else if (typeof obj[propName] === 'object') {
-        removeEmpty(obj[propName])
-      }
-    }
-  })
+export function removeEmpty(obj: any): any {
+  if (Array.isArray(obj)) {
+    return obj.map(itm => removeEmpty(itm)) }
+  else if (typeof obj === 'object') {
+    return Object.entries(obj)
+      .filter(([_k, v]) => !isEmpty(v))
+      .reduce(
+        (acc, [k, v]) => (
+          { ...acc, [k]: v === Object(v) ? removeEmpty(v) : v }
+        ), {}
+      )
+  }
   return obj
 }
 
