@@ -196,7 +196,7 @@ export class BusinessApi {
     const resp = await this.client.fire('PUT',
       `businesses/${business?.token}`,
       undefined,
-      updateOptions
+      updateOptions,
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {
