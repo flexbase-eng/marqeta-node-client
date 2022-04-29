@@ -1,5 +1,10 @@
-import type { Marqeta, MarqetaOptions, MarqetaError } from './'
+import type {
+  Marqeta,
+  MarqetaOptions,
+  MarqetaError,
+} from './'
 import snakecaseKeys from 'snakecase-keys'
+import { removeEmpty } from './'
 
 export interface BusinessIdentifications {
   type: string;
@@ -154,6 +159,44 @@ export class BusinessApi {
   }> {
     const resp = await this.client.fire('GET',
       `businesses/${businessTokenId}`,
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
+
+  /*
+   * Function to take some Business attributes and update the Business in
+   * Marqeta with these values. The return value will be the updated Business.
+   */
+  async update(business: Partial<Business>): Promise<{
+    success: boolean,
+    body?: Business,
+    error?: MarqetaError,
+  }> {
+    /* eslint-disable no-unused-vars */
+    const {
+      created_time,
+      status,
+      active,
+      last_modified_time,
+      ...updateOptions
+    } = snakecaseKeys(removeEmpty(business))
+    /* eslint-enable no-unused-vars */
+
+    const resp = await this.client.fire('PUT',
+      `businesses/${business?.token}`,
+      undefined,
+      updateOptions,
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {

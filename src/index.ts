@@ -110,7 +110,7 @@ export class Marqeta {
           body: isForm ? (body as any) : (body ? JSON.stringify(body) : undefined),
           headers,
         })
-        const payload = declutter(camelCaseKeys((await response?.json()), { deep: true }))
+        const payload = camelCaseKeys((await response?.json()), { deep: true })
         return { response, payload }
       } catch (err) {
         return { response }
@@ -175,28 +175,23 @@ export function mkError(message: string): MarqetaError {
 }
 
 /*
- * Marqeta has several standard fields in their responses - status, and the
- * paging URLs, and if they are unnecessary, like `null` URLs, it makes
- * sense to clear them out and "declutter" the response data for the caller.
- * that's what this function is doing.
+ * Function to recursively remove all the 'undefined' and 'null' values from
+ * the provided Object and return what's left. This will not cover the
+ * complete boolean falsey set.
  */
-export function declutter(arg: any): any {
-  // see if we have anything to do at all...
-  if (isEmpty(arg) || typeof arg !== 'object') {
-    return arg
+export function removeEmpty(obj: any): any {
+  if (Array.isArray(obj)) {
+    return obj.map(itm => removeEmpty(itm)) }
+  else if (typeof obj === 'object') {
+    return Object.entries(obj)
+      .filter(([_k, v]) => !isEmpty(v))
+      .reduce(
+        (acc, [k, v]) => (
+          { ...acc, [k]: v === Object(v) ? removeEmpty(v) : v }
+        ), {}
+      )
   }
-  let ret = { ...arg }
-  // Marqeta can send back several empty fields on all responses... clean it
-  if (isEmpty(ret.nextUrl)) {
-    delete ret.nextUrl
-  }
-  if (isEmpty(ret.previousUrl)) {
-    delete ret.previousUrl
-  }
-  if (ret.status === 200) {
-    delete ret.status
-  }
-  return ret
+  return obj
 }
 
 /*
