@@ -81,4 +81,33 @@ export class UserApi {
     }
     return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
   }
+
+  /*
+   * Function to take a token Id and return the Marqeta User account associated
+   * with that token Id.
+   */
+  async byTokenId(userTokenId: string): Promise<{
+    success: boolean,
+    body?: User,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('GET',
+      `users/${userTokenId}`,
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
 }
+
+
+
