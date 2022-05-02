@@ -9,19 +9,27 @@ import { Marqeta } from '../src';
     apiAccessToken: process.env.MARQETA_API_ACCESS_TOKEN
   })
 
-  console.log('getting list of Users...')
-  const list = await client.user.list()
-
-  if (list?.body?.isMore) {
-    console.log(`Success! ${list.body!.count} Users were retrieved.`)
-  } else {
-    console.log('Error! Unable to get a list of 1 User.')
-    console.log(list)
+  const mockUser = {
+    token: '',
+    firstName: 'Ipsumi4',
+    lastName: 'Lorem',
+    email: 'ipsum.lorem6@mailinator.com',
+    address1: '100 Main Street',
+    city: 'Canton',
+    state: 'GA',
+    postalCode: '30114-7531',
+    country: 'US',
+    birthDate: '1974-01-15',
+    phone: '555-867-5309'
   }
+
   console.log('getting list of 1 User...')
   const listA = await client.user.list({ count: 1 })
+  if (listA?.body?.isMore) {
+    listA.body.isMore = false
+  }
 
-  if (listA?.body?.count && Array.isArray(listA?.body?.data)) {
+  if (listA?.body?.isMore && Array.isArray(listA?.body?.data)) {
     console.log(`Success! ${listA.body!.count} Users were retrieved.`)
 
     if (listA.body.data[0].token) {
@@ -57,6 +65,18 @@ import { Marqeta } from '../src';
       console.log(listA)
     }
 
+  } else if (!listA?.body?.isMore) {
+    console.log('creating User...')
+    const newA = await client.user.create(mockUser)
+
+    if (newA?.success && newA?.body?.token) {
+      console.log('Success! The User account with name "' +
+        newA.body?.firstName + ' ' + newA.body?.lastName + '" was created ' +
+        'with token: ' + newA.body?.token)
+    } else {
+      console.log('Error! Unable to create the User account')
+      console.log(mockUser)
+    }
   } else {
     console.log('Error! Unable to get a list of 1 User using count parameter.')
     console.log(listA)

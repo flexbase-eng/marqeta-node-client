@@ -146,6 +146,36 @@ export class UserApi {
     }
     return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
   }
+
+  /*
+   * Function to take the attributes of a new User account, create that
+   * in Marqeta, and return the account information. If no attributes are
+   * provided, a new User account will still be created and its
+   * token Id returned.
+   */
+  async create(user: Partial<User>): Promise<{
+    success: boolean,
+    body?: User,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('POST',
+      'users',
+      undefined,
+      snakecaseKeys(user),
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
 }
 
 
