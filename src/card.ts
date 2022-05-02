@@ -16,28 +16,29 @@ export interface AddressType {
   lastName?: string;
   address1: string;
   address2?: string;
-  city: string;
-  state: string;
-  zip: string;
-  country: string;
-  phone: string;
-  postalCode: string;
+  city?: string;
+  state?: string;
+  zip?: string;
+  country?: string;
+  phone?: string;
+  postalCode?: string;
 }
 
 export interface Shipping {
   method?: string;
   returnAddress?: AddressType;
   recipientAddress?: AddressType;
-  carOfLine: string;
+  carOfLine?: string;
 }
 
-export interface NameType {
+export interface NameLineType {
   [value: string]: string;
 }
 
-export interface Text{
-  nameLine1: NameType;
-  nameLine2?: NameType
+export interface Text {
+  nameLine1: NameLineType;
+  nameLine2?: NameLineType
+  nameLine3?: NameLineType
 }
 
 export interface Card {
@@ -50,19 +51,15 @@ export interface ImagesCarrier {
   message1?: string;
 }
 
-export interface ImagesSignature {
-  name?: string
-}
-
-export interface CarrierReturnWindow {
+export interface NameType {
   name?: string
 }
 
 export interface Images {
   card?: Card;
   carrier?: ImagesCarrier;
-  signature?: ImagesSignature;
-  carrierReturnWindow?: CarrierReturnWindow;
+  signature?: NameType;
+  carrierReturnWindow?: NameType;
 }
 
 export interface Carrier {
@@ -73,14 +70,11 @@ export interface Carrier {
   messageLine?: string;
 }
 
-export interface PersonType{
-}
-
 export interface CardPersonalization {
   text: Text;
   images?: Images;
   carrier?: Carrier;
-  persoType?: PersonType;
+  persoType?: string;
 }
 
 export interface Fulfillment {
