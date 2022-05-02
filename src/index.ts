@@ -8,7 +8,7 @@ const ClientVersion = require('../package.json').version
 
 import { BusinessApi } from './business'
 import { UserApi } from './user'
-import { Card, CardApi } from './card'
+import { CardApi } from './card'
 
 const PROTOCOL = 'https'
 const MARQETA_HOST = 'sandbox-api.marqeta.com/v3'

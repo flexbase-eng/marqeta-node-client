@@ -28,38 +28,38 @@ export interface Shipping {
   method?: string;
   returnAddress?: AddressType;
   recipientAddress?: AddressType;
-  carOfLine?: string;
-}
-
-export interface NameLineType {
-  [value: string]: string;
+  careOfLine?: string;
 }
 
 export interface Text {
-  nameLine1: NameLineType;
-  nameLine2?: NameLineType
-  nameLine3?: NameLineType
-}
-
-export interface Card {
-  name?: string
-  thermalColor?: string;
+  nameLine1: {
+    value: string;
+  };
+  nameLine2?: {
+    value: string;
+  };
+  nameLine3?: {
+    value: string;
+  };
 }
 
 export interface ImagesCarrier {
-  name?: string
+  name?: string;
   message1?: string;
 }
 
-export interface NameType {
-  name?: string
-}
-
 export interface Images {
-  card?: Card;
+  card?: {
+    name?: string;
+    thermalColor?: string;
+  };
   carrier?: ImagesCarrier;
-  signature?: NameType;
-  carrierReturnWindow?: NameType;
+  signature?: {
+    name: string;
+  };
+  carrierReturnWindow?: {
+    name: string;
+  };
 }
 
 export interface Carrier {
@@ -87,7 +87,7 @@ export interface ActivationActions {
   swapDigitalWalletTokensFromCardToken?: string;
 }
 
-export interface CardType {
+export interface Card {
   cardProductToken: string;
   expedite?: boolean;
   metadata?: any;

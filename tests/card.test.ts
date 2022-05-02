@@ -8,5 +8,9 @@ import { Marqeta } from '../src';
     apiAppToken: process.env.MARQETA_API_APP_TOKEN,
     apiAccessToken: process.env.MARQETA_API_ACCESS_TOKEN
   })
-
+  if (client) {
+    console.log('Success! Client initialized')
+  } else {
+    console.log('Error! Could not create a Client instance')
+  }
 })()
