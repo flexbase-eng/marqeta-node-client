@@ -30,6 +30,23 @@ import { Marqeta } from '../src';
       if (foundUserA && foundUserA?.body?.token) {
         console.log('Success! Able to get Marqeta User by token id: ' +
           foundUserA.body.token)
+        console.log('updating User...')
+        const orgNameA = foundUserA.body.firstName
+        let upUserA
+
+        if (foundUserA.body.firstName) {
+          foundUserA.body.firstName += Math.floor(Math.random() * 100) + 1
+          upUserA = await client.user.update(foundUserA.body)
+        }
+
+        if (upUserA?.body?.token) {
+          console.log('Success! The User account name was updated from "' +
+            orgNameA + '" to "' + upUserA.body?.firstName + '"')
+        } else {
+          console.log('Error! Unable to update the User account')
+          console.log(foundUserA)
+        }
+
       } else {
         console.log('Error! Unable to get a Marqeta User by token id')
         console.log(listA.body)

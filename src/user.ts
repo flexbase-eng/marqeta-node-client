@@ -7,6 +7,7 @@ import type {
 } from './'
 
 import snakecaseKeys from 'snakecase-keys'
+import { removeEmpty } from './'
 
 export interface UserIdentification {
   type: string;
@@ -93,6 +94,44 @@ export class UserApi {
   }> {
     const resp = await this.client.fire('GET',
       `users/${userTokenId}`,
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
+
+  /*
+   * Function to take some User attributes and update the User in
+   * Marqeta with these values. The return value will be the updated User.
+   */
+  async update(user: Partial<User>): Promise<{
+    success: boolean,
+    body?: User,
+    error?: MarqetaError,
+  }> {
+    /* eslint-disable no-unused-vars */
+    const {
+      created_time,
+      status,
+      active,
+      last_modified_time,
+      ...updateOptions
+    } = snakecaseKeys(removeEmpty(user))
+    /* eslint-enable no-unused-vars */
+
+    const resp = await this.client.fire('PUT',
+      `users/${user?.token}`,
+      undefined,
+      updateOptions,
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {
