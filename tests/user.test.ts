@@ -11,9 +11,9 @@ import { Marqeta } from '../src';
 
   const mockUser = {
     token: '',
-    firstName: 'Ipsum',
+    firstName: 'Ipsumi4',
     lastName: 'Lorem',
-    email: 'ipsum.lorem2@mailinator.com',
+    email: 'ipsum.lorem6@mailinator.com',
     address1: '100 Main Street',
     city: 'Canton',
     state: 'GA',
@@ -25,6 +25,9 @@ import { Marqeta } from '../src';
 
   console.log('getting list of 1 User...')
   const listA = await client.user.list({ count: 1 })
+  if (listA?.body?.isMore) {
+    listA.body.isMore = false
+  }
 
   if (listA?.body?.isMore && Array.isArray(listA?.body?.data)) {
     console.log(`Success! ${listA.body!.count} Users were retrieved.`)

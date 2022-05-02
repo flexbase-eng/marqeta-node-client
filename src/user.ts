@@ -158,11 +158,11 @@ export class UserApi {
     body?: User,
     error?: MarqetaError,
   }> {
-    const searchOptions = snakecaseKeys(user)
     const resp = await this.client.fire('POST',
       'users',
-      {},
-      { ...searchOptions })
+      undefined,
+      snakecaseKeys(user),
+    )
     // catch any errors...
     if (resp?.payload?.errorCode) {
       return {
