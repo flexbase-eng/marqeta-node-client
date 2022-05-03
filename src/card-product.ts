@@ -5,24 +5,13 @@ import type {
   MarqetaOptions,
 } from './'
 
-export interface ExpirationOffset {
-  unit?: string;
-  value?: bigint;
-}
-
-export interface AddressType {
-  firstName?: string;
-  middleName?: string;
-  lastName?: string;
-  address1: string;
-  address2?: string;
-  city?: string;
-  state?: string;
-  zip?: string;
-  country?: string;
-  phone?: string;
-  postalCode?: string;
-}
+import {
+  AddressType,
+  Text,
+  Images,
+  ImagesCarrier,
+  ExpirationOffset,
+} from './card'
 
 export interface AddressVerification {
   avMessages?:{
@@ -42,45 +31,6 @@ export interface Shipping {
   returnAddress?: AddressType;
   recipientAddress?: AddressType;
   careOfLine?: string;
-}
-
-export interface Text {
-  nameLine1: {
-    value: string;
-  };
-  nameLine2?: {
-    value: string;
-  };
-  nameLine3?: {
-    value: string;
-  };
-}
-
-export interface ImagesCarrier {
-  name?: string;
-  message1?: string;
-}
-
-export interface Images {
-  card?: {
-    name?: string;
-    thermalColor?: string;
-  };
-  carrier?: ImagesCarrier;
-  signature?: {
-    name: string;
-  };
-  carrierReturnWindow?: {
-    name: string;
-  };
-}
-
-export interface Carrier {
-  templateId?: string;
-  logoFile?: string;
-  logoThumbnailFile?: string;
-  messageFile?: string;
-  messageLine?: string;
 }
 
 export interface POI {
@@ -107,7 +57,7 @@ export interface CustomerAuthentication {
 }
 
 export interface Controls {
-  acceptedCountriesToken?: string; //50 char max
+  acceptedCountriesToken?: string; // 50 char max
   alwaysRequirePin?: boolean;
   alwaysRequireIcc?: boolean;
   allowGpaAuth?: boolean;
@@ -133,10 +83,7 @@ export interface CardLifeCycle {
   expirationOffset?: {
     unit?: string;
     value?: bigint;
-    minOffset?: {
-      unit?: string;
-      value?: bigint;
-    };
+    minOffset?: ExpirationOffset;
   };
   cardServiceCode?: bigint;
   updateExpirationUponActivation?: boolean;
@@ -175,45 +122,45 @@ export interface Config {
     };
   };
   digitalWalletTokenization?: {
-    provisioning_controls?: {
-      manual_entry?: {
+    provisioningControls?: {
+      manualEntry?: {
         enabled?: boolean;
-        address_verification?: {
+        addressVerification?: {
           validate: boolean;
         };
       };
-      wallet_provider_card_on_file?: {
+      walletProviderCardOnFile?: {
         enabled?: boolean;
-        address_verification?: {
+        addressVerification?: {
           validate: boolean;
         };
       };
-      in_app_provisioning?: {
-        address_verification?: {
+      inAppProvisioning?: {
+        addressVerification?: {
           validate?: boolean;
         };
       };
     };
-    card_art_id?: string
+    cardArtId?: string
   };
   fulfillment?: {
     shipping?: Shipping;
-    card_personalization?: {
+    cardPersonalization?: {
       text?: Text;
       images?: Images;
-      carrier?: Carrier;
-      perso_type?: string;
+      carrier?: ImagesCarrier;
+      persoType?: string;
     };
-    payment_instrument?: string;
-    package_id?: string;
-    all_zero_card_security_code?: boolean;
-    bin_prefix?:string;
-    bulk_ship?:	boolean;
-    pan_length?:string;
-    fulfillment_provider?:string;
-    allow_card_creation?:	boolean;
-    uppercase_name_lines?:	boolean;
-    enable_offline_pin?: boolean;
+    paymentInstrument?: string;
+    packageId?: string;
+    allZeroCardSecurityCode?: boolean;
+    binPrefix?:string;
+    bulkShip?:	boolean;
+    panLength?:string;
+    fulfillmentProvider?:string;
+    allowCardCreation?:	boolean;
+    uppercaseNameLines?:	boolean;
+    enableOfflinePin?: boolean;
   };
 }
 
