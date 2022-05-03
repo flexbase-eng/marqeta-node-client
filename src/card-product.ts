@@ -175,6 +175,14 @@ export interface CardProduct {
   config?: Config
 }
 
+export interface CardProductList {
+  count: bigint;
+  startIndex: bigint;
+  endIndex: bigint;
+  isMore: boolean;
+  data?: CardProduct[];
+}
+
 export class CardProductApi {
   client: Marqeta;
 
@@ -194,7 +202,7 @@ export class CardProductApi {
     sortBy?: string,
   } = {}): Promise<{
     success: boolean,
-    body?: CardProduct,
+    body?: CardProductList,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('GET',
@@ -215,6 +223,30 @@ export class CardProductApi {
     return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
   }
 
+  /*
+   * Function to take a Marqeta Card Product token Id and return the
+   * Card Product for that token Id.
+   */
+  async byTokenId(tokenId: string):Promise<{
+    success?: boolean,
+    body?: CardProduct,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('GET',
+      `cardproducts/${tokenId}`,
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
+
 }
-
-
