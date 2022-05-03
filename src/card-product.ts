@@ -188,7 +188,7 @@ export class CardProductApi {
    * Products that fit the criteria. If no search arguments are given, this
    * returns *all* the Card Products in Marqeta.
    */
-  async get(search: {
+  async list(options: {
     count?: number,
     startIndex?: number,
     sortBy?: string,
@@ -197,10 +197,9 @@ export class CardProductApi {
     body?: CardProduct,
     error?: MarqetaError,
   }> {
-    const searchOptions = snakecaseKeys(search)
     const resp = await this.client.fire('GET',
       'cardproducts',
-      { ...searchOptions }
+      snakecaseKeys(options)
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {

@@ -13,7 +13,7 @@ import { Marqeta } from '../src';
     console.log('Success! Client initialized')
     console.log('getting Card Products...')
 
-    const products = await client.cardProduct.get()
+    const products = await client.cardProduct.list()
 
     if (products?.success) {
       console.log('Success! We were able to get the Card Products')
