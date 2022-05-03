@@ -9,6 +9,7 @@ const ClientVersion = require('../package.json').version
 import { BusinessApi } from './business'
 import { UserApi } from './user'
 import { CardApi } from './card'
+import { CardProductApi } from './card-product'
 
 const PROTOCOL = 'https'
 const MARQETA_HOST = 'sandbox-api.marqeta.com/v3'
@@ -62,6 +63,7 @@ export class Marqeta {
   business: BusinessApi
   user: UserApi
   card: CardApi
+  cardProduct: CardProductApi
 
   constructor (options?: MarqetaOptions) {
     this.host = options?.host || MARQETA_HOST
@@ -73,6 +75,7 @@ export class Marqeta {
     this.business = new BusinessApi(this, options)
     this.user = new UserApi(this, options)
     this.card = new CardApi(this, options)
+    this.cardProduct = new CardProductApi(this, options)
   }
 
   /*
