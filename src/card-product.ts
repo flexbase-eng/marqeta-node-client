@@ -12,6 +12,8 @@ import {
   ImagesCarrier,
   ExpirationOffset,
 } from './card'
+import { MarqetaError } from './'
+import snakecaseKeys from 'snakecase-keys'
 
 export interface AddressVerification {
   avMessages?:{
@@ -164,7 +166,7 @@ export interface Config {
   };
 }
 
-export interface Card {
+export interface CardProduct {
   token?: string;
   name: string;
   active?: boolean;
@@ -180,4 +182,39 @@ export class CardProductApi {
     this.client = client
   }
 
+  /*
+   * Function to take a series search arguments, most of which are optional,
+   * as input, pass them to Marqeta, and have them return any Marqeta Card
+   * Products that fit the criteria. If no search arguments are given, this
+   * returns *all* the Card Products in Marqeta.
+   */
+  async list(options: {
+    count?: number,
+    startIndex?: number,
+    sortBy?: string,
+  } = {}): Promise<{
+    success: boolean,
+    body?: CardProduct,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('GET',
+      'cardproducts',
+      snakecaseKeys(options)
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
+
 }
+
+
