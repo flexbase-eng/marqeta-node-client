@@ -26,12 +26,28 @@ import { Marqeta } from '../src';
         if (fouA?.body?.token) {
           console.log('Success! The Marqeta Card Product was found by id: ' +
             JSON.stringify(fouA.body.token))
+          let upA
+          const fouAName = fouA.body.name
+
+          if (fouA.body?.name) {
+            fouA.body.name += Math.floor(Math.random() * 100) + 1
+            upA = await client.cardProduct.update(fouA.body)
+          }
+
+          if (upA?.success) {
+            console.log('Success! The Card Product account name was updated from "' +
+              fouAName + '" to "' + upA.body?.name + '"')
+          } else {
+            console.log('Error! Unable to update the Card Product account')
+            console.log(upA)
+          }
         }
       }
 
     } else {
       console.log('Error! Could not get any Card Products')
     }
+
   } else {
     console.log('Error! Could not create a Client instance')
   }

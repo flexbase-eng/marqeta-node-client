@@ -12,7 +12,11 @@ import {
   ImagesCarrier,
   ExpirationOffset,
 } from './card'
-import { MarqetaError } from './'
+import {
+  cleanMetatData,
+  MarqetaError,
+  removeEmpty
+} from './'
 import snakecaseKeys from 'snakecase-keys'
 
 export interface AddressVerification {
@@ -234,6 +238,37 @@ export class CardProductApi {
   }> {
     const resp = await this.client.fire('GET',
       `cardproducts/${tokenId}`,
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
+
+  /*
+   * Function to take some Card Product attributes and update that Card Product
+   * in Marqeta with these values. The return value will be the updated
+   * Card Product.
+   */
+  async update(cardProduct: CardProduct): Promise<{
+    success?: boolean,
+    body?: CardProduct,
+    error?: MarqetaError,
+  }> {
+
+    const resp = await this.client.fire('PUT',
+
+      `cardproducts/${cardProduct?.token}`,
+      undefined,
+      snakecaseKeys(removeEmpty(cleanMetatData(cardProduct))),
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {

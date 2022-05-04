@@ -204,6 +204,16 @@ export function removeEmpty(obj: any): any {
 }
 
 /*
+ * Marqeta returns metadata fields for businesses, cards, card-products, etc.,
+ * and these fields are invalid when issuing an update, or PUT request, so they
+ * must be removed before any update requests are sent.
+ */
+export function cleanMetatData(obj: any): any {
+  const { createdTime, lastModifiedTime, password, ...ret } = obj // eslint-disable-line
+  return ret
+}
+
+/*
  * Function that returns an Array based on the argument. If the arg is an Array,
  * then returns the argument, if it's a different type, an Array is returned
  * within the value of the argument.
