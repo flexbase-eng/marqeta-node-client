@@ -6,9 +6,6 @@ import type {
   MarqetaError,
 } from './'
 
-import snakecaseKeys from 'snakecase-keys'
-import { removeEmpty } from './'
-
 export interface UserIdentification {
   type: string;
   value: string;
@@ -67,7 +64,7 @@ export class UserApi {
   }> {
     const resp = await this.client.fire('GET',
       'users',
-      snakecaseKeys(search),
+      search,
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {
@@ -118,20 +115,11 @@ export class UserApi {
     body?: User,
     error?: MarqetaError,
   }> {
-    /* eslint-disable no-unused-vars */
-    const {
-      created_time,
-      status,
-      active,
-      last_modified_time,
-      ...updateOptions
-    } = snakecaseKeys(removeEmpty(user))
-    /* eslint-enable no-unused-vars */
 
     const resp = await this.client.fire('PUT',
       `users/${user?.token}`,
       undefined,
-      updateOptions,
+      user,
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {
@@ -161,7 +149,7 @@ export class UserApi {
     const resp = await this.client.fire('POST',
       'users',
       undefined,
-      snakecaseKeys(user),
+      user,
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {
