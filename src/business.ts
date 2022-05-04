@@ -3,8 +3,6 @@ import type {
   MarqetaOptions,
   MarqetaError,
 } from './'
-import snakecaseKeys from 'snakecase-keys'
-import { removeEmpty } from './'
 
 export interface BusinessIdentifications {
   type: string;
@@ -99,10 +97,9 @@ export class BusinessApi {
     body?: BusinessList,
     error?: MarqetaError,
   }> {
-    const searchOptions = snakecaseKeys(search)
     const resp = await this.client.fire('GET',
       'businesses',
-      { ...searchOptions }
+      { ...search }
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {
@@ -129,11 +126,10 @@ export class BusinessApi {
     body?: Business,
     error?: MarqetaError,
   }> {
-    const searchOptions = snakecaseKeys(business)
     const resp = await this.client.fire('POST',
       'businesses',
       {},
-      { ...searchOptions })
+      { ...business })
     // catch any errors...
     if (resp?.payload?.errorCode) {
       return {
@@ -185,12 +181,12 @@ export class BusinessApi {
   }> {
     /* eslint-disable no-unused-vars */
     const {
-      created_time,
+      createdTime,
       status,
       active,
-      last_modified_time,
+      lastModifiedTime,
       ...updateOptions
-    } = snakecaseKeys(removeEmpty(business))
+    } = business
     /* eslint-enable no-unused-vars */
 
     const resp = await this.client.fire('PUT',
