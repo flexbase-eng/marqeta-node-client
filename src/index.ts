@@ -3,6 +3,7 @@ import path from 'path'
 import FormData = require('formdata')
 import camelCaseKeys from 'camelcase-keys'
 import { URL } from 'url'
+import snakecaseKeys from 'snakecase-keys'
 
 const ClientVersion = require('../package.json').version
 
@@ -116,7 +117,9 @@ export class Marqeta {
       try {
         response = await fetch(url, {
           method: method,
-          body: isForm ? (body as any) : (body ? JSON.stringify(body) : undefined),
+          body: isForm ?
+            (body as any) :
+            (body ? JSON.stringify(snakecaseKeys(removeEmpty(cleanMetaData(body)))) : undefined),
           headers,
         })
         const payload = camelCaseKeys((await response?.json()), { deep: true })
@@ -201,6 +204,16 @@ export function removeEmpty(obj: any): any {
       )
   }
   return obj
+}
+
+/*
+ * Marqeta returns metadata fields for businesses, cards, card-products, etc.,
+ * and these fields are invalid when issuing an update, or PUT request, so they
+ * must be removed before any update requests are sent.
+ */
+export function cleanMetaData(obj: any): any {
+  const { createdTime, lastModifiedTime, ...ret } = obj // eslint-disable-line
+  return ret
 }
 
 /*
