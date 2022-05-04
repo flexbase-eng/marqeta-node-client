@@ -40,7 +40,6 @@ import { Marqeta } from '../src';
   const list = await client.business.list()
 
   if (list.body?.isMore) {
-    console.log(`[IS MORE]: ${JSON.stringify(list.body.isMore)}`)
     console.log(`Success! ${list.body!.count} Businesses were retrieved.`)
     const lstItem1 = list?.body?.data?.pop()
 

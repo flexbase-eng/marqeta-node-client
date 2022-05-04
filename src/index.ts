@@ -217,7 +217,7 @@ export function cleanMetaData(obj: any): any {
     createdTime,
     lastModifiedTime,
     password,
-    ...ret } = obj // eslint-disable-line
+    ...ret } = obj
   /* eslint-enable */
   return ret
 }
