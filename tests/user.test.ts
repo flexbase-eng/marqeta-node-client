@@ -13,7 +13,7 @@ import { Marqeta } from '../src';
     token: '',
     firstName: 'Ipsumi4',
     lastName: 'Lorem',
-    email: 'ipsum.lorem6@mailinator.com',
+    email: 'ipsum.lorem8@mailinator.com',
     address1: '100 Main Street',
     city: 'Canton',
     state: 'GA',
@@ -25,9 +25,6 @@ import { Marqeta } from '../src';
 
   console.log('getting list of 1 User...')
   const listA = await client.user.list({ count: 1 })
-  if (listA?.body?.isMore) {
-    listA.body.isMore = false
-  }
 
   if (listA?.body?.isMore && Array.isArray(listA?.body?.data)) {
     console.log(`Success! ${listA.body!.count} Users were retrieved.`)
@@ -52,12 +49,12 @@ import { Marqeta } from '../src';
             orgNameA + '" to "' + upUserA.body?.firstName + '"')
         } else {
           console.log('Error! Unable to update the User account')
-          console.log(foundUserA)
+          console.log(upUserA)
         }
 
       } else {
         console.log('Error! Unable to get a Marqeta User by token id')
-        console.log(listA.body)
+        console.log(foundUserA.body)
       }
     } else {
       console.log('Error! Unable to test get user by token id, no user ' +
@@ -73,6 +70,35 @@ import { Marqeta } from '../src';
       console.log('Success! The User account with name "' +
         newA.body?.firstName + ' ' + newA.body?.lastName + '" was created ' +
         'with token: ' + newA.body?.token)
+
+      console.log('getting User by token id...')
+      const foundUserB = await client.user.byTokenId(newA.body.token)
+
+      if (foundUserB && foundUserB?.body?.token) {
+        console.log('Success! Able to get Marqeta User by token id: ' +
+          foundUserB.body.token)
+        console.log('updating User...')
+        const orgNameB = foundUserB.body.firstName
+        let upUserB
+
+        if (foundUserB.body.firstName) {
+          foundUserB.body.firstName += Math.floor(Math.random() * 100) + 1
+          upUserB = await client.user.update(foundUserB.body)
+        }
+
+        if (upUserB?.body?.token) {
+          console.log('Success! The User account name was updated from "' +
+            orgNameB + '" to "' + upUserB.body?.firstName + '"')
+        } else {
+          console.log('Error! Unable to update the User account')
+          console.log(upUserB)
+        }
+
+      } else {
+        console.log('Error! Unable to get a Marqeta User by token id')
+        console.log(foundUserB.body)
+      }
+
     } else {
       console.log('Error! Unable to create the User account')
       console.log(mockUser)
