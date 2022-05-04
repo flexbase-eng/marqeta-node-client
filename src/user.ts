@@ -115,7 +115,6 @@ export class UserApi {
     body?: User,
     error?: MarqetaError,
   }> {
-
     const resp = await this.client.fire('PUT',
       `users/${user?.token}`,
       undefined,
