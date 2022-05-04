@@ -39,7 +39,7 @@ import { Marqeta } from '../src';
   console.log('getting list of Businesses...')
   const list = await client.business.list()
 
-  if (list?.body?.isMore) {
+  if (list.body?.isMore) {
     console.log(`Success! ${list.body!.count} Businesses were retrieved.`)
     const lstItem1 = list?.body?.data?.pop()
 
@@ -64,11 +64,11 @@ import { Marqeta } from '../src';
               orgNameA + '" to "' + upA.body?.businessNameLegal + '"')
         } else {
           console.log('Error! Unable to update the Business account')
-          console.log(fouA)
+          console.log(upA)
         }
       } else {
         console.log('Error! The Business account was not found by id')
-        console.log(lstItem1)
+        console.log(fouA)
       }
 
     } else {
@@ -105,11 +105,11 @@ import { Marqeta } from '../src';
               orgNameB + '" to "' + upB.body?.businessNameLegal + '"')
         } else {
           console.log('Error! Unable to update the Business account')
-          console.log(fouB)
+          console.log(upB)
         }
       } else {
         console.log('Error! Unable to get Businesses by id.')
-        console.log(newA)
+        console.log(fouB)
       }
 
     } else {

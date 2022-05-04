@@ -212,7 +212,13 @@ export function removeEmpty(obj: any): any {
  * must be removed before any update requests are sent.
  */
 export function cleanMetaData(obj: any): any {
-  const { createdTime, lastModifiedTime, ...ret } = obj // eslint-disable-line
+  /* eslint-disable */
+  const {
+    createdTime,
+    lastModifiedTime,
+    password,
+    ...ret } = obj
+  /* eslint-enable */
   return ret
 }
 
