@@ -36,7 +36,7 @@ import { Marqeta } from '../src';
     ],
   }
 
-  console.log('getting list of Businesses...')
+  console.log('getting a list of Businesses...')
   const list = await client.business.list()
 
   if (list.body?.isMore) {
@@ -75,50 +75,49 @@ import { Marqeta } from '../src';
       console.log('Error! The Business account found is missing a token id.')
       console.log(lstItem1)
     }
-  } else if (list?.success && !list?.body?.isMore) {
-    console.log('Error! Unable to get a list of Businesses. ' +
-        'Creating Business account: "' + mockBusiness.businessNameLegal)
-    const newA = await client.business.create(mockBusiness)
-
-    if (newA?.success && newA?.body?.token) {
-      console.log('Success! The Business account "' +
-          newA.body?.businessNameLegal +
-          '" was created with token: ' + newA.body?.token)
-      console.log('getting Business account by id: ' + newA.body?.token)
-      const fouB = await client.business.byTokenId(newA.body?.token)
-
-      if (fouB.success && fouB?.body?.token) {
-        console.log('Success! The Business account "' +
-            newA.body?.businessNameLegal + '" was found with Business id: ' +
-            newA?.body?.token)
-        console.log('updating Business...')
-        const orgNameB = fouB.body.businessNameLegal
-        let upB
-
-        if (fouB.body.businessNameLegal) {
-          fouB.body.businessNameLegal += Math.floor(Math.random() * 100) + 1
-          upB = await client.business.update(fouB.body)
-        }
-
-        if (upB?.body?.token) {
-          console.log('Success! The Business account name was updated from "' +
-              orgNameB + '" to "' + upB.body?.businessNameLegal + '"')
-        } else {
-          console.log('Error! Unable to update the Business account')
-          console.log(upB)
-        }
-      } else {
-        console.log('Error! Unable to get Businesses by id.')
-        console.log(fouB)
-      }
-
-    } else {
-      console.log('Error! Unable to create a Businesses account.')
-      console.log(newA)
-    }
   } else {
     console.log('Error! Unable to get a list of Businesses.')
     console.log(list)
+  }
+
+  console.log('creating Business account')
+  const newA = await client.business.create(mockBusiness)
+
+  if (newA?.success && newA?.body?.token) {
+    console.log('Success! The Business account "' +
+      newA.body?.businessNameLegal +
+      '" was created with token: ' + newA.body?.token)
+    console.log('getting Business account by id: ' + newA.body?.token)
+    const fouB = await client.business.byTokenId(newA.body?.token)
+
+    if (fouB.success && fouB?.body?.token) {
+      console.log('Success! The Business account "' +
+        newA.body?.businessNameLegal + '" was found with Business id: ' +
+        newA?.body?.token)
+      console.log('updating Business...')
+      const orgNameB = fouB.body.businessNameLegal
+      let upB
+
+      if (fouB.body.businessNameLegal) {
+        fouB.body.businessNameLegal += Math.floor(Math.random() * 100) + 1
+        upB = await client.business.update(fouB.body)
+      }
+
+      if (upB?.body?.token) {
+        console.log('Success! The Business account name was updated from "' +
+          orgNameB + '" to "' + upB.body?.businessNameLegal + '"')
+      } else {
+        console.log('Error! Unable to update the Business account')
+        console.log(upB)
+      }
+    } else {
+      console.log('Error! Unable to get Businesses by id.')
+      console.log(fouB)
+    }
+
+  } else {
+    console.log('Error! Unable to create a Businesses account.')
+    console.log(newA)
   }
 
 })()
