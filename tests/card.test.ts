@@ -20,13 +20,17 @@ import { Marqeta } from '../src'
     console.log('getting a list of Marqeta Users...')
     const users = await client.user.list()
 
-    if (users?.body?.isMore && Array.isArray(users?.body?.data)) {
+    if (
+      users?.body?.isMore
+      && users?.body?.count > 0
+      && Array.isArray(users?.body?.data)
+    ) {
       console.log('getting the User Marqeta Card Products...')
       const products = await client.cardProduct.list()
+      const user = users?.body?.data.pop()
 
       if (products?.body?.isMore && Array.isArray(products?.body?.data)) {
         const product = products?.body?.data.pop()
-        const user = users?.body?.data.pop()
 
         if (user?.token && product?.token) {
           mockCard.userToken = user.token
@@ -40,7 +44,32 @@ import { Marqeta } from '../src'
           }
         }
       }
+
+      console.log('getting a list of Marqeta Cards by User token Id...')
+      if (user?.token) {
+        const userCards = await client.card.listByUser(
+          user?.token,
+          { count: 1 }
+        )
+        if (userCards?.success && userCards?.body?.count) {
+          console.log('Success! Found Marqeta Cards by User token and ' +
+            '{count:1} search option')
+        } else {
+          console.log('Error! Unable to find any Marqeta Cards by User token ' +
+            ' and {count:1} search option')
+          console.log(userCards)
+        }
+
+      } else {
+        console.log('Error! User token empty, cannot get a list of Cards')
+        console.log(user)
+      }
+
+    } else {
+      console.log('Error! Unable to get a list of Marqeta Users')
+      console.log(users)
     }
+
   } else {
     console.log('Error! Could not create a Client instance')
   }
