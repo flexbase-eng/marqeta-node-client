@@ -13,7 +13,7 @@ import { Marqeta } from '../src';
     token: '',
     firstName: 'Ipsumi4',
     lastName: 'Lorem',
-    email: 'ipsum.lorem8@mailinator.com',
+    email: 'ipsum.lorem9@mailinator.com',
     address1: '100 Main Street',
     city: 'Canton',
     state: 'GA',
@@ -23,7 +23,7 @@ import { Marqeta } from '../src';
     phone: '555-867-5309'
   }
 
-  console.log('getting list of 1 User...')
+  console.log('getting list of e User...')
   const listA = await client.user.list({ count: 1 })
 
   if (listA?.body?.isMore && Array.isArray(listA?.body?.data)) {
@@ -62,50 +62,62 @@ import { Marqeta } from '../src';
       console.log(listA)
     }
 
-  } else if (!listA?.body?.isMore) {
-    console.log('creating User...')
-    const newA = await client.user.create(mockUser)
-
-    if (newA?.success && newA?.body?.token) {
-      console.log('Success! The User account with name "' +
-        newA.body?.firstName + ' ' + newA.body?.lastName + '" was created ' +
-        'with token: ' + newA.body?.token)
-
-      console.log('getting User by token id...')
-      const foundUserB = await client.user.byTokenId(newA.body.token)
-
-      if (foundUserB && foundUserB?.body?.token) {
-        console.log('Success! Able to get Marqeta User by token id: ' +
-          foundUserB.body.token)
-        console.log('updating User...')
-        const orgNameB = foundUserB.body.firstName
-        let upUserB
-
-        if (foundUserB.body.firstName) {
-          foundUserB.body.firstName += Math.floor(Math.random() * 100) + 1
-          upUserB = await client.user.update(foundUserB.body)
-        }
-
-        if (upUserB?.body?.token) {
-          console.log('Success! The User account name was updated from "' +
-            orgNameB + '" to "' + upUserB.body?.firstName + '"')
-        } else {
-          console.log('Error! Unable to update the User account')
-          console.log(upUserB)
-        }
-
-      } else {
-        console.log('Error! Unable to get a Marqeta User by token id')
-        console.log(foundUserB.body)
-      }
-
-    } else {
-      console.log('Error! Unable to create the User account')
-      console.log(mockUser)
-    }
   } else {
     console.log('Error! Unable to get a list of 1 User using count parameter.')
     console.log(listA)
+  }
+
+  console.log('testing creating User...')
+  const newA = await client.user.create(mockUser)
+
+  if (newA?.success && newA?.body?.token) {
+    console.log('Success! The User account with name "' +
+        newA.body?.firstName + ' ' + newA.body?.lastName + '" was created ' +
+        'with token: ' + newA.body?.token)
+
+    console.log('getting User by token id...')
+    const foundUserB = await client.user.byTokenId(newA.body.token)
+
+    if (foundUserB && foundUserB?.body?.token) {
+      console.log('Success! Able to get Marqeta User by token id: ' +
+          foundUserB.body.token)
+      console.log('updating User...')
+      const orgNameB = foundUserB.body.firstName
+      let upUserB
+
+      if (foundUserB.body.firstName) {
+        foundUserB.body.firstName += Math.floor(Math.random() * 100) + 1
+        upUserB = await client.user.update(foundUserB.body)
+      }
+
+      if (upUserB?.body?.token) {
+        console.log('Success! The User account name was updated from "' +
+            orgNameB + '" to "' + upUserB.body?.firstName + '"')
+      } else {
+        console.log('Error! Unable to update the User account')
+        console.log(upUserB)
+      }
+
+    } else {
+      console.log('Error! Unable to get a Marqeta User by token id')
+      console.log(foundUserB.body)
+    }
+
+  } else {
+    console.log('Error! Unable to create the User account')
+    console.log(mockUser)
+  }
+
+  console.log('testing User search...')
+  const { email, ...searchFields } = mockUser // eslint-disable-line
+  const userExists = await client.user.search(searchFields)
+
+  if (userExists?.body?.count) {
+    console.log('Success! The User with email "' +
+      mockUser.email + '" was found using search.')
+  } else {
+    console.log('Error! search failed to find the User account')
+    console.log(mockUser)
   }
 
 })()

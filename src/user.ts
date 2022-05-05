@@ -163,6 +163,34 @@ export class UserApi {
     }
     return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
   }
+
+  /*
+   * Function to take some User attributes that will be sent to Marqeta to
+   * search for an existing user.
+   */
+  async search(user: Partial<User>): Promise<{
+    success: boolean,
+    body?: UserList,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('POST',
+      'users/lookup',
+      undefined,
+      user,
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
 }
 
 
