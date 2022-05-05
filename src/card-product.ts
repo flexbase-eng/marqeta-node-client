@@ -37,7 +37,7 @@ export interface Shipping {
 }
 
 export interface POI {
-  other: {
+  other?: {
     allow?: boolean
     cardPresenceRequired?: boolean;
     cardholderPresenceRequired?: boolean;
@@ -96,16 +96,16 @@ export interface Config {
   poi?: POI;
   transactionControls?: Controls;
   selectiveAuth?: {
-    saMode: bigint;
-    enableRegexSearchChain: boolean;
-    dmdLocationSensitivity: bigint;
+    saMode?: bigint;
+    enableRegexSearchChain?: boolean;
+    dmdLocationSensitivity?: bigint;
   };
   special?: {
     merchantOnBoarding?: boolean;
   };
   cardLifeCycle?: CardLifeCycle;
   clearingAndSettlement?: {
-    overdraftDestination: string;
+    overdraftDestination?: string;
   };
   jitFunding?: {
     paymentcardFundingSource?: {
@@ -129,13 +129,13 @@ export interface Config {
       manualEntry?: {
         enabled?: boolean;
         addressVerification?: {
-          validate: boolean;
+          validate?: boolean;
         };
       };
       walletProviderCardOnFile?: {
         enabled?: boolean;
         addressVerification?: {
-          validate: boolean;
+          validate?: boolean;
         };
       };
       inAppProvisioning?: {
@@ -169,18 +169,17 @@ export interface Config {
 
 export interface CardProduct {
   token?: string;
-  name: string;
+  name?: string;
   active?: boolean;
-  startDate: string;
-  endDate: string;
+  startDate?: string;
   config?: Config
 }
 
 export interface CardProductList {
-  count: bigint;
-  startIndex: bigint;
-  endIndex: bigint;
-  isMore: boolean;
+  count?: bigint;
+  startIndex?: bigint;
+  endIndex?: bigint;
+  isMore?: boolean;
   data?: CardProduct[];
 }
 
@@ -279,4 +278,29 @@ export class CardProductApi {
     return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
   }
 
+  /*
+   * Function to take the attributes of a new Card Product, create that
+   * in Marqeta, and return the Card Product information.
+   */
+  async create(cardProduct: Partial<CardProduct>): Promise<{
+    success?: boolean,
+    body?: CardProduct,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('POST',
+      'cardproducts',
+      undefined,
+      cardProduct)
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
 }
