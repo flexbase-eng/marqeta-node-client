@@ -159,7 +159,7 @@ export class CardApi {
     startIndex?: number,
     fields?: string[],
     sortBy?: string,
-  } | undefined = {}): Promise<{
+  } = {}): Promise<{
     success: boolean,
     body?: CardList,
     error?: MarqetaError,

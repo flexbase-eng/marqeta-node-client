@@ -47,10 +47,7 @@ import { Marqeta } from '../src'
 
       console.log('getting a list of Marqeta Cards by User token Id...')
       if (user?.token) {
-        const userCards = await client.card.listByUser(
-          user?.token,
-          { count: 1 }
-        )
+        const userCards = await client.card.listByUser(user?.token)
         if (userCards?.success && userCards?.body?.count) {
           console.log('Success! Found Marqeta Cards by User token and ' +
             '{count:1} search option')
