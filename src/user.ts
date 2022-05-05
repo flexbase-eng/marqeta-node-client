@@ -173,7 +173,6 @@ export class UserApi {
     body?: UserList,
     error?: MarqetaError,
   }> {
-    console.log(`[SEARCH:] ${JSON.stringify(user)}`)
     const resp = await this.client.fire('POST',
       'users/lookup',
       undefined,
