@@ -4,6 +4,8 @@ import type {
   Marqeta,
   MarqetaOptions,
 } from './'
+import { MarqetaError } from './'
+import { User } from './user'
 
 export interface ExpirationOffset {
   unit?: string;
@@ -102,6 +104,14 @@ export interface Card {
   bulkIssuanceToken?: string;
 }
 
+export interface CardList {
+  count: bigint;
+  startIndex: bigint;
+  endIndex: bigint;
+  isMore: boolean;
+  data?: Card[];
+}
+
 export class CardApi {
   client: Marqeta;
 
@@ -109,4 +119,31 @@ export class CardApi {
     this.client = client
   }
 
+  /*
+   * Function to take the attributes of a new Card, create that
+   * in Marqeta, and return the Card information.
+   */
+  async create(card: Partial<Card>): Promise<{
+    success: boolean,
+    body?: User,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('POST',
+      'cards',
+      undefined,
+      card,
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
 }
