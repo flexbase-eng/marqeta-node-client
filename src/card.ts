@@ -5,7 +5,6 @@ import type {
   MarqetaOptions,
 } from './'
 import { MarqetaError } from './'
-import { User } from './user'
 
 export interface ExpirationOffset {
   unit?: string;
@@ -91,17 +90,24 @@ export interface ActivationActions {
 
 export interface Card {
   cardProductToken: string;
-  expedite?: boolean;
   metadata?: any;
+  expiration?: string;
+  expirationTime?: string;
   expirationOffset?: ExpirationOffset;
   token?: string;
   userToken: string;
   fulfillment?: Fulfillment;
   reissuePanFromCardToken?: string;
-  newPanFromCardToken?:string;
+  newPanFromCardToken?: string;
   translatePinFromCardToken?: string;
   activationActions?: ActivationActions;
+  barcode?: string;
   bulkIssuanceToken?: string;
+  chipCvvNumber?: string;
+  contactlessExemptionCounter?: bigint;
+  contactlessExemptionTotalAmount?: number;
+  cvvNumber?: string;
+  expedite?: boolean;
 }
 
 export interface CardList {
@@ -125,7 +131,7 @@ export class CardApi {
    */
   async create(card: Partial<Card>): Promise<{
     success: boolean,
-    body?: User,
+    body?: Card,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('POST',
@@ -150,9 +156,9 @@ export class CardApi {
   /*
    * Function to take a User token, and a series of search arguments - most of
    * which are optional- as input, pass them to Marqeta, and have them return
-   * any Marqeta Cards for the User that fit the criteria. If no search
-   * arguments are given, this returns *all* the Card in Marqeta for the User
-   * associated with the token.
+   * any Marqeta Cards that fit the criteria for the given User token. If no
+   * search arguments are given, this returns *all* the Cards in Marqeta for
+   * the Card associated with the token.
    */
   async listByUser(token: string, options: {
     count?: number,
@@ -167,6 +173,32 @@ export class CardApi {
     const resp = await this.client.fire('GET',
       `cards/user/${token}`,
       options
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
+
+  /*
+   * Function to take a Card barcode, pass it to Marqeta, and have them return
+   * the Marqeta Card associated with that barcode.
+   */
+  async byBarcode(barcode: string): Promise<{
+    success: boolean,
+    body?: Card,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('GET',
+      `cards/barcode/${barcode}`,
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {
