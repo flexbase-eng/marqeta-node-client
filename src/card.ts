@@ -92,21 +92,21 @@ export interface Card {
   cardProductToken: string;
   metadata?: any;
   expiration?: string;
-  expirationTime?:string;
+  expirationTime?: string;
   expirationOffset?: ExpirationOffset;
   token?: string;
   userToken: string;
   fulfillment?: Fulfillment;
   reissuePanFromCardToken?: string;
-  newPanFromCardToken?:string;
+  newPanFromCardToken?: string;
   translatePinFromCardToken?: string;
   activationActions?: ActivationActions;
   barcode?: string;
   bulkIssuanceToken?: string;
-  chipCvvNumber?:string;
-  contactlessExemptionCounter?:bigint;
-  contactlessExemptionTotalAmount?:number;
-  cvvNumber?:string;
+  chipCvvNumber?: string;
+  contactlessExemptionCounter?: bigint;
+  contactlessExemptionTotalAmount?: number;
+  cvvNumber?: string;
   expedite?: boolean;
 }
 
