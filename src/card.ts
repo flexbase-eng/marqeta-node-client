@@ -5,7 +5,6 @@ import type {
   MarqetaOptions,
 } from './'
 import { MarqetaError } from './'
-import { User } from './user'
 
 export interface ExpirationOffset {
   unit?: string;
