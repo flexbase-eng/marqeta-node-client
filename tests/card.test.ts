@@ -62,7 +62,6 @@ import { Marqeta } from '../src'
       console.log('updating the new Marqeta Card...')
       let updatedCard
       if (newCard?.body?.barcode) {
-        const originalExp = newCard?.body?.expiration
 
         if (newCard && newCard?.body?.expiration && newCard?.body?.token) {
           newCard.body.expiration = newCard.body.expiration + 1
