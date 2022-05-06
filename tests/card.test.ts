@@ -74,8 +74,8 @@ import { Marqeta } from '../src'
 
           if (updatedCard?.body?.token) {
             console.log('Success! The new Card metadata was updated from "' +
-              JSON.stringify(originalMeta ) + '" to "' +
-              JSON.stringify( updatedCard.body?.metadata) + '"')
+              JSON.stringify(originalMeta) + '" to "' +
+              JSON.stringify(updatedCard.body?.metadata) + '"')
           } else {
             console.log('Error! Unable to update the new Marqeta Card')
             console.log(newCard)
@@ -105,7 +105,6 @@ import { Marqeta } from '../src'
         console.log('Error! User token empty, cannot get a list of Cards')
         console.log(user)
       }
-
 
     } else {
       console.log('Error! Unable to get a list of Marqeta Users')

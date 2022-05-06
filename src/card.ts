@@ -215,7 +215,8 @@ export class CardApi {
   }
 
   /*
-   * Function
+   * Function to take some Card attributes and update the Card in Marqeta
+   * with these values. The return value will be the updated Card.
    */
   async update(token: string, options: {
     metadata?: any,
@@ -246,5 +247,4 @@ export class CardApi {
     }
     return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
   }
-
 }
