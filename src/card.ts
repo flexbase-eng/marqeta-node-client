@@ -80,7 +80,7 @@ export interface CardPersonalization {
 
 export interface Fulfillment {
   shipping?: Shipping;
-  cardPersonalization: CardPersonalization;
+  cardPersonalization?: CardPersonalization;
 }
 
 export interface ActivationActions {
@@ -199,6 +199,40 @@ export class CardApi {
   }> {
     const resp = await this.client.fire('GET',
       `cards/barcode/${barcode}`,
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
+
+  /*
+   * Function to take some Card attributes and update the Card in Marqeta
+   * with these values. The return value will be the updated Card.
+   */
+  async update(token: string, options: {
+    metadata?: any,
+    expedite?: boolean,
+    fulfillment?: Fulfillment,
+    token?: string,
+    userToken?: string,
+  }): Promise<{
+    success: boolean,
+    body?: Card,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('PUT',
+      `cards/${token}`,
+      undefined,
+      options
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {

@@ -59,6 +59,36 @@ import { Marqeta } from '../src'
         console.log(users)
       }
 
+      console.log('updating the new Marqeta Card...')
+      let updatedCard
+      if (newCard?.body?.barcode) {
+
+        if (newCard && newCard?.body?.expiration && newCard?.body?.token) {
+          newCard.body.expiration = newCard.body.expiration + 1
+          const originalMeta = newCard.body?.metadata
+          updatedCard = await client.card.update(
+            newCard.body.token,
+            { metadata: { name_1: 'ipsum' } }
+          )
+
+          if (updatedCard?.body?.token) {
+            console.log('Success! The new Card metadata was updated from "' +
+              JSON.stringify(originalMeta) + '" to "' +
+              JSON.stringify(updatedCard.body?.metadata) + '"')
+          } else {
+            console.log('Error! Unable to update the new Marqeta Card')
+            console.log(newCard)
+          }
+        } else {
+          console.log('Error! Unable to update the new Marqeta Card as the ' +
+          ' expiration date is missing.')
+          console.log(updatedCard)
+        }
+      } else {
+        console.log('Error! Card barcode empty, cannot update Card')
+        console.log(updatedCard)
+      }
+
       console.log('getting a list of Marqeta Cards by User token Id...')
       if (user?.token) {
         const userCards = await client.card.listByUser(user?.token)
