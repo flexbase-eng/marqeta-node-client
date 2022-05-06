@@ -28,14 +28,14 @@ import { Marqeta } from '../src'
       console.log('getting the User Marqeta Card Products...')
       const products = await client.cardProduct.list()
       const user = users?.body?.data.pop()
-
+      let newCard
       if (products?.body?.isMore && Array.isArray(products?.body?.data)) {
         const product = products?.body?.data.pop()
 
         if (user?.token && product?.token) {
           mockCard.userToken = user.token
           mockCard.cardProductToken = product.token
-          const newCard = await client.card.create(mockCard)
+          newCard = await client.card.create(mockCard)
           if (newCard.success && newCard?.body?.token) {
             console.log('Success! New Card created.')
           } else {
@@ -43,6 +43,20 @@ import { Marqeta } from '../src'
             console.log(newCard)
           }
         }
+      }
+
+      console.log('retrieving new Card by barcode...')
+      if (newCard?.body?.barcode) {
+        const foundCard = await client.card.byBarcode(newCard?.body.barcode)
+        if (foundCard?.body?.token) {
+          console.log('Success! New Card retrieved by barcode.')
+        } else {
+          console.log('Error! Unable to retrieve the new Card by barcode.')
+        }
+      } else {
+        console.log('Error! Unable to retrieve the new Card by barcode. ' +
+          'The Card does not exist')
+        console.log(users)
       }
 
       console.log('getting a list of Marqeta Cards by User token Id...')
@@ -56,7 +70,6 @@ import { Marqeta } from '../src'
             ' and {count:1} search option')
           console.log(userCards)
         }
-
       } else {
         console.log('Error! User token empty, cannot get a list of Cards')
         console.log(user)
