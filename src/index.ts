@@ -3,6 +3,7 @@ import path from 'path'
 import FormData = require('formdata')
 import camelCaseKeys from 'camelcase-keys'
 import { URL } from 'url'
+
 import snakecaseKeys from 'snakecase-keys'
 
 const ClientVersion = require('../package.json').version
@@ -11,6 +12,7 @@ import { BusinessApi } from './business'
 import { UserApi } from './user'
 import { CardApi } from './card'
 import { CardProductApi } from './card-product'
+import { WebhooksApi } from './webhooks'
 
 const PROTOCOL = 'https'
 const MARQETA_HOST = 'sandbox-api.marqeta.com/v3'
@@ -65,6 +67,7 @@ export class Marqeta {
   user: UserApi
   card: CardApi
   cardProduct: CardProductApi
+  webHooks: WebhooksApi
 
   constructor (options?: MarqetaOptions) {
     this.host = options?.host || MARQETA_HOST
@@ -77,6 +80,7 @@ export class Marqeta {
     this.user = new UserApi(this, options)
     this.card = new CardApi(this, options)
     this.cardProduct = new CardProductApi(this, options)
+    this.webHooks = new WebhooksApi(this, options)
   }
 
   /*
