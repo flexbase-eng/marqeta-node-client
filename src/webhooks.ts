@@ -110,7 +110,7 @@ export class WebhooksApi {
    * Function to take the attributes of a new Webhook, create that
    * in Marqeta, and return the Webhook information.
    */
-  async create (hook: Webhook): Promise<{
+  async create (hook: Partial<Webhook>): Promise<{
     success: boolean,
     body?: Webhook,
     error?: MarqetaError,

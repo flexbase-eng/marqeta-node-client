@@ -1,15 +1,13 @@
 'use strict'
 
 import { Marqeta } from '../src'
-import { DateTime } from 'ts-luxon'
 
 (async () => {
 
-  const dt = DateTime.now()
-  const mockWebhook =
-  {
-    token: 'test.' + dt.toISOTime(),
-    name: 'webhooks.test.' + dt.toISOTime(),
+  const dt = new Date().toISOString()
+  const mockWebhook = {
+    token: 'test.' + dt,
+    name: 'webhooks.test.' + dt,
     active: false,
     events: [
       '*'
