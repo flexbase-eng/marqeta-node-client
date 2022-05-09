@@ -109,4 +109,37 @@ export class WebhooksApi {
     }
     return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
   }
+
+  /*
+   * Function to take the attributes of a new Webhook, create that
+   * in Marqeta, and return the Webhook information.
+   */
+  async create (hook: WebHook): Promise<{
+    success: boolean,
+    body?: WebHook,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('POST',
+      `webhooks/${hook.token}`,
+      undefined,
+      {
+        name: hook?.name,
+        active: hook?.active,
+        config: hook?.config,
+        events: hook?.events,
+      },
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        }
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
 }
