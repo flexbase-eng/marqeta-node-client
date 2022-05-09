@@ -10,7 +10,7 @@ export interface Headers {
   [index: string] : number | string | boolean;
 }
 
-export interface WebHook {
+export interface Webhook {
   name: string;
   token?: string;
   active?: boolean;
@@ -30,7 +30,7 @@ export interface WebhooksList {
   startIndex: bigint;
   endIndex: bigint;
   isMore: boolean;
-  data?: WebHook[];
+  data?: Webhook[];
 }
 
 export class WebhooksApi {
@@ -75,4 +75,34 @@ export class WebhooksApi {
     return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
   }
 
+  /*
+   * A function to update an existing Marqeta Webhook based upon
+   * an updated webhook as the input argument. The required Marqeta
+   * parameters to update a webhook are: url, events, basicAuthName,
+   * basicAuthPassword, name, and. token.
+   */
+  async update (hook: Webhook): Promise<{
+    success: boolean,
+    body?: Webhook,
+    error?: MarqetaError,
+  }> {
+    const { token, ...body } = hook  // eslint-disable-line
+    const resp = await this.client.fire('PUT',
+      `webhooks/${hook.token}`,
+      undefined,
+      body,
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        }
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
 }
