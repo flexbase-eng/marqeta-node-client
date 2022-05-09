@@ -6,6 +6,10 @@ import type {
   MarqetaError,
 } from './'
 
+export interface Headers {
+  [index: string] : number | string | boolean;
+}
+
 export interface WebHook {
   name: string;
   token?: string;
@@ -15,13 +19,13 @@ export interface WebHook {
     secret?: string;
     basicAuthUsername: string;
     basicAuthPassword: string;
-    customHeader: any;
+    customHeader: Headers;
     useMtls: boolean;
   },
   events: string[];
 }
 
-export interface BusinessList {
+export interface WebhooksList {
   count: bigint;
   startIndex: bigint;
   endIndex: bigint;
@@ -50,7 +54,7 @@ export class WebhooksApi {
     sortBy?: string,
   } = {}): Promise<{
     success: boolean,
-    body?: BusinessList,
+    body?: WebhooksList,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('GET',

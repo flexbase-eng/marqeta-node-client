@@ -68,6 +68,7 @@ export class Marqeta {
   card: CardApi
   cardProduct: CardProductApi
   webHooks: WebhooksApi
+
   constructor (options?: MarqetaOptions) {
     this.host = options?.host || MARQETA_HOST
     this.apiAppToken = options?.apiAppToken!
