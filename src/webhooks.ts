@@ -11,16 +11,16 @@ export interface Headers {
 }
 
 export interface Webhook {
-  name: string;
   token?: string;
+  name: string;
   active?: boolean;
-  config: {
+  config?: {
     url?: string;
     secret?: string;
     basicAuthUsername: string;
     basicAuthPassword: string;
-    customHeader: Headers;
-    useMtls: boolean;
+    customHeader?: Headers;
+    useMtls?: boolean;
   },
   events: string[];
 }
@@ -91,6 +91,34 @@ export class WebhooksApi {
       `webhooks/${hook.token}`,
       undefined,
       body,
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        }
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
+
+  /*
+   * Function to take the attributes of a new Webhook, create that
+   * in Marqeta, and return the Webhook information.
+   */
+  async create (hook: Partial<Webhook>): Promise<{
+    success: boolean,
+    body?: Webhook,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('POST',
+      'webhooks',
+      undefined,
+      { ...hook },
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {

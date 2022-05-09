@@ -1,7 +1,23 @@
 'use strict'
 
-import { Marqeta } from '../src';
+import { Marqeta } from '../src'
+
 (async () => {
+
+  const dt = new Date().toISOString()
+  const mockWebhook = {
+    token: 'test.' + dt,
+    name: 'webhooks.test.' + dt,
+    active: false,
+    events: [
+      '*'
+    ],
+    config: {
+      url: 'https://baconipsum.com',
+      basicAuthUsername: 'ipsum',
+      basicAuthPassword: 'WFx&Q44Roc/LUjaDjx2SvyK'
+    }
+  }
 
   const client = new Marqeta({
     host: process.env.MARQETA_HOST,
@@ -23,7 +39,7 @@ import { Marqeta } from '../src';
   const listOne = await client.webHooks.list({ count: 1 })
 
   if (listOne.body?.data && Array.isArray(listOne.body?.data)) {
-    if(listOne.body.data.length === 1){
+    if (listOne.body.data.length === 1) {
       console.log(`Success! One ${listOne.body!.count} Webhook was retrieved.`)
     } else {
       console.log('Error! Unable to get a list of one Webhook.')
@@ -41,12 +57,13 @@ import { Marqeta } from '../src';
 
     if (update && update?.name) {
       const originalName = update.name
-      update.name += Math.floor(Math.random() * 100) + 1
+      update.name = mockWebhook.name
       const updatedHook = await client.webHooks.update(update)
 
-      if (updatedHook?.body?.name != originalName) {
+      if (updatedHook?.body?.name != undefined
+        && updatedHook?.body?.name != originalName) {
         console.log('Success! Webhook name was updated from "' + originalName +
-        '" to "' + updatedHook.body?.name + '" was retrieved.')
+        '" to "' + updatedHook?.body?.name + '" was retrieved.')
       } else {
         console.log('Error! Unable to update Webhook.')
         console.log(updatedHook)
@@ -55,6 +72,16 @@ import { Marqeta } from '../src';
       console.log('Error! Unable to update empty Webhook.')
       console.log(update)
     }
+  }
+  console.log('creating Webhook...')
+  const created = await client.webHooks.create(mockWebhook)
+
+  if (created?.success && created?.body?.token) {
+    console.log('Success! Webhook created with token id: "' +
+      created?.body?.token + '"')
+  } else {
+    console.log('Error! Unable to create Webhook.')
+    console.log(created)
   }
 
 })()
