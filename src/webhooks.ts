@@ -6,6 +6,10 @@ import type {
   MarqetaError,
 } from './'
 
+export interface Headers {
+  [index: string] : number | string | boolean;
+}
+
 export interface WebHook {
   name: string;
   token?: string;
@@ -15,7 +19,7 @@ export interface WebHook {
     secret?: string;
     basicAuthUsername: string;
     basicAuthPassword: string;
-    customHeader: any;
+    customHeader: Headers;
     useMtls: boolean;
   },
   events: string[];
