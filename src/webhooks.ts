@@ -86,15 +86,11 @@ export class WebhooksApi {
     body?: Webhook,
     error?: MarqetaError,
   }> {
+    const { token, ...body } = hook  // eslint-disable-line
     const resp = await this.client.fire('PUT',
       `webhooks/${hook.token}`,
       undefined,
-      {
-        name: hook?.name,
-        active: hook?.active,
-        config: hook?.config,
-        events: hook?.events,
-      },
+      body,
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {
