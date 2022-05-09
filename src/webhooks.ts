@@ -10,17 +10,17 @@ export interface Headers {
   [index: string] : number | string | boolean;
 }
 
-export interface WebHook {
-  name: string;
+export interface Webhook {
   token?: string;
+  name: string;
   active?: boolean;
-  config: {
+  config?: {
     url?: string;
     secret?: string;
     basicAuthUsername: string;
     basicAuthPassword: string;
-    customHeader: Headers;
-    useMtls: boolean;
+    customHeader?: Headers;
+    useMtls?: boolean;
   },
   events: string[];
 }
@@ -30,7 +30,7 @@ export interface WebhooksList {
   startIndex: bigint;
   endIndex: bigint;
   isMore: boolean;
-  data?: WebHook[];
+  data?: Webhook[];
 }
 
 export class WebhooksApi {
@@ -81,9 +81,9 @@ export class WebhooksApi {
    * parameters to update a webhook are: url, events, basicAuthName,
    * basicAuthPassword, name, and. token.
    */
-  async update (hook: WebHook): Promise<{
+  async update (hook: Webhook): Promise<{
     success: boolean,
-    body?: WebHook,
+    body?: Webhook,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('PUT',
@@ -114,20 +114,15 @@ export class WebhooksApi {
    * Function to take the attributes of a new Webhook, create that
    * in Marqeta, and return the Webhook information.
    */
-  async create (hook: WebHook): Promise<{
+  async create (hook: Webhook): Promise<{
     success: boolean,
-    body?: WebHook,
+    body?: Webhook,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('POST',
-      `webhooks/${hook.token}`,
+      'webhooks',
       undefined,
-      {
-        name: hook?.name,
-        active: hook?.active,
-        config: hook?.config,
-        events: hook?.events,
-      },
+      { ...hook },
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {
