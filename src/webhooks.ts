@@ -133,4 +133,29 @@ export class WebhooksApi {
     }
     return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
   }
+
+  /*
+   * Function to retrieve a Webhook by its token Id.
+   */
+  async byTokenId (token: string): Promise<{
+    success: boolean,
+    body?: Webhook,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('GET',
+      `webhooks/${token}`,
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        }
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
 }

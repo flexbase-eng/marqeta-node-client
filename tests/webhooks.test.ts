@@ -73,6 +73,7 @@ import { Marqeta } from '../src'
       console.log(update)
     }
   }
+
   console.log('creating Webhook...')
   const created = await client.webHooks.create(mockWebhook)
 
@@ -82,6 +83,26 @@ import { Marqeta } from '../src'
   } else {
     console.log('Error! Unable to create Webhook.')
     console.log(created)
+  }
+
+  console.log('get Webhook by token Id...')
+
+  if (list.body?.data && Array.isArray(list.body?.data)) {
+    const item = list.body.data.pop()
+
+    if (item && item?.token) {
+      const found = await client.webHooks.byTokenId(item.token)
+
+      if (found?.body?.token) {
+        console.log('Success! Webhook was retrieved by token Id: ' + found.body.token)
+      } else {
+        console.log('Error! Unable to get Webhook by token Id.')
+        console.log(found)
+      }
+    } else {
+      console.log('Error! Unable to retrieve Webhook with missing token Id.')
+      console.log(item)
+    }
   }
 
 })()
