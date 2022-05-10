@@ -1,6 +1,6 @@
 'use strict'
 
-import { Marqeta } from '../src';
+import { Marqeta } from '../src'
 (async () => {
 
   const client = new Marqeta({
@@ -9,11 +9,12 @@ import { Marqeta } from '../src';
     apiAccessToken: process.env.MARQETA_API_ACCESS_TOKEN
   })
 
+  const emailNum = Math.floor(Math.random() * 30) + 1
   const mockUser = {
     token: '',
     firstName: 'Ipsumi4',
     lastName: 'Lorem',
-    email: 'ipsum.lorem9@mailinator.com',
+    email: `ipsum.lorem${emailNum}@mailinator.com`,
     address1: '100 Main Street',
     city: 'Canton',
     state: 'GA',
@@ -68,8 +69,8 @@ import { Marqeta } from '../src';
   }
 
   console.log('testing creating User...')
-  const newA = await client.user.create(mockUser)
 
+  const newA = await client.user.create(mockUser)
   if (newA?.success && newA?.body?.token) {
     console.log('Success! The User account with name "' +
         newA.body?.firstName + ' ' + newA.body?.lastName + '" was created ' +
@@ -118,6 +119,33 @@ import { Marqeta } from '../src';
   } else {
     console.log('Error! search failed to find the User account')
     console.log(mockUser)
+  }
+
+  console.log('testing User transition...')
+  if (listA?.body?.isMore && Array.isArray(listA?.body?.data)) {
+    const testUser = listA.body.data.pop()
+    let trans
+    if (testUser?.token && testUser?.status) {
+      //const originalStatus = testUser.status
+      const state = {
+        status: 'UNVERIFIED',
+        reasonCode: '02',
+        channel: 'API',
+        userToken: testUser.token,
+      }
+      trans = await client.user.transition(state)
+
+      if (trans?.body?.token) {
+        console.log('Success! The User was transitioned to status: "' +
+          trans.body.status)
+      } else {
+        console.log('Error! Unable to transition the User status.')
+        console.log(trans)
+      }
+    }
+  } else {
+    console.log('Error! Unable to transition empty User account.')
+    console.log(listA)
   }
 
 })()

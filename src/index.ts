@@ -119,11 +119,12 @@ export class Marqeta {
     for (let cnt = 0; cnt < 3; cnt++) {
       // now we can make the call... see if it's a JSON body or a FormData one...
       try {
+        const fieldsKey = method + ':' + uri
         response = await fetch(url, {
           method: method,
           body: isForm ?
             (body as any) :
-            (body ? JSON.stringify(snakecaseKeys(removeEmpty(cleanMetaData(body)))) : undefined),
+            (body ? JSON.stringify(snakecaseKeys(removeEmpty(cleanMetaData(body, fieldsKey)))) : undefined),
           headers,
         })
         const payload = camelCaseKeys((await response?.json()), { deep: true })
@@ -215,16 +216,18 @@ export function removeEmpty(obj: any): any {
  * and these fields are invalid when issuing an update, or PUT request, so they
  * must be removed before any update requests are sent.
  */
-export function cleanMetaData(obj: any): any {
-  /* eslint-disable */
-  const {
-    createdTime,
-    lastModifiedTime,
-    password,
-    status,
-    ...ret } = obj
-  /* eslint-enable */
-  return ret
+export interface fields {
+  [key:string]: string[]
+}
+
+export function cleanMetaData(obj: any, fieldsKey: string): any {
+  const defaultFields = ['createdTime', 'lastModifiedTime', 'password', 'status']
+  const fields: fields = {
+    'POST:usertransitions' :['createdTime', 'lastModifiedTime', 'password']
+  }
+  const removeFields = fields[fieldsKey] || defaultFields
+  removeFields.forEach(f => delete obj[f])
+  return obj
 }
 
 /*

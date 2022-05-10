@@ -6,6 +6,16 @@ import type {
   MarqetaError,
 } from './'
 
+export interface Transition {
+  idempotentHash?: string;
+  token?:	string;
+  status:	string;
+  reasonCode:	string;
+  reason?:string;
+  channel:	string;
+  userToken: string;
+}
+
 export interface UserIdentification {
   type: string;
   value: string;
@@ -28,6 +38,7 @@ export interface User {
   gender?:string;
   usesParentAccount?: boolean;
   metadata: any;
+  status: string;
 }
 
 export interface UserList {
@@ -191,7 +202,33 @@ export class UserApi {
     }
     return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
   }
+
+  /*
+   * Function to a User token, status, reason code, and channel, send
+   * those to Marqeta, and transition a User account between states.
+   */
+  async transition(status: Partial<Transition>): Promise<{
+    success: boolean,
+    body?: Transition,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('POST',
+      'usertransitions',
+      undefined,
+      status,
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
+
 }
-
-
-
