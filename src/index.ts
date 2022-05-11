@@ -215,19 +215,6 @@ export function removeEmpty(obj: any): any {
 }
 
 /*
-
-export function cleanMetaData(obj: any, fieldsKey: string): any {
-  const defaultFields = ['createdTime', 'lastModifiedTime', 'password', 'status']
-  const fields: fields = {
-    'POST:usertransitions' :['createdTime', 'lastModifiedTime', 'password']
-  }
-  const removeFields = fields[fieldsKey] || defaultFields
-  removeFields.forEach(f => delete obj[f])
-  return obj
-}
-*/
-
-/*
  * These are the problem fields for sending to each of the indicated
  * method:ure pairs in the keys. These are something that the caller
  * can provide, but we need to filter out because Marqeta will error
