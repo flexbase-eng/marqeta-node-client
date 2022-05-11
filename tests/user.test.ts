@@ -123,9 +123,9 @@ import { Marqeta } from '../src'
   }
 
   console.log('testing User transition...')
+  let trans
   if (listA?.body?.isMore && Array.isArray(listA?.body?.data)) {
     const testUser = listA.body.data.pop()
-    let trans
     if (testUser?.token && testUser?.status) {
       //const originalStatus = testUser.status
       const state = {
@@ -150,19 +150,15 @@ import { Marqeta } from '../src'
   }
 
   console.log('testing get User transition by token Id...')
-  if (listA?.body?.isMore && Array.isArray(listA?.body?.data)) {
-    const testUser = listA.body.data.pop()
+  if (trans?.body?.token) {
     let getTrans
-    if (testUser?.token && testUser?.status) {
-      //const originalStatus = testUser.status
-      getTrans = await client.user.getTransition(testUser?.token)
+    getTrans = await client.user.getTransition(trans?.body?.token)
 
-      if (getTrans?.body?.token) {
-        console.log('Success! We were able to get the User transition status.')
-      } else {
-        console.log('Error! We were unable to get the User transition status.')
-        console.log(getTrans)
-      }
+    if (getTrans?.body?.token) {
+      console.log('Success! We were able to get the User transition status.')
+    } else {
+      console.log('Error! We were unable to get the User transition status.')
+      console.log(getTrans)
     }
   } else {
     console.log('Error! Unable to get User transition because the User ' +
