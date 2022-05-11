@@ -113,6 +113,10 @@ export class Marqeta {
     } as any
     if (!isForm) {
       headers = { ...headers, 'Content-Type': 'application/json' }
+      // body exist only on POST requests...
+      if (body) {
+        body = cleanRequestData(body, method, uri)
+      }
     }
     // allow a few retries on the authentication token expiration
     let response
@@ -123,7 +127,7 @@ export class Marqeta {
           method: method,
           body: isForm ?
             (body as any) :
-            (body ? JSON.stringify(snakecaseKeys(removeEmpty(cleanMetaData(body)))) : undefined),
+            (body ? JSON.stringify(body) : undefined),
           headers,
         })
         const payload = camelCaseKeys((await response?.json()), { deep: true })
@@ -211,20 +215,25 @@ export function removeEmpty(obj: any): any {
 }
 
 /*
- * Marqeta returns metadata fields for businesses, cards, card-products, etc.,
- * and these fields are invalid when issuing an update, or PUT request, so they
- * must be removed before any update requests are sent.
+ * These are the problem fields for sending to each of the indicated
+ * method:ure pairs in the keys. These are something that the caller
+ * can provide, but we need to filter out because Marqeta will error
+ * out if we pass them.
  */
-export function cleanMetaData(obj: any): any {
-  /* eslint-disable */
-  const {
-    createdTime,
-    lastModifiedTime,
-    password,
-    status,
-    ...ret } = obj
-  /* eslint-enable */
-  return ret
+const problemFields: { [index: string]: string[] } = {
+  'POST:usertransitions': ['createdTime', 'lastModifiedTime', 'password'],
+}
+/*
+ * Marqeta is picky about the JSON body data that we send on some calls,
+ * and in order to make it possible for the user to pass in more than
+ * is needed, we need to file out the problematic fields - based on the
+ * method and uri that's being called. This function does that.
+ */
+function cleanRequestData(obj: any, method: string, uri: string): any {
+  (problemFields[method + ':' + uri]
+  || ['createdTime', 'lastModifiedTime', 'password', 'status'])
+    .forEach(f => delete obj[f])
+  return snakecaseKeys(removeEmpty(obj))
 }
 
 /*
