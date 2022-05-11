@@ -8,11 +8,11 @@ import type {
 
 export interface Transition {
   idempotentHash?: string;
-  token?:	string;
-  status:	string;
-  reasonCode:	string;
-  reason?:string;
-  channel:	string;
+  token?: string;
+  status: string;
+  reasonCode: string;
+  reason?: string;
+  channel: string;
   userToken: string;
 }
 
@@ -22,20 +22,20 @@ export interface UserIdentification {
 }
 
 export interface User {
-  token?:string;
+  token?: string;
   firstName?: string;
   lastName?: string;
-  email?:string;
-  password?:string;
+  email?: string;
+  password?: string;
   identifications?: UserIdentification[];
-  birthDate?:string;
+  birthDate?: string;
   address1?: string;
   city?: string;
   state?: string;
   country?: string;
   postalCode?: string;
-  phone?:string;
-  gender?:string;
+  phone?: string;
+  gender?: string;
   usesParentAccount?: boolean;
   metadata?: any;
   status?: string;
