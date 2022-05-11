@@ -232,7 +232,7 @@ export class UserApi {
   }
 
   /*
-   * Function to take a User token Id, send that to Marqeta, and have the Users
+   * Function to take a Transition token Id, send that to Marqeta, and have the
    * transition status information returned.
    */
   async getTransition(token: string): Promise<{
