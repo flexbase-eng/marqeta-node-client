@@ -9,7 +9,7 @@ import { Marqeta } from '../src'
     apiAccessToken: process.env.MARQETA_API_ACCESS_TOKEN
   })
 
-  const emailNum = Math.floor(Math.random() * 30) + 1
+  const emailNum = Math.floor(Math.random() * 50) + 1
   const mockUser = {
     token: '',
     firstName: 'Ipsumi4',
@@ -31,6 +31,7 @@ import { Marqeta } from '../src'
     console.log(`Success! ${listA.body!.count} Users were retrieved.`)
 
     if (listA.body.data[0].token) {
+      console.log('getting User by token Id...')
       const foundUserA = await client.user.byTokenId(listA.body.data[0].token)
 
       if (foundUserA && foundUserA?.body?.token) {

@@ -114,7 +114,10 @@ export class Marqeta {
     if (!isForm) {
       headers = { ...headers, 'Content-Type': 'application/json' }
       const key = method + ':' + uri
-      body = cleanRequestData(body, key)
+      // body exist only on POST requests...
+      if (body) {
+        body = cleanRequestData(body, key)
+      }
     }
     // allow a few retries on the authentication token expiration
     let response
@@ -242,7 +245,7 @@ const problemFields: { [index: string]: string[] } = {
  */
 function cleanRequestData(obj: any, key: string): any {
   (problemFields[key]
-    || ['createdTime', 'lastModifiedTime', 'password', 'status'])
+  || ['createdTime', 'lastModifiedTime', 'password', 'status'])
     .forEach(f => delete obj[f])
   return snakecaseKeys(removeEmpty(obj))
 }
