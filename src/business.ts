@@ -14,6 +14,14 @@ export interface BusinessTransition {
   businessToken: string;
 }
 
+export interface BusinessTransitionList {
+  count: bigint;
+  startIndex: bigint;
+  endIndex: bigint;
+  isMore: boolean;
+  data?: BusinessTransition[];
+}
+
 export interface BusinessIdentifications {
   type: string;
   value: string;
@@ -257,6 +265,32 @@ export class BusinessApi {
   }> {
     const resp = await this.client.fire('GET',
       `businesstransitions/${token}`,
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
+
+  /*
+   * Function to take a Business token Id, send that to Marqeta, and have a
+   * list of Business transition statuses returned.
+   */
+  async listTransition(token: string): Promise<{
+    success: boolean,
+    body?: BusinessTransitionList,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('GET',
+      `businesstransitions/business/${token}`,
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {
