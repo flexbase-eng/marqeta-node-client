@@ -82,6 +82,7 @@ import { Marqeta } from '../src';
   console.log('creating Business account')
   const newA = await client.business.create(mockBusiness)
 
+  /*
   if (newA?.success && newA?.body?.token) {
     console.log('Success! The Business account "' +
       newA.body?.businessNameLegal +
@@ -118,25 +119,30 @@ import { Marqeta } from '../src';
     console.log('Error! Unable to create a Businesses account.')
     console.log(newA)
   }
+  */
 
   const businesses = await client.business.list()
+
+  let listItem
+  let trans
   if (businesses.body?.isMore) {
-    const listItem = businesses?.body?.data?.pop()
+    listItem = businesses?.body?.data?.pop()
     if (listItem?.token) {
-      console.log('transition Business status...')
-      let trans
+      console.log(`[TOKEN: ] ${listItem?.token}`)
+      console.log('transition Business status to Active...')
       if (listItem?.token && listItem?.status) {
         const state = {
-          status: 'UNVERIFIED',
+          status: 'ACTIVE',
           reasonCode: '02',
           channel: 'API',
           businessToken: listItem.token,
         }
         trans = await client.business.transition(state)
       }
+      console.log(`\n[TRANS:] ${JSON.stringify(trans)}`)
       if (trans?.body?.token) {
         console.log('Success! The Business was transitioned to status: "' +
-          trans.body.status)
+          trans.body.status + '"')
       } else {
         console.log('Error! Unable to transition the Business status.')
         console.log(trans)
@@ -149,6 +155,27 @@ import { Marqeta } from '../src';
   } else {
     console.log('Error! Unable to get a list of Businesses.')
     console.log(list)
+  }
+
+  console.log('testing get Business transition by token Id...')
+  if (trans?.body?.token) {
+    console.log(`[BUSINESS: ] ${JSON.stringify(listItem)}`)
+    let getTrans
+    getTrans = await client.business.getBusinessTransition(
+      trans?.body?.token
+    )
+    if (getTrans?.body?.token) {
+      console.log('Success! We were able to get the Business ' +
+          'transition status.')
+    } else {
+      console.log('Error! We were unable to get the Business transition ' +
+          'status.')
+      console.log(getTrans)
+    }
+  } else {
+    console.log('Error! Unable to get Business transition because the ' +
+      'Business account is empty.')
+    console.log(businesses)
   }
 
 })()
