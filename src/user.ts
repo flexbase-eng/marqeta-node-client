@@ -37,8 +37,8 @@ export interface User {
   phone?:string;
   gender?:string;
   usesParentAccount?: boolean;
-  metadata: any;
-  status: string;
+  metadata?: any;
+  status?: string;
 }
 
 export interface UserList {

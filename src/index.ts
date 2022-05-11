@@ -113,18 +113,19 @@ export class Marqeta {
     } as any
     if (!isForm) {
       headers = { ...headers, 'Content-Type': 'application/json' }
+      const key = method + ':' + uri
+      body = cleanRequestData(body, key)
     }
     // allow a few retries on the authentication token expiration
     let response
     for (let cnt = 0; cnt < 3; cnt++) {
       // now we can make the call... see if it's a JSON body or a FormData one...
       try {
-        const fieldsKey = method + ':' + uri
         response = await fetch(url, {
           method: method,
           body: isForm ?
             (body as any) :
-            (body ? JSON.stringify(snakecaseKeys(removeEmpty(cleanMetaData(body, fieldsKey)))) : undefined),
+            (body ? JSON.stringify(body) : undefined),
           headers,
         })
         const payload = camelCaseKeys((await response?.json()), { deep: true })
@@ -212,13 +213,6 @@ export function removeEmpty(obj: any): any {
 }
 
 /*
- * Marqeta returns metadata fields for businesses, cards, card-products, etc.,
- * and these fields are invalid when issuing an update, or PUT request, so they
- * must be removed before any update requests are sent.
- */
-export interface fields {
-  [key:string]: string[]
-}
 
 export function cleanMetaData(obj: any, fieldsKey: string): any {
   const defaultFields = ['createdTime', 'lastModifiedTime', 'password', 'status']
@@ -228,6 +222,29 @@ export function cleanMetaData(obj: any, fieldsKey: string): any {
   const removeFields = fields[fieldsKey] || defaultFields
   removeFields.forEach(f => delete obj[f])
   return obj
+}
+*/
+
+/*
+ * These are the problem fields for sending to each of the indicated
+ * method:ure pairs in the keys. These are something that the caller
+ * can provide, but we need to filter out because Marqeta will error
+ * out if we pass them.
+ */
+const problemFields: { [index: string]: string[] } = {
+  'POST:usertransitions': ['createdTime', 'lastModifiedTime', 'password'],
+}
+/*
+ * Marqeta is picky about the JSON body data that we send on some calls,
+ * and in order to make it possible for the user to pass in more than
+ * is needed, we need to file out the problematic fields - based on the
+ * method and uri that's being called. This function does that.
+ */
+function cleanRequestData(obj: any, key: string): any {
+  (problemFields[key]
+    || ['createdTime', 'lastModifiedTime', 'password', 'status'])
+    .forEach(f => delete obj[f])
+  return snakecaseKeys(removeEmpty(obj))
 }
 
 /*
