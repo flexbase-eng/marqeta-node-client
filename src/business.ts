@@ -245,4 +245,30 @@ export class BusinessApi {
     }
     return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
   }
+
+  /*
+   * Function to take a Transition token, send that to Marqeta, and have
+   * the transition status information returned.
+   */
+  async getTransition(token: string): Promise<{
+    success: boolean,
+    body?: BusinessTransition,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('GET',
+      `businesstransitions/${token}`,
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
 }
