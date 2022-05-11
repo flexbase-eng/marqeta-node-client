@@ -4,6 +4,16 @@ import type {
   MarqetaError,
 } from './'
 
+export interface BusinessTransition {
+  idempotentHash?: string;
+  token?: string;
+  status: string;
+  reasonCode: string;
+  reason?: string;
+  channel: string;
+  businessToken: string;
+}
+
 export interface BusinessIdentifications {
   type: string;
   value: string;
@@ -193,6 +203,34 @@ export class BusinessApi {
       `businesses/${business?.token}`,
       undefined,
       updateOptions,
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
+
+  /*
+   * Function to a Business token, status, reason code, and channel, send
+   * those to Marqeta, and transition a Business account between states.
+   */
+  async transition(status: Partial<BusinessTransition>): Promise<{
+    success: boolean,
+    body?: BusinessTransition,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('POST',
+      'businesstransitions',
+      undefined,
+      status,
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {

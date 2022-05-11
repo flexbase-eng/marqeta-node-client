@@ -38,7 +38,6 @@ import { Marqeta } from '../src';
 
   console.log('getting a list of Businesses...')
   const list = await client.business.list()
-
   if (list.body?.isMore) {
     console.log(`Success! ${list.body!.count} Businesses were retrieved.`)
     const lstItem1 = list?.body?.data?.pop()
@@ -118,6 +117,38 @@ import { Marqeta } from '../src';
   } else {
     console.log('Error! Unable to create a Businesses account.')
     console.log(newA)
+  }
+
+  const businesses = await client.business.list()
+  if (businesses.body?.isMore) {
+    const listItem = businesses?.body?.data?.pop()
+    if (listItem?.token) {
+      console.log('transition Business status...')
+      let trans
+      if (listItem?.token && listItem?.status) {
+        const state = {
+          status: 'UNVERIFIED',
+          reasonCode: '02',
+          channel: 'API',
+          businessToken: listItem.token,
+        }
+        trans = await client.business.transition(state)
+      }
+      if (trans?.body?.token) {
+        console.log('Success! The Business was transitioned to status: "' +
+          trans.body.status)
+      } else {
+        console.log('Error! Unable to transition the Business status.')
+        console.log(trans)
+      }
+    } else {
+      console.log('Error! The Business account is missing a token id.')
+      console.log(listItem)
+    }
+
+  } else {
+    console.log('Error! Unable to get a list of Businesses.')
+    console.log(list)
   }
 
 })()

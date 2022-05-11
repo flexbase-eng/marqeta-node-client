@@ -222,6 +222,7 @@ export function removeEmpty(obj: any): any {
  */
 const problemFields: { [index: string]: string[] } = {
   'POST:usertransitions': ['createdTime', 'lastModifiedTime', 'password'],
+  'POST:businesstransitions': ['createdTime', 'lastModifiedTime', 'password'],
 }
 /*
  * Marqeta is picky about the JSON body data that we send on some calls,
