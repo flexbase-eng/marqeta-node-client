@@ -113,10 +113,9 @@ export class Marqeta {
     } as any
     if (!isForm) {
       headers = { ...headers, 'Content-Type': 'application/json' }
-      const key = method + ':' + uri
       // body exist only on POST requests...
       if (body) {
-        body = cleanRequestData(body, key)
+        body = cleanRequestData(body, method, uri)
       }
     }
     // allow a few retries on the authentication token expiration
@@ -243,8 +242,8 @@ const problemFields: { [index: string]: string[] } = {
  * is needed, we need to file out the problematic fields - based on the
  * method and uri that's being called. This function does that.
  */
-function cleanRequestData(obj: any, key: string): any {
-  (problemFields[key]
+function cleanRequestData(obj: any, method: string, uri: string): any {
+  (problemFields[method + ':' + uri]
   || ['createdTime', 'lastModifiedTime', 'password', 'status'])
     .forEach(f => delete obj[f])
   return snakecaseKeys(removeEmpty(obj))
