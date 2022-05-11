@@ -3,7 +3,6 @@ import type {
   MarqetaOptions,
   MarqetaError,
 } from './'
-import { Transition } from './user'
 
 export interface BusinessTransition {
   idempotentHash?: string;
@@ -251,7 +250,7 @@ export class BusinessApi {
    * Function to take a Business token Id, send that to Marqeta, and have
    * the Business's transition status information returned.
    */
-  async getBusinessTransition(token: string): Promise<{
+  async getTransition(token: string): Promise<{
     success: boolean,
     body?: BusinessTransition,
     error?: MarqetaError,
@@ -260,7 +259,6 @@ export class BusinessApi {
       `businesstransitions/${token}`,
     )
     // catch any errors...
-    console.log(`[RESPONSE: ] ${JSON.stringify(resp)}`)
     if (resp?.payload?.errorCode) {
       return {
         success: false,
