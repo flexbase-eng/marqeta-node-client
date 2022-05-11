@@ -247,8 +247,8 @@ export class BusinessApi {
   }
 
   /*
-   * Function to take a Business token Id, send that to Marqeta, and have
-   * the Business's transition status information returned.
+   * Function to take a Transition token, send that to Marqeta, and have
+   * the transition status information returned.
    */
   async getTransition(token: string): Promise<{
     success: boolean,
