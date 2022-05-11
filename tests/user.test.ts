@@ -149,4 +149,25 @@ import { Marqeta } from '../src'
     console.log(listA)
   }
 
+  console.log('testing get User transition by token Id...')
+  if (listA?.body?.isMore && Array.isArray(listA?.body?.data)) {
+    const testUser = listA.body.data.pop()
+    let getTrans
+    if (testUser?.token && testUser?.status) {
+      //const originalStatus = testUser.status
+      getTrans = await client.user.getTransition(testUser?.token)
+
+      if (getTrans?.body?.token) {
+        console.log('Success! We were able to get the User transition status.')
+      } else {
+        console.log('Error! We were unable to get the User transition status.')
+        console.log(getTrans)
+      }
+    }
+  } else {
+    console.log('Error! Unable to get User transition because the User ' +
+      'account is empty.')
+    console.log(listA)
+  }
+
 })()
