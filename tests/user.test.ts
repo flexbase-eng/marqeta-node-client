@@ -124,8 +124,9 @@ import { Marqeta } from '../src'
 
   console.log('testing User transition...')
   let trans
+  let testUser
   if (listA?.body?.isMore && Array.isArray(listA?.body?.data)) {
-    const testUser = listA.body.data.pop()
+    testUser = listA.body.data.pop()
     if (testUser?.token && testUser?.status) {
       //const originalStatus = testUser.status
       const state = {
@@ -155,14 +156,31 @@ import { Marqeta } from '../src'
     getTrans = await client.user.getTransition(trans?.body?.token)
 
     if (getTrans?.body?.token) {
-      console.log('Success! We were able to get the User transition status.')
+      console.log('Success! We were able to get the Transition status.')
     } else {
-      console.log('Error! We were unable to get the User transition status.')
+      console.log('Error! We were unable to get the Transition status.')
       console.log(getTrans)
     }
   } else {
+    console.log('Error! Unable to get transition because the Transition ' +
+      'token is empty.')
+    console.log(listA)
+  }
+
+  console.log('testing list User transitions by User token Id...')
+  if (testUser?.token) {
+    let listTrans
+    listTrans = await client.user.listTransition(testUser?.token)
+
+    if (listTrans?.success && listTrans?.body?.count) {
+      console.log('Success! We were able to get a list of User transitions.')
+    } else {
+      console.log('Error! We were unable to get a list of User transitions.')
+      console.log(listTrans)
+    }
+  } else {
     console.log('Error! Unable to get User transition because the User ' +
-      'account is empty.')
+      'token is empty.')
     console.log(listA)
   }
 

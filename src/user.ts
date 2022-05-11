@@ -16,6 +16,14 @@ export interface Transition {
   userToken: string;
 }
 
+export interface TransitionList {
+  count: bigint;
+  startIndex: bigint;
+  endIndex: bigint;
+  isMore: boolean;
+  data?: Transition[];
+}
+
 export interface UserIdentification {
   type: string;
   value: string;
@@ -242,6 +250,32 @@ export class UserApi {
   }> {
     const resp = await this.client.fire('GET',
       `usertransitions/${token}`,
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
+
+  /*
+   * Function to take a User token Id, send that to Marqeta, and have a list of
+   * User transition statuses returned.
+   */
+  async listTransition(token: string): Promise<{
+    success: boolean,
+    body?: TransitionList,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('GET',
+      `usertransitions/user/${token}`,
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {
