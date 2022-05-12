@@ -281,15 +281,20 @@ export class BusinessApi {
   }
 
   /*
-   * Function to take a list of search parameters, which include a Business
-   * token Id, send that to Marqeta, and have a list of User transition
-   * statuses returned based on the optional parameters.
+   * Function to take a list of search parameters, send those to Marqeta, and
+   * have a list of User transition statuses returned for a Business, where
+   * "token" correlates to a Marqeta Business account, "count" determines
+   * how many business transitions to return, "startIndex" is the sort order
+   * index of the first resource in the response, "fields" determines  which
+   * Transition fields to include in the response (leaving this empty returns
+   * all Transition fields for a Business Transition), and "sortBy" is the
+   * Transition field by which to sort the response, e.g. lastModifiedData,
+   * createdTime, etc.
    */
   async listTransition(search: {
     token?: string,
     count?: number,
     startIndex?: number,
-    searchType?: string,
     fields?: string[],
     sortBy?: string,
   } = {}): Promise<{
@@ -297,19 +302,27 @@ export class BusinessApi {
     body?: TransitionList,
     error?: MarqetaError,
   }> {
-    /* eslint-disable no-unused-vars */
     const {
-      token,
-      count,
-      startIndex,
-      searchType,
-      fields,
-      sortBy
+      token = '',
+      count = 100,
+      startIndex = 0,
+      fields = '',
+      sortBy = 'lastModifiedTime',
     } = search
-    /* eslint-enable no-unused-vars */
+    if (!token) {
+      return {
+        success: true, body: {
+          count: BigInt(0),
+          startIndex: BigInt(0),
+          endIndex: BigInt(0),
+          isMore: false,
+          data: [],
+        }
+      }
+    }
     const resp = await this.client.fire('GET',
       `businesstransitions/business/${token}`,
-      search,
+      { count, startIndex, fields, sortBy },
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {
