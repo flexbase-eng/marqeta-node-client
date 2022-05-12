@@ -281,16 +281,25 @@ export class BusinessApi {
   }
 
   /*
-   * Function to take a Business token Id, send that to Marqeta, and have a
-   * list of Business transition statuses returned.
+   * Function to take a list of search parameters, which include a Business
+   * token Id, send that to Marqeta, and have a list of Business transition
+   * statuses returned based on the optional parameters.
    */
-  async listTransition(token: string): Promise<{
+  async listTransition(search: {
+    token?: string,
+    count?: number,
+    startIndex?: number,
+    searchType?: string,
+    fields?: string[],
+    sortBy?: string,
+  } = {}): Promise<{
     success: boolean,
     body?: TransitionList,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('GET',
-      `businesstransitions/business/${token}`,
+      `businesstransitions/business/${search.token}`,
+      search,
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {
