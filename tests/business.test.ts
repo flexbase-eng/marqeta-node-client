@@ -176,9 +176,7 @@ import { Marqeta } from '../src';
   console.log('testing list Business transitions by token Id...')
   if (listItem?.token) {
     let listTrans
-    listTrans = await client.business.listTransition(
-      { token: listItem?.token }
-    )
+    listTrans = await client.business.listTransition({ ...listItem })
     if (listTrans?.success && listTrans?.body?.count) {
       console.log('Success! We were able to get a list of Business ' +
         'transitions.')
@@ -196,9 +194,7 @@ import { Marqeta } from '../src';
   console.log('testing list one Business transitions by token Id...')
   if (listItem?.token) {
     let listTrans
-    listTrans = await client.business.listTransition(
-      { token: listItem?.token, count: 1 }
-    )
+    listTrans = await client.business.listTransition({ ...listItem, count: 1 })
     if (listTrans?.success && listTrans?.body?.count) {
       console.log('Success! We were able to get a list of one Business ' +
         'transitions.')

@@ -282,7 +282,7 @@ export class BusinessApi {
 
   /*
    * Function to take a list of search parameters, which include a Business
-   * token Id, send that to Marqeta, and have a list of Business transition
+   * token Id, send that to Marqeta, and have a list of User transition
    * statuses returned based on the optional parameters.
    */
   async listTransition(search: {
@@ -297,8 +297,18 @@ export class BusinessApi {
     body?: TransitionList,
     error?: MarqetaError,
   }> {
+    /* eslint-disable no-unused-vars */
+    const {
+      token,
+      count,
+      startIndex,
+      searchType,
+      fields,
+      sortBy
+    } = search
+    /* eslint-enable no-unused-vars */
     const resp = await this.client.fire('GET',
-      `businesstransitions/business/${search.token}`,
+      `businesstransitions/business/${token}`,
       search,
     )
     // catch any errors...
