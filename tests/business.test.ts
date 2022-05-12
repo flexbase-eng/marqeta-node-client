@@ -176,12 +176,30 @@ import { Marqeta } from '../src';
   console.log('testing list Business transitions by token Id...')
   if (listItem?.token) {
     let listTrans
-    listTrans = await client.business.listTransition(listItem?.token)
+    listTrans = await client.business.listTransition({ ...listItem })
     if (listTrans?.success && listTrans?.body?.count) {
       console.log('Success! We were able to get a list of Business ' +
         'transitions.')
     } else {
       console.log('Error! We were unable to get a list of Business ' +
+        'transitions.')
+      console.log(listTrans)
+    }
+  } else {
+    console.log('Error! Unable to get list of Business transition statuses ' +
+      'because the Business token Id is empty.')
+    console.log(listItem)
+  }
+
+  console.log('testing list one Business transitions by token Id...')
+  if (listItem?.token) {
+    let listTrans
+    listTrans = await client.business.listTransition({ ...listItem, count: 1 })
+    if (listTrans?.success && listTrans?.body?.count) {
+      console.log('Success! We were able to get a list of one Business ' +
+        'transitions.')
+    } else {
+      console.log('Error! We were unable to get a list of one Business ' +
         'transitions.')
       console.log(listTrans)
     }
