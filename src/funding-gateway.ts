@@ -5,7 +5,6 @@ import type {
   MarqetaOptions,
 } from './'
 import { MarqetaError } from './'
-import { Card } from './card'
 
 export interface FundingGateway {
   name: string;
@@ -30,13 +29,39 @@ export class FundingGatewayApi {
    */
   async create(source: Partial<FundingGateway>): Promise<{
     success: boolean,
-    body?: Card,
+    body?: FundingGateway,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('POST',
       'fundingsources/programgateway',
       undefined,
       source,
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
+
+  /*
+   * Function that takes a funding source token Id, sends that to Marqeta,
+   * which returns the funding source information.
+   */
+  async get(token: string): Promise<{
+    success: boolean,
+    body?: FundingGateway,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('GET',
+      `fundingsources/programgateway/${token}`,
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {
