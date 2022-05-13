@@ -10,9 +10,15 @@ export interface FundingGateway {
   name: string;
   url: string;
   token: string;
+  active: boolean;
   basicAuthUsername: string;
   basicAuthPassword: string;
   customHeader: any;
+  createdTime?: string;
+  lastModifiedTime?: string;
+  status?: string;
+  version?: string;
+  account?: string;
 }
 
 export class FundingGatewayApi {
@@ -76,4 +82,44 @@ export class FundingGatewayApi {
     }
     return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
   }
+
+  /*
+   * Function that takes a series of monetary funding parameters, sends
+   * those to Marqeta, which in turn updates a Card funding source.
+   */
+  async update(source: Partial<FundingGateway>): Promise<{
+    success: boolean,
+    body?: FundingGateway,
+    error?: MarqetaError,
+  }> {
+    /* eslint-disable no-unused-vars */
+    const {
+      token,
+      createdTime,
+      status,
+      account,
+      version,
+      lastModifiedTime,
+      ...updateOptions
+    } = source
+    /* eslint-enable no-unused-vars */
+    const resp = await this.client.fire('PUT',
+      `fundingsources/programgateway/${source.token}`,
+      undefined,
+      updateOptions,
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
+
 }
