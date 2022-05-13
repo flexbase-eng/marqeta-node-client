@@ -13,6 +13,7 @@ import { UserApi } from './user'
 import { CardApi } from './card'
 import { CardProductApi } from './card-product'
 import { WebhooksApi } from './webhooks'
+import { FundingGatewayApi } from './funding-gateway'
 
 const PROTOCOL = 'https'
 const MARQETA_HOST = 'sandbox-api.marqeta.com/v3'
@@ -68,6 +69,7 @@ export class Marqeta {
   card: CardApi
   cardProduct: CardProductApi
   webHooks: WebhooksApi
+  fundingGatewayApi: FundingGatewayApi
 
   constructor (options?: MarqetaOptions) {
     this.host = options?.host || MARQETA_HOST
@@ -81,6 +83,7 @@ export class Marqeta {
     this.card = new CardApi(this, options)
     this.cardProduct = new CardProductApi(this, options)
     this.webHooks = new WebhooksApi(this, options)
+    this.fundingGatewayApi = new FundingGatewayApi(this, options)
   }
 
   /*
