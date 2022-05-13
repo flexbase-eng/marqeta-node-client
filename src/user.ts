@@ -266,16 +266,48 @@ export class UserApi {
   }
 
   /*
-   * Function to take a User token Id, send that to Marqeta, and have a list of
-   * User transition statuses returned.
+   * Function to take a list of search parameters, send those to Marqeta, and
+   * have a list of User transition statuses returned for a User, where
+   * "token" correlates to a Marqeta User account, "count" determines
+   * how many business transitions to return, "startIndex" is the sort order
+   * index of the first resource in the response, "fields" determines  which
+   * Transition fields to include in the response (leaving this empty returns
+   * all Transition fields for a User Transition), and "sortBy" is the
+   * Transition field by which to sort the response, e.g. lastModifiedData,
+   * createdTime, etc.
    */
-  async listTransition(token: string): Promise<{
+  async listTransition(search: {
+    token?: string,
+    count?: number,
+    startIndex?: number,
+    fields?: string[],
+    sortBy?: string,
+  } = {}): Promise<{
     success: boolean,
     body?: TransitionList,
     error?: MarqetaError,
   }> {
+    const {
+      token = '',
+      count = 100,
+      startIndex = 0,
+      fields = '',
+      sortBy = 'lastModifiedTime',
+    } = search
+    if (!token) {
+      return {
+        success: true, body: {
+          count: BigInt(0),
+          startIndex: BigInt(0),
+          endIndex: BigInt(0),
+          isMore: false,
+          data: [],
+        }
+      }
+    }
     const resp = await this.client.fire('GET',
       `usertransitions/user/${token}`,
+      { count, startIndex, fields, sortBy },
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {
@@ -290,5 +322,4 @@ export class UserApi {
     }
     return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
   }
-
 }

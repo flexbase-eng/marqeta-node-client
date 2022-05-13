@@ -43,6 +43,7 @@ import { Marqeta } from '../src'
 
         if (foundUserA.body.firstName) {
           foundUserA.body.firstName += Math.floor(Math.random() * 100) + 1
+          foundUserA.body.firstName = foundUserA.body.firstName.slice(0, 20)
           upUserA = await client.user.update(foundUserA.body)
         }
 
@@ -109,7 +110,6 @@ import { Marqeta } from '../src'
     console.log('Error! Unable to create the User account')
     console.log(mockUser)
   }
-
   console.log('testing User search...')
   const { email, ...searchFields } = mockUser // eslint-disable-line
   const userExists = await client.user.search(searchFields)
@@ -170,7 +170,7 @@ import { Marqeta } from '../src'
   console.log('testing list User transitions by User token Id...')
   if (testUser?.token) {
     let listTrans
-    listTrans = await client.user.listTransition(testUser?.token)
+    listTrans = await client.user.listTransition({ ...testUser })
 
     if (listTrans?.success && listTrans?.body?.count) {
       console.log('Success! We were able to get a list of User transitions.')
@@ -182,6 +182,27 @@ import { Marqeta } from '../src'
     console.log('Error! Unable to get User transition because the User ' +
       'token is empty.')
     console.log(listA)
+  }
+
+  console.log('testing list one User transitions by token Id...')
+  if (testUser?.token) {
+    let listTransOne
+    listTransOne = await client.user.listTransition({
+      ...testUser,
+      count: 1,
+    })
+    if (listTransOne?.success
+      && listTransOne?.body?.count && listTransOne.body) {
+      console.log('Success! We were able to get a list of one User transitions.')
+    } else {
+      console.log('Error! We were unable to get a list of one User ' +
+        'transitions.')
+      console.log(listTransOne)
+    }
+  } else {
+    console.log('Error! Unable to get list of User transition statuses ' +
+      'because the User token Id is empty.')
+    console.log(testUser)
   }
 
 })()

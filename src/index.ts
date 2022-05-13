@@ -146,7 +146,7 @@ export class Marqeta {
  * trying to place them on the call.
  */
 function something(arg: any) {
-  return arg || arg === false || arg === 0 || arg === ''
+  return arg || arg === false || arg === 0
 }
 
 /*
