@@ -306,7 +306,7 @@ export class UserApi {
       }
     }
     const resp = await this.client.fire('GET',
-      `/usertransitions/user/${token}`,
+      `usertransitions/user/${token}`,
       { count, startIndex, fields, sortBy },
     )
     // catch any errors...

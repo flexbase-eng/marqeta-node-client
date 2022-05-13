@@ -98,10 +98,9 @@ export class Marqeta {
     // build up the complete url from the provided 'uri' and the 'host'
     let url = new URL(PROTOCOL+'://'+path.join(this.host, uri))
     if (query) {
-      const cleanQuery = removeEmpty(query)
-      Object.keys(cleanQuery).forEach(k => {
-        if (something(cleanQuery[k])) {
-          url.searchParams.append(k, cleanQuery[k].toString())
+      Object.keys(query).forEach(k => {
+        if (something(query[k])) {
+          url.searchParams.append(k, query[k].toString())
         }
       })
     }
@@ -147,7 +146,7 @@ export class Marqeta {
  * trying to place them on the call.
  */
 function something(arg: any) {
-  return arg || arg === false || arg === 0 || arg === ''
+  return arg || arg === false || arg === 0
 }
 
 /*

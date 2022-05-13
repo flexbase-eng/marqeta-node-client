@@ -193,9 +193,7 @@ import { Marqeta } from '../src'
     })
     if (listTransOne?.success
       && listTransOne?.body?.count && listTransOne.body) {
-      console.log(`[ONE: ] ${JSON.stringify(listTransOne)}`)
-      console.log('Success! We were able to get a list of one User ' +
-        'transitions.')
+      console.log('Success! We were able to get a list of one User transitions.')
     } else {
       console.log('Error! We were unable to get a list of one User ' +
         'transitions.')
