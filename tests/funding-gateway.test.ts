@@ -28,5 +28,19 @@ import { Marqeta } from '../src'
     console.log(funding)
   }
 
-})()
+  console.log('retrieving funding gateway source...')
+  if (funding?.body?.token) {
+    const found = await client.fundingGatewayApi.get(funding?.body?.token)
+    if (found.success && found?.body?.token) {
+      console.log('Success! Funding gateway retrieved.')
+    } else {
+      console.log('Error! Unable to retrieve a funding gateway source.')
+      console.log(found)
+    }
+  } else {
+    console.log('Error! Unable to retrieve a funding gateway source using an ' +
+      ' empty token Id.')
+    console.log(funding)
+  }
 
+})()
