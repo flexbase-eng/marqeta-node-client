@@ -29,8 +29,9 @@ import { Marqeta } from '../src'
   }
 
   console.log('retrieving funding gateway source...')
+  let found
   if (funding?.body?.token) {
-    const found = await client.fundingGatewayApi.get(funding?.body?.token)
+    found = await client.fundingGatewayApi.get(funding?.body?.token)
     if (found.success && found?.body?.token) {
       console.log('Success! Funding gateway retrieved.')
     } else {
@@ -41,6 +42,24 @@ import { Marqeta } from '../src'
     console.log('Error! Unable to retrieve a funding gateway source using an ' +
       ' empty token Id.')
     console.log(funding)
+  }
+  console.log('updating funding gateway source active status...')
+  if (found?.body?.token && found?.body?.name) {
+    const foundName = found.body.name
+    found.body.name = 'updated_name_' + Math.floor(65536 * 100) + 1,
+    found.body.name = found.body.name.slice(0, 40)
+    const updated = await client.fundingGatewayApi.update(found.body)
+    if (updated.success && updated?.body?.token) {
+      console.log('Success! Funding gateway name changed from "' + foundName +
+        '" to "' + found.body.name + '"')
+    } else {
+      console.log('Error! Unable to update funding gateway source.')
+      console.log(updated)
+    }
+  } else {
+    console.log('Error! Unable to update funding gateway source using an ' +
+      'empty token Id.')
+    console.log(found)
   }
 
 })()
