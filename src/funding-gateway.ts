@@ -104,7 +104,7 @@ export class FundingGatewayApi {
     } = source
     /* eslint-enable no-unused-vars */
     const resp = await this.client.fire('PUT',
-      `fundingsources/programgateway/${source.token}`,
+      `fundingsources/programgateway/${token}`,
       undefined,
       updateOptions,
     )

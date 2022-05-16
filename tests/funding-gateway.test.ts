@@ -43,7 +43,6 @@ import { Marqeta } from '../src'
       ' empty token Id.')
     console.log(funding)
   }
-
   console.log('updating funding gateway source active status...')
   if (found?.body?.token && found?.body?.name) {
     const foundName = found.body.name
