@@ -58,7 +58,7 @@ import { Marqeta } from '../src'
     }
   } else {
     console.log('Error! Unable to update funding gateway source using an ' +
-      ' empty token Id.')
+      'empty token Id.')
     console.log(found)
   }
 
