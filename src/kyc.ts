@@ -70,11 +70,11 @@ export class KycApi {
    * results for that User.
    */
   async userResults(search :{
-    token ? : string,
-    count ? : number,
-    startIndex ? : number,
-    fields ? : string[],
-    sortBy ? : string,
+    token?: string,
+    count?: number,
+    startIndex?: number,
+    fields?: string[],
+    sortBy?: string,
   } = {}): Promise<{
     success: boolean,
     body?: KycList,
