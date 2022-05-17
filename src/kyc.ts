@@ -5,7 +5,6 @@ import type {
   MarqetaOptions,
   MarqetaError,
 } from './'
-import { Transition } from './business'
 
 export interface Kyc {
   notes?: string;
