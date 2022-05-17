@@ -70,7 +70,6 @@ export class Marqeta {
   cardProduct: CardProductApi
   webHooks: WebhooksApi
   fundingGatewayApi: FundingGatewayApi
-  fundingSourceApi: FundingSourceApi
 
   constructor (options?: MarqetaOptions) {
     this.host = options?.host || MARQETA_HOST
@@ -85,7 +84,6 @@ export class Marqeta {
     this.cardProduct = new CardProductApi(this, options)
     this.webHooks = new WebhooksApi(this, options)
     this.fundingGatewayApi = new FundingGatewayApi(this, options)
-    this.fundingSourceApi = new FundingSourceApi(this, options)
   }
 
   /*
