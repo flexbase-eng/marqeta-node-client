@@ -54,8 +54,9 @@ import { Marqeta } from '../src'
   console.log('getting list of one Marqeta business...')
   const businessList = await client.business.list({ count: 1 })
 
+  let business
   if (businessList?.body?.isMore && Array.isArray(businessList?.body?.data)) {
-    const business = businessList.body.data.pop()
+    business = businessList.body.data.pop()
     if (business?.token) {
       console.log('sending a Business KYB request to Marqeta...')
       const verified = await client.kyc.verify({
@@ -73,6 +74,23 @@ import { Marqeta } from '../src'
   } else {
     console.log('Error! Unable to get a list of Businesses to test KYB.')
     console.log(businessList)
+  }
+
+  if (business?.token) {
+    console.log('getting list of Marqeta Business KYC results...')
+    const businessResults = await client.kyc.businessResults({ ...business })
+    if (businessResults?.success && Array.isArray(businessResults?.body?.data)) {
+      console.log('Success! A list of KYC results was returned for business: ' +
+        business.token
+      )
+    } else {
+      console.log('Error! Unable to get a list of KYC results for business: ' +
+        business.token)
+      console.log(businessResults)
+    }
+  } else {
+    console.log('Error! Empty Business token Id. Cannot get a list of User KYC ' +
+      'results')
   }
 
 })()
