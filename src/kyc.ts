@@ -3,8 +3,8 @@
 import type {
   Marqeta,
   MarqetaOptions,
+  MarqetaError,
 } from './'
-import { MarqetaError } from './'
 
 export interface Kyc {
   notes?: string;
