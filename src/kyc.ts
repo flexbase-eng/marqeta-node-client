@@ -115,4 +115,55 @@ export class KycApi {
     }
     return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
   }
+
+  /*
+   * Function that takes a Marqeta Business token and gets a list of the KYC
+   * results for that Business.
+   */
+  async businessResults(search :{
+    token?: string,
+    count?: number,
+    startIndex?: number,
+    fields?: string[],
+    sortBy?: string,
+  } = {}): Promise<{
+    success: boolean,
+    body?: KycList,
+    error?: MarqetaError,
+  }> {
+    const {
+      token = '',
+      count = 100,
+      startIndex = 0,
+      fields = '',
+      sortBy = 'lastModifiedTime',
+    } = search
+    if (!token) {
+      return {
+        success: true, body: {
+          count: BigInt(0),
+          startIndex: BigInt(0),
+          endIndex: BigInt(0),
+          isMore: false,
+          data: [],
+        }
+      }
+    }
+    const resp = await this.client.fire('GET',
+      `kyc/business/${token}`,
+      { count, startIndex, fields, sortBy },
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
 }
