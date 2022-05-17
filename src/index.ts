@@ -14,7 +14,6 @@ import { CardApi } from './card'
 import { CardProductApi } from './card-product'
 import { WebhooksApi } from './webhooks'
 import { FundingGatewayApi } from './funding-gateway'
-import { FundingSourceApi } from './funding-source'
 
 const PROTOCOL = 'https'
 const MARQETA_HOST = 'sandbox-api.marqeta.com/v3'
