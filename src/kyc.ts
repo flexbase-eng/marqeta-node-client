@@ -166,4 +166,30 @@ export class KycApi {
     }
     return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
   }
+
+  /*
+   * Function to take a KYC or KYB token, send that to Marqeta, and have
+   * the KYC result returned.
+   */
+  async byTokenId(token: string): Promise<{
+    success: boolean,
+    body?: Kyc,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('GET',
+      `kyc/${token}`,
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
 }

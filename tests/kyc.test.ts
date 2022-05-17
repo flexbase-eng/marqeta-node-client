@@ -88,9 +88,20 @@ import { Marqeta } from '../src'
         business.token)
       console.log(businessResults)
     }
+
+    console.log('getting single Marqeta Business KYC result...')
+    const kycResult = await client.kyc.byTokenId(business.token)
+    if (kycResult?.success && kycResult?.body?.token) {
+      console.log('Success! KYC result retrieved for the business with token: ' +
+        business.token
+      )
+    } else {
+      console.log('Error! Unable to retrieve KYC result for business: ' +
+        business.token)
+      console.log(kycResult)
+    }
   } else {
-    console.log('Error! Empty Business token Id. Cannot get a list of User KYC ' +
-      'results')
+    console.log('Error! Empty Business token Id. Cannot get KYC result')
   }
 
 })()
