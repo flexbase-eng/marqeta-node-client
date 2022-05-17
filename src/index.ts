@@ -15,6 +15,7 @@ import { CardProductApi } from './card-product'
 import { WebhooksApi } from './webhooks'
 import { FundingGatewayApi } from './funding-gateway'
 import { FundingSourceApi } from './funding-source'
+import { KycApi } from './kyc'
 
 const PROTOCOL = 'https'
 const MARQETA_HOST = 'sandbox-api.marqeta.com/v3'
@@ -72,6 +73,7 @@ export class Marqeta {
   webHooks: WebhooksApi
   fundingGatewayApi: FundingGatewayApi
   fundingSourceApi: FundingSourceApi
+  kyc: KycApi
 
   constructor (options?: MarqetaOptions) {
     this.host = options?.host || MARQETA_HOST
@@ -87,6 +89,7 @@ export class Marqeta {
     this.webHooks = new WebhooksApi(this, options)
     this.fundingGatewayApi = new FundingGatewayApi(this, options)
     this.fundingSourceApi = new FundingSourceApi(this, options)
+    this.kyc = new KycApi(this, options)
   }
 
   /*
@@ -129,6 +132,15 @@ export class Marqeta {
     for (let cnt = 0; cnt < 3; cnt++) {
       // now we can make the call... see if it's a JSON body or a FormData one...
       try {
+        const foo = {
+          method: method,
+          body: isForm ?
+            (body as any) :
+            (body ? JSON.stringify(body) : undefined),
+          headers,
+        }
+        console.log(`[FOO: ] ${JSON.stringify(foo)}`)
+
         response = await fetch(url, {
           method: method,
           body: isForm ?
