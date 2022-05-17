@@ -71,10 +71,10 @@ export class KycApi {
    */
   async userResults(search :{
     token ? : string,
-      count ? : number,
-      startIndex ? : number,
-      fields ? : string[],
-      sortBy ? : string,
+    count ? : number,
+    startIndex ? : number,
+    fields ? : string[],
+    sortBy ? : string,
   } = {}): Promise<{
     success: boolean,
     body?: KycList,
