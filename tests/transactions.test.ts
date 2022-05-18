@@ -16,7 +16,7 @@ import { Marqeta } from '../src'
   if (userList?.body?.isMore && Array.isArray(userList?.body?.data)) {
     user = userList.body.data.pop()
     if (user?.token) {
-      console.log('getting user transactions...')
+      console.log('getting user transactions by user token Id...')
       const transactions = await client.transactions.list({
         userToken: user.token
       })

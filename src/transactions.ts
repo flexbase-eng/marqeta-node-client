@@ -39,6 +39,11 @@ export class TransactionsApi {
     this.client = client
   }
 
+  /*
+   * Function to take a set of optional arguments, send those to Marqeta, and
+   * return a list of transactions.  These can be transactions for a business,
+   * user, acting user, merchant, or campaign.
+   */
   async list(search: {
     count?: number,
     startIndex?: number,
@@ -61,28 +66,9 @@ export class TransactionsApi {
     body?: TransactionList,
     error?: MarqetaError,
   }> {
-    const {
-      count = 100,
-      startIndex = 0,
-      fields = '',
-      sortBy = 'lastModifiedTime',
-      startDate = '',
-      endDate = '',
-      type = '',
-      userToken = '',
-      businessToken = '',
-      actingUserToken = '',
-      cardToken = '',
-      merchantToken = '',
-      campaignToken = '',
-      state = '',
-      version = '',
-    } = search
     const resp = await this.client.fire('GET',
       'transactions',
-      { count, startIndex, fields, startDate, endDate, type, userToken,
-        businessToken, actingUserToken, cardToken, merchantToken, campaignToken,
-        state, version, sortBy },
+      { ...search },
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {
