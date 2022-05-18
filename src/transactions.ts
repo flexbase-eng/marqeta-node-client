@@ -110,4 +110,55 @@ export class TransactionsApi {
     }
     return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
   }
+
+  /*
+   * Function to take a set of optional arguments, send those to Marqeta, and
+   * return a list of related transactions.  These can be transactions for a business,
+   * user, acting user, merchant, or campaign.
+   */
+  async related(search: {
+    token?: string,
+    count?: number,
+    startIndex?: number,
+    fields?: string[],
+    sortBy?: string,
+    startDate?: string,
+    endDate?: string,
+    type?: string,
+    state?: string,
+    version?: string,
+    verbose?: boolean,
+  } = {}): Promise<{
+    success: boolean,
+    body?: TransactionList,
+    error?: MarqetaError,
+  }> {
+    if (!search.token) {
+      return {
+        success: true, body: {
+          count: BigInt(0),
+          startIndex: BigInt(0),
+          endIndex: BigInt(0),
+          isMore: false,
+          data: [],
+        }
+      }
+    }
+    const resp = await this.client.fire('GET',
+      `transactions/${search.token}/related`,
+      { ...search },
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
 }
