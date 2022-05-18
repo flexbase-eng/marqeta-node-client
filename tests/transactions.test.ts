@@ -18,7 +18,8 @@ import { Marqeta } from '../src'
     if (user?.token) {
       console.log('getting user transactions by user token Id...')
       const transactions = await client.transactions.list({
-        userToken: user.token
+        userToken: user.token,
+        count: 1
       })
       if (transactions.success) {
         console.log('Success! A list of transactions was retrieved for user: '
