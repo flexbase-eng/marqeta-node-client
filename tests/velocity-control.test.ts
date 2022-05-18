@@ -45,4 +45,29 @@ import { Marqeta } from '../src'
     console.log(userList)
   }
 
+  const products = await client.cardProduct.list()
+
+  if (products?.body?.isMore && Array.isArray(products?.body?.data)) {
+    console.log('getting a list of velocity controls ...')
+    const oneProduct = products.body.data.pop()
+    if (oneProduct?.token) {
+      const velocityList = await client.velocityControl.list({
+        cardProduct: oneProduct.token
+      })
+      if (velocityList?.success) {
+        console.log('Success! A list of velocity controls was retrieved for ' +
+         ' card product token Id: ' + oneProduct.token)
+      } else {
+        console.log('Error! Failed to retrieve a list of velocity controls ' +
+        'for card product token Id: ' + oneProduct.token)
+        console.log(velocityList)
+      }
+    } else {
+      console.log('Error! Empty card product token Id.')
+      console.log(oneProduct)
+    }
+  } else {
+    console.log('Error! Unable to get a list of card products.')
+  }
+
 })()

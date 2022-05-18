@@ -30,6 +30,14 @@ export interface VelocityControl {
   active?: boolean;
 }
 
+export interface VelocityControlList {
+  count?: bigint;
+  startIndex?: bigint;
+  endIndex?: bigint;
+  isMore?: boolean;
+  data?: VelocityControl[];
+}
+
 export class VelocityControlApi {
   client: Marqeta;
 
@@ -50,6 +58,46 @@ export class VelocityControlApi {
       'velocitycontrols',
       undefined,
       { ...control },
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
+
+  /*
+   * Function to take a set of optional arguments, send that to Marqeta, and
+   * have a list of Velocity Controls returned to the caller.
+   */
+  async list(search: {
+    cardProduct?: string,
+    count?: number,
+    startIndex?: number,
+    fields?: string[],
+    sortBy?: string,
+  }): Promise<{
+    success: boolean,
+    body?: VelocityControlList,
+    error?: MarqetaError,
+  }> {
+    const {
+      cardProduct = '',
+      count = 100,
+      startIndex = 0,
+      fields = '',
+      sortBy = 'lastModifiedTime',
+    } = search
+    const resp = await this.client.fire('GET',
+      'velocitycontrols',
+      { cardProduct, count, startIndex, fields, sortBy },
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {
