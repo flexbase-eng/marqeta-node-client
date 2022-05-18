@@ -40,6 +40,8 @@ import { Marqeta } from '../src'
   console.log('getting users...')
   const users = await client.user.list()
 
+  let newCard
+  let getTransaction
   if (users?.body?.isMore && Array.isArray(users?.body?.data)) {
     const products = await client.cardProduct.list()
     const user = users?.body?.data.pop()
@@ -47,7 +49,6 @@ import { Marqeta } from '../src'
     if (products?.body?.isMore && Array.isArray(products?.body?.data)) {
       const product = products?.body?.data.pop()
 
-      let newCard
       if (user?.token && product?.token) {
         console.log('creating card for user...')
         newCard = await client.card.create({
@@ -67,7 +68,7 @@ import { Marqeta } from '../src'
           }
         )
         if (response?.payload?.transaction?.token) {
-          const getTransaction = await client.transactions.byTokenId(
+          getTransaction = await client.transactions.byTokenId(
             response.payload.transaction.token
           )
           if (getTransaction?.success && getTransaction?.body?.token) {
@@ -88,6 +89,23 @@ import { Marqeta } from '../src'
   } else {
     console.log('Error! Unable to get a list of users.')
     console.log(userList)
+  }
+
+  console.log('getting related transactions ...')
+  if (getTransaction?.success && getTransaction?.body?.token) {
+    const related = await client.transactions.related({
+      token: getTransaction.body.token,
+      count: 1
+    })
+    if (related.success && Array.isArray(related?.body?.data)) {
+      console.log('Success! Related transactions retrieved by token Id')
+    } else {
+      console.log('Error! Unable to retrieve related transactions by token Id')
+      console.log(related)
+    }
+  } else {
+    console.log('Error! Empty Transaction token Id')
+    console.log(getTransaction)
   }
 
 })()
