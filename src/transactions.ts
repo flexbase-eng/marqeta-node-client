@@ -6,6 +6,7 @@ import type {
 } from './'
 
 export interface Transaction {
+  token?: string;
   count?: bigint;
   startIndex: bigint;
   fields?: string[];
@@ -69,6 +70,32 @@ export class TransactionsApi {
     const resp = await this.client.fire('GET',
       'transactions',
       { ...search },
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
+
+  /*
+   * Function to take a Transaction token Id and return the Transaction
+   * information for that token Id.
+   */
+  async byTokenId(token: string): Promise<{
+    success: boolean,
+    body?: Transaction,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('GET',
+      `transactions/${token}`,
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {

@@ -9,7 +9,7 @@ import { Marqeta } from '../src'
     apiAccessToken: process.env.MARQETA_API_ACCESS_TOKEN
   })
 
-  console.log('getting a Marqeta user ...')
+  console.log('getting a user ...')
   const userList = await client.user.list({ count: 1 })
 
   let user
@@ -33,7 +33,60 @@ import { Marqeta } from '../src'
       console.log('Error! Empty user token Id.')
     }
   } else {
-    console.log('Error! Unable to get a list of Marqeta users.')
+    console.log('Error! Unable to get a list of users.')
+    console.log(userList)
+  }
+
+  console.log('getting users...')
+  const users = await client.user.list()
+
+  if (users?.body?.isMore && Array.isArray(users?.body?.data)) {
+    const products = await client.cardProduct.list()
+    const user = users?.body?.data.pop()
+
+    if (products?.body?.isMore && Array.isArray(products?.body?.data)) {
+      const product = products?.body?.data.pop()
+
+      let newCard
+      if (user?.token && product?.token) {
+        console.log('creating card for user...')
+        newCard = await client.card.create({
+          userToken: user.token,
+          cardProductToken: product.token,
+        })
+      }
+      if (newCard?.body?.token) {
+        console.log('simulating a card transaction...')
+        const response = await client.fire('POST',
+          'simulate/authorization',
+          undefined,
+          {
+            amount: '10',
+            mid: '1234567890',
+            cardToken: newCard.body.token
+          }
+        )
+        if (response?.payload?.transaction?.token) {
+          const getTransaction = await client.transactions.byTokenId(
+            response.payload.transaction.token
+          )
+          if (getTransaction?.success && getTransaction?.body?.token) {
+            console.log('Success! Retrieved a transaction by token Id')
+          } else {
+            console.log('Error! Unable to retrieve a transaction by token Id')
+            console.log(getTransaction)
+          }
+        } else {
+          console.log('Error! Empty Transaction token Id')
+          console.log(response)
+        }
+      } else {
+        console.log('Error! Empty new card token Id')
+        console.log(newCard)
+      }
+    }
+  } else {
+    console.log('Error! Unable to get a list of users.')
     console.log(userList)
   }
 
