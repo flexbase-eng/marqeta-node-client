@@ -47,11 +47,12 @@ import { Marqeta } from '../src'
 
   const products = await client.cardProduct.list()
 
+  let velocityList
   if (products?.body?.isMore && Array.isArray(products?.body?.data)) {
     console.log('getting a list of velocity controls ...')
     const oneProduct = products.body.data.pop()
     if (oneProduct?.token) {
-      const velocityList = await client.velocityControl.list({
+      velocityList = await client.velocityControl.list({
         cardProduct: oneProduct.token
       })
       if (velocityList?.success) {
@@ -68,6 +69,29 @@ import { Marqeta } from '../src'
     }
   } else {
     console.log('Error! Unable to get a list of card products.')
+  }
+
+  console.log('getting a velocity control by token Id...')
+  if (velocityList?.success && Array.isArray(velocityList?.body?.data)) {
+    const oneVelocity = velocityList?.body?.data.pop()
+    if (oneVelocity?.token) {
+      const foundVelocity = await client.velocityControl.byTokenId(
+        oneVelocity.token
+      )
+      if (foundVelocity.success) {
+        console.log('Success! The Velocity Control was retrieved by token' +
+          ' Id: ' + oneVelocity.token)
+      } else {
+        console.log('Error! Unable to retrieve the Velocity Control by' +
+          ' token Id: ' + oneVelocity.token)
+        console.log(foundVelocity)
+      }
+    } else {
+      console.log('Error! Empty Velocity Control token Id.')
+      console.log(oneVelocity)
+    }
+  } else {
+    console.log('Error! Unable to get a list of velocity controls.')
   }
 
 })()

@@ -105,4 +105,33 @@ export class VelocityControlApi {
     }
     return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
   }
+
+  /*
+   * Function to take a Velocity token and some optional arguments, send that to
+   * Marqeta, and have the found Velocity Control returned to the caller.
+   */
+  async byTokenId(token: string, search?: {
+    fields?: string[],
+  }): Promise<{
+    success: boolean,
+    body?: VelocityControl,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('GET',
+      `velocitycontrols/${token}`,
+      { ...search },
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
 }
