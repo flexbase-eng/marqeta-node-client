@@ -72,8 +72,9 @@ import { Marqeta } from '../src'
   }
 
   console.log('getting a velocity control by token Id...')
+  let oneVelocity
   if (velocityList?.success && Array.isArray(velocityList?.body?.data)) {
-    const oneVelocity = velocityList?.body?.data.pop()
+    oneVelocity = velocityList?.body?.data.pop()
     if (oneVelocity?.token) {
       const foundVelocity = await client.velocityControl.byTokenId(
         oneVelocity.token
@@ -89,6 +90,26 @@ import { Marqeta } from '../src'
     } else {
       console.log('Error! Empty Velocity Control token Id.')
       console.log(oneVelocity)
+    }
+  } else {
+    console.log('Error! Unable to get a list of velocity controls.')
+  }
+
+  console.log('updating a velocity control...')
+  if (oneVelocity?.token) {
+    const origActive = oneVelocity.active
+    console.log(`[original active:] ${JSON.stringify(origActive)}`)
+    oneVelocity.active = !oneVelocity.active
+
+    const updateVelocity = await client.velocityControl.update(
+      oneVelocity
+    )
+    if (updateVelocity.success && updateVelocity?.body?.active != undefined) {
+      console.log('Success! The Velocity Control active status was updated ' +
+          'from "' + origActive + '" to "' + updateVelocity.body.active + '"')
+    } else {
+      console.log('Error! Unable to update the Velocity Control active status.')
+      console.log(updateVelocity)
     }
   } else {
     console.log('Error! Unable to get a list of velocity controls.')
