@@ -17,6 +17,7 @@ import { FundingGatewayApi } from './funding-gateway'
 import { KycApi } from './kyc'
 import { TransactionsApi } from './transactions'
 import { VelocityControlApi } from './velocity-control'
+import { AuthorizationControlApi } from './authorization-control'
 
 const PROTOCOL = 'https'
 const MARQETA_HOST = 'sandbox-api.marqeta.com/v3'
@@ -76,6 +77,7 @@ export class Marqeta {
   kyc: KycApi
   transactions: TransactionsApi
   velocityControl: VelocityControlApi
+  authorizationControl: AuthorizationControlApi
 
   constructor (options?: MarqetaOptions) {
     this.host = options?.host || MARQETA_HOST
@@ -93,6 +95,7 @@ export class Marqeta {
     this.kyc = new KycApi(this, options)
     this.transactions = new TransactionsApi(this, options)
     this.velocityControl = new VelocityControlApi(this, options)
+    this.authorizationControl = new AuthorizationControlApi(this, options)
   }
 
   /*
