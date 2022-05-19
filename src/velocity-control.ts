@@ -15,7 +15,7 @@ export interface VelocityControl {
   merchantScope: {
     mid?: string;
     mcc?: string;
-    mcc_group?: string;
+    mccGroup?: string;
   }
   usageLimit?: number;
   approvalsOnly?: boolean;
