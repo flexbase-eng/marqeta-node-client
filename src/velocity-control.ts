@@ -107,8 +107,8 @@ export class VelocityControlApi {
   }
 
   /*
-   * Function to take a Velocity token and some optional arguments, send that to
-   * Marqeta, and have the found Velocity Control returned to the caller.
+   * Function to take a Velocity token and some optional arguments, send those
+   * to Marqeta, and have the found Velocity Control returned to the caller.
    */
   async byTokenId(token: string, search?: {
     fields?: string[],
@@ -134,4 +134,33 @@ export class VelocityControlApi {
     }
     return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
   }
+
+  /*
+   * Function to take a Velocity token and some optional arguments, send those
+   * to Marqeta, and update a Velocity Control.
+   */
+  async update(control: Partial<VelocityControl>): Promise<{
+    success: boolean,
+    body?: VelocityControl,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('PUT',
+      `velocitycontrols/${control.token}`,
+      undefined,
+      { ...control },
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
+
 }
