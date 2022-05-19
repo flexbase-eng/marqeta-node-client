@@ -1,7 +1,8 @@
 'use strict'
 
 import type {
-  Marqeta, MarqetaError,
+  Marqeta,
+  MarqetaError,
   MarqetaOptions,
 } from './'
 
@@ -11,12 +12,12 @@ export interface AuthorizationControl {
   association?: {
     userToken?: string;
     cardProductToken?: string;
-  }
+  };
   merchantScope: {
     mid?: string;
     mcc?: string;
     mccGroup?: string;
-  }
+  };
   startTime: string;
   endTime: string;
   active?: boolean;
