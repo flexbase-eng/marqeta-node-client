@@ -163,4 +163,37 @@ export class VelocityControlApi {
     return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
   }
 
+  /*
+   * Function to take a user token with a set of optional arguments, send those
+   * to Marqeta, and have a list of User Velocity Controls returned to
+   * the caller.
+   */
+  async byUser(search: {
+    token?: string,
+    count?: number,
+    startIndex?: number,
+    fields?: string[],
+    sortBy?: string,
+  }): Promise<{
+    success: boolean,
+    body?: VelocityControlList,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('GET',
+      `velocitycontrols/user/${search.token}/available`,
+      { ...search },
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
 }

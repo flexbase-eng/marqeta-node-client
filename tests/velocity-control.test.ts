@@ -33,7 +33,7 @@ import { Marqeta } from '../src'
         console.log('Success! A velocity control was created for user: ' +
           user?.token)
       } else {
-        console.log('Success! Unable to create a velocity control for user: ' +
+        console.log('Error! Unable to create a velocity control for user: ' +
           + user?.token)
         console.log(control)
       }
@@ -113,6 +113,24 @@ import { Marqeta } from '../src'
     }
   } else {
     console.log('Error! Unable to get a list of velocity controls.')
+  }
+
+  console.log('getting a list of user velocity controls...')
+  if (user?.token) {
+    const control = await client.velocityControl.byUser({
+      token: user.token,
+      count: 1
+    })
+    if (control.success && control?.body?.isMore) {
+      console.log('Success! A list of velocity controls was retrieved for user: ' +
+        user?.token)
+    } else {
+      console.log('Error! Unable to get a list of velocity controls for user: ' +
+        + user?.token)
+      console.log(control)
+    }
+  } else {
+    console.log('Error! Empty user token Id.')
   }
 
 })()
