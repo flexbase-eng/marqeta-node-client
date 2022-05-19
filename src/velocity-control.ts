@@ -88,16 +88,9 @@ export class VelocityControlApi {
     body?: VelocityControlList,
     error?: MarqetaError,
   }> {
-    const {
-      cardProduct = '',
-      count = 100,
-      startIndex = 0,
-      fields = '',
-      sortBy = 'lastModifiedTime',
-    } = search
     const resp = await this.client.fire('GET',
       'velocitycontrols',
-      { cardProduct, count, startIndex, fields, sortBy },
+      { ...search },
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {
