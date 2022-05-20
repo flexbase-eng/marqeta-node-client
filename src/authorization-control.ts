@@ -79,13 +79,9 @@ export class AuthorizationControlApi {
     body?: AuthorizationControl,
     error?: MarqetaError,
   }> {
-    const {
-      token,
-      fields = ''
-    } = search
     const resp = await this.client.fire('GET',
-      `authcontrols/${token}`,
-      { fields }
+      `authcontrols/${search.token}`,
+      { ...search }
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {
