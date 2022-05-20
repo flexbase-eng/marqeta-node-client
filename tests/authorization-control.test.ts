@@ -66,4 +66,27 @@ import { Marqeta } from '../src'
     console.log(authControl)
   }
 
+  if (authControl?.body?.token) {
+    console.log('updating user authorization control by token Id...')
+
+    let updated, originalActive
+    if (authControl?.body?.active) {
+      originalActive = authControl.body.active
+      authControl.body.active = !authControl.body.active
+      updated = await client.authorizationControl.update(
+        authControl.body
+      )
+    }
+    if (updated?.success && updated?.body?.token) {
+      console.log('Success! Authorization control active status: "' +
+      originalActive + '" was updated to: "' + updated?.body?.active)
+    } else {
+      console.log('Error! Unable to update Authorization control status.')
+      console.log(updated)
+    }
+  } else {
+    console.log('Error! Empty Authorization Control token Id')
+    console.log(authControl)
+  }
+
 })()
