@@ -7,8 +7,8 @@ import type {
 } from './'
 
 export interface Association {
-    userToken?: string;
-    cardProductToken?: string;
+  userToken?: string;
+  cardProductToken?: string;
 }
 
 export interface Merchant {
