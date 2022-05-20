@@ -65,4 +65,35 @@ export class AuthorizationControlApi {
     }
     return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
   }
+
+  /*
+   * Function to take an Authorization Control token with an optional fields
+   * argument, send those to Marqeta, and have an Authorization Control
+   * updated and returned to the caller.
+   */
+  async byTokenId(search: {
+    token?: string,
+    fields?: string[],
+  } = {}): Promise<{
+    success: boolean,
+    body?: AuthorizationControl,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('GET',
+      `authcontrols/${search.token}`,
+      { ...search }
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
 }
