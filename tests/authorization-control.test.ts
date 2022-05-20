@@ -21,7 +21,7 @@ import { Marqeta } from '../src'
   }
 
   console.log('getting a user ...')
-  let user
+  let user, authControl
   const userList = await client.user.list({ count: 1 })
 
   if (userList?.body?.isMore && Array.isArray(userList?.body?.data)) {
@@ -30,7 +30,7 @@ import { Marqeta } from '../src'
     if (user?.token) {
       console.log('creating user authorization control ...')
       mockAuthControl.association.userToken = user.token
-      const authControl = await client.authorizationControl.create(
+      authControl = await client.authorizationControl.create(
         mockAuthControl
       )
       if (authControl?.success) {
@@ -48,6 +48,22 @@ import { Marqeta } from '../src'
   } else {
     console.log('Error! Unable to get a list of users.')
     console.log(userList)
+  }
+
+  if (authControl?.body?.token) {
+    console.log('getting user authorization control by token Id...')
+    const found = await client.authorizationControl.byTokenId({
+      token: authControl?.body?.token
+    })
+    if (found.success && found?.body?.token) {
+      console.log('Success! Authorization control retrieved by token Id.')
+    } else {
+      console.log('Error! Unable to get authorization control by token Id.')
+      console.log(found)
+    }
+  } else {
+    console.log('Error! Empty Authorization Control token Id')
+    console.log(authControl)
   }
 
 })()
