@@ -125,4 +125,40 @@ export class AuthorizationControlApi {
     }
     return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
   }
+
+  /*
+   * Function to take a series of arguments, most of which are optional,
+   * pass them to Marqeta, and have a *paged* list of Authorization Controls
+   * returned either for a Card Product, or a User, and that conforms to the
+   * optional search criteria such as count, fields, sortBy, startIndex.
+   */
+  async list(search: {
+    cardProduct?: string,
+    user?: string,
+    count?: number,
+    startIndex?: string,
+    fields?: string[],
+    sortBy?: string,
+  } = {}): Promise<{
+    success: boolean,
+    body?: AuthorizationControlList,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('GET',
+      'businesses',
+      { ...search }
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
 }
