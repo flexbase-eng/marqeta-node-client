@@ -209,4 +209,31 @@ export class AuthorizationControlApi {
     }
     return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
   }
+
+  /*
+   * Function to take an Authorization Control Merchant Exemption token, send
+   * that to Marqeta, and have an Authorization Control Merchant Exemption
+   * object returned.
+   */
+  async getMerchantExemption(token?: string): Promise<{
+    success: boolean,
+    body?: AuthorizationControl,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('GET',
+      `authcontrols/exemptmids/${token}`,
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
 }

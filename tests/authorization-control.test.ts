@@ -109,15 +109,31 @@ import { Marqeta } from '../src'
   }
 
   console.log('creating Merchant Identifier exemption...')
-  const list = await client.authorizationControl.createMerchant({
+  let mid = await client.authorizationControl.createMerchant({
     name: 'test_1111',
     mid: '123456789102',
   })
-  if (list?.success) {
+  if (mid?.success) {
     console.log('Success! Merchant Identifier exemption created.')
   } else {
     console.log('Error! Unable to create Merchant Identifier exemption.')
-    console.log(list)
+    console.log(mid)
+  }
+
+  console.log('getting Merchant Identifier exemption...')
+  if (mid?.body?.token) {
+    const foundMerchant = await client.authorizationControl.getMerchantExemption(
+      mid.body.token
+    )
+    if (foundMerchant?.success) {
+      console.log('Success! Merchant Identifier exemption retrieved.')
+    } else {
+      console.log('Error! Empty Merchant Identifier token.')
+      console.log(foundMerchant)
+    }
+  } else {
+    console.log('Error! Empty Merchant Identifier token.')
+    console.log(mid)
   }
 
 })()
