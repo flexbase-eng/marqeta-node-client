@@ -31,7 +31,7 @@ import { Marqeta } from '../src'
       console.log('creating user authorization control ...')
       mockAuthControl.association.userToken = user.token
       authControl = await client.authorizationControl.create(
-        mockAuthControl
+        { ...mockAuthControl }
       )
       if (authControl?.success) {
         console.log('Success! Authorization Control created for user: ' +
@@ -106,6 +106,18 @@ import { Marqeta } from '../src'
   } else {
     console.log('Error! Empty user token.')
     console.log(user)
+  }
+
+  console.log('creating Merchant Identifier exemption...')
+  const list = await client.authorizationControl.createMerchant({
+    name: 'test_1111',
+    mid: '123456789102',
+  })
+  if (list?.success) {
+    console.log('Success! Merchant Identifier exemption created.')
+  } else {
+    console.log('Error! Unable to create Merchant Identifier exemption.')
+    console.log(list)
   }
 
 })()

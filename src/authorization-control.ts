@@ -6,13 +6,33 @@ import type {
   MarqetaOptions,
 } from './'
 
+export interface Association {
+    userToken?: string;
+    cardProductToken?: string;
+}
+
+export interface Merchant {
+  token?: string;
+  name: string;
+  association?: Association;
+  mid?: string;
+  merchantGroupToken: string;
+  startTime: string;
+  endTime: string;
+}
+
+export interface MerchantList {
+  count?: bigint;
+  startIndex?: bigint;
+  endIndex?: bigint;
+  isMore?: boolean;
+  data?: Merchant[];
+}
+
 export interface AuthorizationControl {
   token?: string;
   name?: string;
-  association?: {
-    userToken?: string;
-    cardProductToken?: string;
-  };
+  association?: Association;
   merchantScope: {
     mid?: string;
     mcc?: string;
@@ -147,6 +167,34 @@ export class AuthorizationControlApi {
     const resp = await this.client.fire('GET',
       'businesses',
       { ...search }
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
+
+  /*
+   * Function to take a series of optional Merchant arguments, pass them to
+   * Marqeta, and have a new Merchant Identifier exemption created and returned.
+   */
+  async createMerchant(merchant: Partial<Merchant>): Promise<{
+    success: boolean,
+    body?: Merchant,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('POST',
+      'authcontrols/exemptmids',
+      undefined,
+      merchant,
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {
