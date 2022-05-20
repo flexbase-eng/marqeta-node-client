@@ -89,4 +89,23 @@ import { Marqeta } from '../src'
     console.log(authControl)
   }
 
+  if (user?.token) {
+    console.log('getting a list of user authorization controls ...')
+    const list = await client.authorizationControl.list({
+      user: user.token,
+      count: 1
+    })
+    if (list?.success) {
+      console.log('Success! A list of Authorization Controls was found for ' +
+        'user: ' + user.token)
+    } else {
+      console.log('Error! Unable to retrieve a list of Authorization ' +
+      'Controls for user: ' + user.token)
+      console.log(list)
+    }
+  } else {
+    console.log('Error! Empty user token.')
+    console.log(user)
+  }
+
 })()
