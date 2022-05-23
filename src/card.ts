@@ -131,7 +131,7 @@ export class CardApi {
    */
   async create(card: Partial<Card>): Promise<{
     success: boolean,
-    body?: Card,
+    card?: Card,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('POST',
@@ -150,7 +150,7 @@ export class CardApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, card: { ...resp.payload } }
   }
 
   /*
@@ -167,7 +167,7 @@ export class CardApi {
     sortBy?: string,
   } = {}): Promise<{
     success: boolean,
-    body?: CardList,
+    cards?: CardList,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('GET',
@@ -185,7 +185,7 @@ export class CardApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, cards: { ...resp.payload } }
   }
 
   /*
@@ -194,7 +194,7 @@ export class CardApi {
    */
   async byBarcode(barcode: string): Promise<{
     success: boolean,
-    body?: Card,
+    card?: Card,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('GET',
@@ -211,7 +211,7 @@ export class CardApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, card: { ...resp.payload } }
   }
 
   /*
@@ -226,7 +226,7 @@ export class CardApi {
     userToken?: string,
   }): Promise<{
     success: boolean,
-    body?: Card,
+    card?: Card,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('PUT',
@@ -245,6 +245,6 @@ export class CardApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, card: { ...resp.payload } }
   }
 }

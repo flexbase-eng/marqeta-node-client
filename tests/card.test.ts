@@ -36,7 +36,7 @@ import { Marqeta } from '../src'
           mockCard.userToken = user.token
           mockCard.cardProductToken = product.token
           newCard = await client.card.create(mockCard)
-          if (newCard.success && newCard?.body?.token) {
+          if (newCard.success && newCard?.card?.token) {
             console.log('Success! New Card created.')
           } else {
             console.log('Error! Unable to create a new Card.')
@@ -46,9 +46,9 @@ import { Marqeta } from '../src'
       }
 
       console.log('retrieving new Card by barcode...')
-      if (newCard?.body?.barcode) {
-        const foundCard = await client.card.byBarcode(newCard?.body.barcode)
-        if (foundCard?.body?.token) {
+      if (newCard?.card?.barcode) {
+        const foundCard = await client.card.byBarcode(newCard?.card.barcode)
+        if (foundCard?.card?.token) {
           console.log('Success! New Card retrieved by barcode.')
         } else {
           console.log('Error! Unable to retrieve the new Card by barcode.')
@@ -61,20 +61,20 @@ import { Marqeta } from '../src'
 
       console.log('updating the new Marqeta Card...')
       let updatedCard
-      if (newCard?.body?.barcode) {
+      if (newCard?.card?.barcode) {
 
-        if (newCard && newCard?.body?.expiration && newCard?.body?.token) {
-          newCard.body.expiration = newCard.body.expiration + 1
-          const originalMeta = newCard.body?.metadata
+        if (newCard && newCard?.card?.expiration && newCard?.card?.token) {
+          newCard.card.expiration = newCard.card.expiration + 1
+          const originalMeta = newCard.card?.metadata
           updatedCard = await client.card.update(
-            newCard.body.token,
+            newCard.card.token,
             { metadata: { name_1: 'ipsum' } }
           )
 
-          if (updatedCard?.body?.token) {
+          if (updatedCard?.card?.token) {
             console.log('Success! The new Card metadata was updated from "' +
               JSON.stringify(originalMeta) + '" to "' +
-              JSON.stringify(updatedCard.body?.metadata) + '"')
+              JSON.stringify(updatedCard.card?.metadata) + '"')
           } else {
             console.log('Error! Unable to update the new Marqeta Card')
             console.log(newCard)
@@ -92,7 +92,7 @@ import { Marqeta } from '../src'
       console.log('getting a list of Marqeta Cards by User token Id...')
       if (user?.token) {
         const userCards = await client.card.listByUser(user?.token)
-        if (userCards?.success && userCards?.body?.count) {
+        if (userCards?.success && userCards?.cards?.count) {
           console.log('Success! Found Marqeta Cards by User token and ' +
             '{count:1} search option')
         } else {
