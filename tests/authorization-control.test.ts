@@ -121,14 +121,15 @@ import { Marqeta } from '../src'
   }
 
   console.log('getting Merchant Identifier exemption...')
+  let foundMerchant
   if (mid?.body?.token) {
-    const foundMerchant = await client.authorizationControl.getMerchantExemption(
+    foundMerchant = await client.authorizationControl.getMerchantExemption(
       mid.body.token
     )
     if (foundMerchant?.success) {
       console.log('Success! Merchant Identifier exemption retrieved.')
     } else {
-      console.log('Error! Empty Merchant Identifier token.')
+      console.log('Error! Unable to get Merchant Identifier exemption.')
       console.log(foundMerchant)
     }
   } else {
@@ -154,6 +155,34 @@ import { Marqeta } from '../src'
   } else {
     console.log('Error! Empty User token.')
     console.log(user)
+  }
+
+  console.log('updating Merchant Identifier exemption status...')
+  if (foundMerchant?.body?.active) {
+    const originalStatus = foundMerchant.body.active
+    foundMerchant.body.active = !foundMerchant.body.active
+    const updatedMerchant = await client.authorizationControl.
+      updateMerchantStatus(
+        foundMerchant.body
+      )
+    const updatedStatus = await client.authorizationControl.
+      byTokenId({
+        token: foundMerchant?.body?.token
+      })
+
+    if (updatedMerchant?.success
+      && originalStatus != updatedStatus?.body?.active
+      && updatedStatus?.body?.active != undefined) {
+      console.log('Success! Merchant Identifier exemption active status ' +
+        'updated from "' + originalStatus + '" to "' +
+        updatedStatus?.body?.active + '"')
+    } else {
+      console.log('Error! Unable to update Merchant Identifier active status.')
+      console.log(updatedMerchant)
+    }
+  } else {
+    console.log('Error! Empty Merchant Identifier Exemption active status.')
+    console.log(foundMerchant)
   }
 
 })()
