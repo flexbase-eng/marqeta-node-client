@@ -217,7 +217,7 @@ export class AuthorizationControlApi {
    */
   async getMerchantExemption(token?: string): Promise<{
     success: boolean,
-    body?: AuthorizationControl,
+    body?: Merchant,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('GET',
