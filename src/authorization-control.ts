@@ -283,7 +283,7 @@ export class AuthorizationControlApi {
    * If not active status argument is supplied, the default active status is set
    * to false.
    */
-  async updateMerchantStatus(merchant: Partial<Merchant>): Promise<{
+  async updateMerchantStatus(merchant: Merchant): Promise<{
     success: boolean,
     body?: Merchant,
     error?: MarqetaError,
@@ -294,16 +294,20 @@ export class AuthorizationControlApi {
     } = merchant
     if (!token) {
       return {
-        success: true,
-        body: {
-          name: merchant.name ?? '',
-        }
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: 'This call requires a Merchant to have an active "token" ' +
+            '- and this one does not.',
+          status: 404,
+        },
+        body: merchant,
       }
     }
     const resp = await this.client.fire('PUT',
       `authcontrols/exemptmids/${token}`,
       undefined,
-      { active: active },
+      { active },
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {
