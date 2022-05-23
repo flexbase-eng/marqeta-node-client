@@ -136,4 +136,24 @@ import { Marqeta } from '../src'
     console.log(mid)
   }
 
+  console.log('list Merchant Identifier Exemptions...')
+  if (user?.token) {
+    const merchantList = await client.authorizationControl.
+      listMerchantExemptions({
+        user: user.token,
+        count: 1,
+      })
+    if (merchantList?.success) {
+      console.log('Success! List of Merchant Identifier Exemptions retrieved' +
+        'for user with token Id: ' + user.token)
+    } else {
+      console.log('Success! Unable to get a List of Merchant Identifier ' +
+        'Exemptions for user with token Id: ' + user.token)
+      console.log(merchantList)
+    }
+  } else {
+    console.log('Error! Empty User token.')
+    console.log(user)
+  }
+
 })()
