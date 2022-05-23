@@ -14,12 +14,12 @@ export interface Association {
 export interface Merchant {
   token?: string;
   name: string;
-  active: boolean;
+  active?: boolean;
   association?: Association;
   mid?: string;
-  merchantGroupToken: string;
-  startTime: string;
-  endTime: string;
+  merchantGroupToken?: string;
+  startTime?: string;
+  endTime?: string;
 }
 
 export interface MerchantList {
@@ -184,8 +184,9 @@ export class AuthorizationControlApi {
   }
 
   /*
-   * Function to take a series of optional Merchant arguments, pass them to
-   * Marqeta, and have a new Merchant Identifier exemption created and returned.
+   * Function to take a series of optional Merchant Identifier Exemption
+   * arguments, pass them to Marqeta, and have a new Merchant Identifier
+   * Exemption created and returned.
    */
   async createMerchant(merchant: Partial<Merchant>): Promise<{
     success: boolean,
@@ -212,9 +213,9 @@ export class AuthorizationControlApi {
   }
 
   /*
-   * Function to take an Authorization Control Merchant Exemption token, send
-   * that to Marqeta, and have an Authorization Control Merchant Exemption
-   * object returned.
+   * Function to take an Authorization Control Merchant Identifier Exemption
+   * token, send that to Marqeta, and have an Authorization Control Merchant
+   * Identifier Exemption object returned.
    */
   async getMerchantExemption(token?: string): Promise<{
     success: boolean,
@@ -260,6 +261,49 @@ export class AuthorizationControlApi {
     const resp = await this.client.fire('GET',
       'businesses',
       { ...search }
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
+
+  /*
+   * Function to take an Authorization Control Merchant Identifier Exemption
+   * token, and an active status argument, send that to Marqeta, and have an
+   * Authorization Control Merchant Identifier Exemption's active status updated.
+   * If not active status argument is supplied, the default active status is set
+   * to false.
+   */
+  async updateMerchantStatus(merchant: Partial<Merchant>): Promise<{
+    success: boolean,
+    body?: Merchant,
+    error?: MarqetaError,
+  }> {
+    const {
+      token,
+      active = false,
+    } = merchant
+    if (!token) {
+      return {
+        success: true,
+        body: {
+          name: merchant.name ?? '',
+        }
+      }
+    }
+    const resp = await this.client.fire('PUT',
+      `authcontrols/exemptmids/${token}`,
+      undefined,
+      { active: active },
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {
