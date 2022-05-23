@@ -50,12 +50,12 @@ import { Marqeta } from '../src'
     console.log(userList)
   }
 
-  if (authControl?.body?.token) {
+  if (authControl?.authorizationControl?.token) {
     console.log('getting user authorization control by token Id...')
     const found = await client.authorizationControl.byTokenId({
-      token: authControl?.body?.token
+      token: authControl?.authorizationControl?.token
     })
-    if (found.success && found?.body?.token) {
+    if (found.success && found?.authorizationControl?.token) {
       console.log('Success! Authorization control retrieved by token Id.')
     } else {
       console.log('Error! Unable to get authorization control by token Id.')
@@ -66,20 +66,20 @@ import { Marqeta } from '../src'
     console.log(authControl)
   }
 
-  if (authControl?.body?.token) {
+  if (authControl?.authorizationControl?.token) {
     console.log('updating user authorization control by token Id...')
 
     let updated, originalActive
-    if (authControl?.body?.active) {
-      originalActive = authControl.body.active
-      authControl.body.active = !authControl.body.active
+    if (authControl?.authorizationControl?.active) {
+      originalActive = authControl.authorizationControl.active
+      authControl.authorizationControl.active = !authControl.authorizationControl.active
       updated = await client.authorizationControl.update(
-        authControl.body
+        authControl.authorizationControl
       )
     }
-    if (updated?.success && updated?.body?.token) {
+    if (updated?.success && updated?.authorizationControl?.token) {
       console.log('Success! Authorization control active status: "' +
-      originalActive + '" was updated to: "' + updated?.body?.active)
+      originalActive + '" was updated to: "' + updated?.authorizationControl?.active)
     } else {
       console.log('Error! Unable to update Authorization control status.')
       console.log(updated)
@@ -122,9 +122,9 @@ import { Marqeta } from '../src'
 
   console.log('getting Merchant Identifier exemption...')
   let foundMerchant
-  if (mid?.body?.token) {
+  if (mid?.merchant?.token) {
     foundMerchant = await client.authorizationControl.getMerchantExemption(
-      mid.body.token
+      mid.merchant.token
     )
     if (foundMerchant?.success) {
       console.log('Success! Merchant Identifier exemption retrieved.')
@@ -158,24 +158,24 @@ import { Marqeta } from '../src'
   }
 
   console.log('updating Merchant Identifier exemption status...')
-  if (foundMerchant?.body?.active) {
-    const originalStatus = foundMerchant.body.active
-    foundMerchant.body.active = !foundMerchant.body.active
+  if (foundMerchant?.merchant?.active) {
+    const originalStatus = foundMerchant.merchant.active
+    foundMerchant.merchant.active = !foundMerchant.merchant.active
     const updatedMerchant = await client.authorizationControl.
       updateMerchantStatus(
-        foundMerchant.body
+        foundMerchant.merchant
       )
     const updatedStatus = await client.authorizationControl.
       byTokenId({
-        token: foundMerchant?.body?.token
+        token: foundMerchant?.merchant?.token
       })
 
     if (updatedMerchant?.success
-      && originalStatus != updatedStatus?.body?.active
-      && updatedStatus?.body?.active != undefined) {
+      && originalStatus != updatedStatus?.authorizationControl?.active
+      && updatedStatus?.authorizationControl?.active != undefined) {
       console.log('Success! Merchant Identifier exemption active status ' +
         'updated from "' + originalStatus + '" to "' +
-        updatedStatus?.body?.active + '"')
+        updatedStatus?.authorizationControl?.active + '"')
     } else {
       console.log('Error! Unable to update Merchant Identifier active status.')
       console.log(updatedMerchant)
