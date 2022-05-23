@@ -38,29 +38,29 @@ import { Marqeta } from '../src';
 
   console.log('getting a list of Businesses...')
   const list = await client.business.list()
-  if (list.body?.isMore) {
-    console.log(`Success! ${list.body!.count} Businesses were retrieved.`)
-    const lstItem1 = list?.body?.data?.pop()
+  if (list.business?.isMore) {
+    console.log(`Success! ${list.business!.count} Businesses were retrieved.`)
+    const lstItem1 = list?.business?.data?.pop()
 
     if (lstItem1?.token) {
       console.log(`getting Business account by id: ${lstItem1.token}`)
       const fouA = await client.business.byTokenId(lstItem1.token)
 
-      if (fouA?.body?.token) {
+      if (fouA?.business?.token) {
         console.log('Success! The Business account was found by id: ' +
-            JSON.stringify(fouA.body.token))
+            JSON.stringify(fouA.business.token))
         console.log('updating Business...')
-        const orgNameA = fouA.body.businessNameLegal
+        const orgNameA = fouA.business.businessNameLegal
         let upA
 
-        if (fouA.body?.businessNameLegal) {
-          fouA.body.businessNameLegal += Math.floor(Math.random() * 100) + 1
-          upA = await client.business.update(fouA.body)
+        if (fouA.business?.businessNameLegal) {
+          fouA.business.businessNameLegal += Math.floor(Math.random() * 100) + 1
+          upA = await client.business.update(fouA.business)
         }
 
-        if (upA?.body?.token) {
+        if (upA?.business?.token) {
           console.log('Success! The Business account name was updated from "' +
-              orgNameA + '" to "' + upA.body?.businessNameLegal + '"')
+              orgNameA + '" to "' + upA.business?.businessNameLegal + '"')
         } else {
           console.log('Error! Unable to update the Business account')
           console.log(upA)
@@ -82,29 +82,29 @@ import { Marqeta } from '../src';
   console.log('creating Business account')
   const newA = await client.business.create(mockBusiness)
 
-  if (newA?.success && newA?.body?.token) {
+  if (newA?.success && newA?.business?.token) {
     console.log('Success! The Business account "' +
-      newA.body?.businessNameLegal +
-      '" was created with token: ' + newA.body?.token)
-    console.log('getting Business account by id: ' + newA.body?.token)
-    const fouB = await client.business.byTokenId(newA.body?.token)
+      newA.business?.businessNameLegal +
+      '" was created with token: ' + newA.business?.token)
+    console.log('getting Business account by id: ' + newA.business?.token)
+    const fouB = await client.business.byTokenId(newA.business?.token)
 
-    if (fouB.success && fouB?.body?.token) {
+    if (fouB.success && fouB?.business?.token) {
       console.log('Success! The Business account "' +
-        newA.body?.businessNameLegal + '" was found with Business id: ' +
-        newA?.body?.token)
+        newA.business?.businessNameLegal + '" was found with Business id: ' +
+        newA?.business?.token)
       console.log('updating Business...')
-      const orgNameB = fouB.body.businessNameLegal
+      const orgNameB = fouB.business.businessNameLegal
       let upB
 
-      if (fouB.body.businessNameLegal) {
-        fouB.body.businessNameLegal += Math.floor(Math.random() * 100) + 1
-        upB = await client.business.update(fouB.body)
+      if (fouB.business.businessNameLegal) {
+        fouB.business.businessNameLegal += Math.floor(Math.random() * 100) + 1
+        upB = await client.business.update(fouB.business)
       }
 
-      if (upB?.body?.token) {
+      if (upB?.business?.token) {
         console.log('Success! The Business account name was updated from "' +
-          orgNameB + '" to "' + upB.body?.businessNameLegal + '"')
+          orgNameB + '" to "' + upB.business?.businessNameLegal + '"')
       } else {
         console.log('Error! Unable to update the Business account')
         console.log(upB)
@@ -123,8 +123,8 @@ import { Marqeta } from '../src';
 
   let listItem
   let trans
-  if (businesses.body?.isMore) {
-    listItem = businesses?.body?.data?.pop()
+  if (businesses.business?.isMore) {
+    listItem = businesses?.business?.data?.pop()
     if (listItem?.token) {
       console.log('transition Business status to Active...')
       if (listItem?.token && listItem?.status) {
@@ -136,9 +136,9 @@ import { Marqeta } from '../src';
         }
         trans = await client.business.transition(state)
       }
-      if (trans?.body?.token) {
+      if (trans?.business?.token) {
         console.log('Success! The Business was transitioned to status: "' +
-          trans.body.status + '"')
+          trans.business.status + '"')
       } else {
         console.log('Error! Unable to transition the Business status.')
         console.log(trans)
@@ -154,12 +154,12 @@ import { Marqeta } from '../src';
   }
 
   console.log('testing get Business transition by token Id...')
-  if (trans?.body?.token) {
+  if (trans?.business?.token) {
     let getTrans
     getTrans = await client.business.getTransition(
-      trans?.body?.token
+      trans?.business?.token
     )
-    if (getTrans?.body?.token) {
+    if (getTrans?.business?.token) {
       console.log('Success! We were able to get the Business ' +
           'transition status.')
     } else {
@@ -177,7 +177,7 @@ import { Marqeta } from '../src';
   if (listItem?.token) {
     let listTrans
     listTrans = await client.business.listTransition({ ...listItem })
-    if (listTrans?.success && listTrans?.body?.count) {
+    if (listTrans?.success && listTrans?.business?.count) {
       console.log('Success! We were able to get a list of Business ' +
         'transitions.')
     } else {
@@ -195,7 +195,7 @@ import { Marqeta } from '../src';
   if (listItem?.token) {
     let listTrans
     listTrans = await client.business.listTransition({ ...listItem, count: 1 })
-    if (listTrans?.success && listTrans?.body?.count) {
+    if (listTrans?.success && listTrans?.business?.count) {
       console.log('Success! We were able to get a list of one Business ' +
         'transitions.')
     } else {

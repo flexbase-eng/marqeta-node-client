@@ -112,7 +112,7 @@ export class BusinessApi {
     sortBy?: string,
   } = {}): Promise<{
     success: boolean,
-    body?: BusinessList,
+    business?: BusinessList,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('GET',
@@ -130,7 +130,7 @@ export class BusinessApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, business: { ...resp.payload } }
   }
 
   /*
@@ -141,7 +141,7 @@ export class BusinessApi {
    */
   async create(business: Partial<Business>): Promise<{
     success: boolean,
-    body?: Business,
+    business?: Business,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('POST',
@@ -159,7 +159,7 @@ export class BusinessApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, business: { ...resp.payload } }
   }
 
   /*
@@ -168,7 +168,7 @@ export class BusinessApi {
    */
   async byTokenId(businessTokenId: string): Promise<{
     success: boolean,
-    body?: Business,
+    business?: Business,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('GET',
@@ -185,7 +185,7 @@ export class BusinessApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, business: { ...resp.payload } }
   }
 
   /*
@@ -194,7 +194,7 @@ export class BusinessApi {
    */
   async update(business: Partial<Business>): Promise<{
     success: boolean,
-    body?: Business,
+    business?: Business,
     error?: MarqetaError,
   }> {
     /* eslint-disable no-unused-vars */
@@ -223,7 +223,7 @@ export class BusinessApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, business: { ...resp.payload } }
   }
 
   /*
@@ -232,7 +232,7 @@ export class BusinessApi {
    */
   async transition(status: Partial<Transition>): Promise<{
     success: boolean,
-    body?: Transition,
+    business?: Transition,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('POST',
@@ -251,7 +251,7 @@ export class BusinessApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, business: { ...resp.payload } }
   }
 
   /*
@@ -260,7 +260,7 @@ export class BusinessApi {
    */
   async getTransition(token: string): Promise<{
     success: boolean,
-    body?: Transition,
+    business?: Transition,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('GET',
@@ -277,7 +277,7 @@ export class BusinessApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, business: { ...resp.payload } }
   }
 
   /*
@@ -299,7 +299,7 @@ export class BusinessApi {
     sortBy?: string,
   } = {}): Promise<{
     success: boolean,
-    body?: TransitionList,
+    business?: TransitionList,
     error?: MarqetaError,
   }> {
     const {
@@ -311,7 +311,7 @@ export class BusinessApi {
     } = search
     if (!token) {
       return {
-        success: true, body: {
+        success: true, business: {
           count: BigInt(0),
           startIndex: BigInt(0),
           endIndex: BigInt(0),
@@ -335,6 +335,6 @@ export class BusinessApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, business: { ...resp.payload } }
   }
 }
