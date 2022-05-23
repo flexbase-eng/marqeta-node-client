@@ -112,7 +112,7 @@ export class BusinessApi {
     sortBy?: string,
   } = {}): Promise<{
     success: boolean,
-    business?: BusinessList,
+    businesses?: BusinessList,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('GET',
@@ -130,7 +130,7 @@ export class BusinessApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, business: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, businesses: { ...resp.payload } }
   }
 
   /*
@@ -232,7 +232,7 @@ export class BusinessApi {
    */
   async transition(status: Partial<Transition>): Promise<{
     success: boolean,
-    business?: Transition,
+    transition?: Transition,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('POST',
@@ -251,7 +251,7 @@ export class BusinessApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, business: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, transition: { ...resp.payload } }
   }
 
   /*
@@ -260,7 +260,7 @@ export class BusinessApi {
    */
   async getTransition(token: string): Promise<{
     success: boolean,
-    business?: Transition,
+    transition?: Transition,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('GET',
@@ -277,7 +277,7 @@ export class BusinessApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, business: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, transition: { ...resp.payload } }
   }
 
   /*
@@ -299,7 +299,7 @@ export class BusinessApi {
     sortBy?: string,
   } = {}): Promise<{
     success: boolean,
-    business?: TransitionList,
+    transitions?: TransitionList,
     error?: MarqetaError,
   }> {
     const {
@@ -311,7 +311,7 @@ export class BusinessApi {
     } = search
     if (!token) {
       return {
-        success: true, business: {
+        success: true, transitions: {
           count: BigInt(0),
           startIndex: BigInt(0),
           endIndex: BigInt(0),
@@ -335,6 +335,6 @@ export class BusinessApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, business: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, transitions: { ...resp.payload } }
   }
 }

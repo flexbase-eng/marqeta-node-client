@@ -38,9 +38,9 @@ import { Marqeta } from '../src';
 
   console.log('getting a list of Businesses...')
   const list = await client.business.list()
-  if (list.business?.isMore) {
-    console.log(`Success! ${list.business!.count} Businesses were retrieved.`)
-    const lstItem1 = list?.business?.data?.pop()
+  if (list.businesses?.isMore) {
+    console.log(`Success! ${list.businesses!.count} Businesses were retrieved.`)
+    const lstItem1 = list?.businesses?.data?.pop()
 
     if (lstItem1?.token) {
       console.log(`getting Business account by id: ${lstItem1.token}`)
@@ -123,8 +123,8 @@ import { Marqeta } from '../src';
 
   let listItem
   let trans
-  if (businesses.business?.isMore) {
-    listItem = businesses?.business?.data?.pop()
+  if (businesses.businesses?.isMore) {
+    listItem = businesses?.businesses?.data?.pop()
     if (listItem?.token) {
       console.log('transition Business status to Active...')
       if (listItem?.token && listItem?.status) {
@@ -136,9 +136,9 @@ import { Marqeta } from '../src';
         }
         trans = await client.business.transition(state)
       }
-      if (trans?.business?.token) {
+      if (trans?.transition?.token) {
         console.log('Success! The Business was transitioned to status: "' +
-          trans.business.status + '"')
+          trans.transition.status + '"')
       } else {
         console.log('Error! Unable to transition the Business status.')
         console.log(trans)
@@ -154,12 +154,12 @@ import { Marqeta } from '../src';
   }
 
   console.log('testing get Business transition by token Id...')
-  if (trans?.business?.token) {
+  if (trans?.transition?.token) {
     let getTrans
     getTrans = await client.business.getTransition(
-      trans?.business?.token
+      trans?.transition?.token
     )
-    if (getTrans?.business?.token) {
+    if (getTrans?.transition?.token) {
       console.log('Success! We were able to get the Business ' +
           'transition status.')
     } else {
@@ -177,7 +177,7 @@ import { Marqeta } from '../src';
   if (listItem?.token) {
     let listTrans
     listTrans = await client.business.listTransition({ ...listItem })
-    if (listTrans?.success && listTrans?.business?.count) {
+    if (listTrans?.success && listTrans?.transitions?.count) {
       console.log('Success! We were able to get a list of Business ' +
         'transitions.')
     } else {
@@ -195,7 +195,7 @@ import { Marqeta } from '../src';
   if (listItem?.token) {
     let listTrans
     listTrans = await client.business.listTransition({ ...listItem, count: 1 })
-    if (listTrans?.success && listTrans?.business?.count) {
+    if (listTrans?.success && listTrans?.transitions?.count) {
       console.log('Success! We were able to get a list of one Business ' +
         'transitions.')
     } else {
