@@ -66,7 +66,7 @@ export class AuthorizationControlApi {
    */
   async create(auth: Partial<AuthorizationControl>): Promise<{
     success: boolean,
-    body?: AuthorizationControl,
+    authorizationControl?: AuthorizationControl,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('POST',
@@ -85,7 +85,7 @@ export class AuthorizationControlApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, authorizationControl: { ...resp.payload } }
   }
 
   /*
@@ -98,7 +98,7 @@ export class AuthorizationControlApi {
     fields?: string[],
   } = {}): Promise<{
     success: boolean,
-    body?: AuthorizationControl,
+    authorizationControl?: AuthorizationControl,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('GET',
@@ -116,7 +116,7 @@ export class AuthorizationControlApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, authorizationControl: { ...resp.payload } }
   }
 
   /*
@@ -126,7 +126,7 @@ export class AuthorizationControlApi {
    */
   async update(control: Partial<AuthorizationControl>): Promise<{
     success: boolean,
-    body?: AuthorizationControl,
+    authorizationControl?: AuthorizationControl,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('PUT',
@@ -145,7 +145,7 @@ export class AuthorizationControlApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, authorizationControl: { ...resp.payload } }
   }
 
   /*
@@ -163,7 +163,7 @@ export class AuthorizationControlApi {
     sortBy?: string,
   } = {}): Promise<{
     success: boolean,
-    body?: AuthorizationControlList,
+    authorizationControls?: AuthorizationControlList,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('GET',
@@ -181,7 +181,7 @@ export class AuthorizationControlApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, authorizationControls: { ...resp.payload } }
   }
 
   /*
@@ -191,7 +191,7 @@ export class AuthorizationControlApi {
    */
   async createMerchant(merchant: Partial<Merchant>): Promise<{
     success: boolean,
-    body?: Merchant,
+    merchant?: Merchant,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('POST',
@@ -210,7 +210,7 @@ export class AuthorizationControlApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, merchant: { ...resp.payload } }
   }
 
   /*
@@ -220,7 +220,7 @@ export class AuthorizationControlApi {
    */
   async getMerchantExemption(token?: string): Promise<{
     success: boolean,
-    body?: Merchant,
+    merchant?: Merchant,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('GET',
@@ -237,7 +237,7 @@ export class AuthorizationControlApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, merchant: { ...resp.payload } }
   }
 
   /*
@@ -256,7 +256,7 @@ export class AuthorizationControlApi {
     sortBy?: string,
   } = {}): Promise<{
     success: boolean,
-    body?: MerchantList,
+    merchants?: MerchantList,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('GET',
@@ -274,7 +274,7 @@ export class AuthorizationControlApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, merchants: { ...resp.payload } }
   }
 
   /*
