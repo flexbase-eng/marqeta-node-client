@@ -171,7 +171,8 @@ import { Marqeta } from '../src'
       })
 
     if (updatedMerchant?.success
-      && originalStatus != updatedStatus?.body?.active) {
+      && originalStatus != updatedStatus?.body?.active
+      && updatedStatus?.body?.active != undefined) {
       console.log('Success! Merchant Identifier exemption active status ' +
         'updated from "' + originalStatus + '" to "' +
         updatedStatus?.body?.active + '"')

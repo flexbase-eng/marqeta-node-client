@@ -5,6 +5,7 @@ import type {
   MarqetaError,
   MarqetaOptions,
 } from './'
+import { mkError } from './'
 
 export interface Association {
   userToken?: string;
@@ -285,7 +286,7 @@ export class AuthorizationControlApi {
    */
   async updateMerchantStatus(merchant: Merchant): Promise<{
     success: boolean,
-    body?: Merchant,
+    merchant?: Merchant,
     error?: MarqetaError,
   }> {
     const {
@@ -295,11 +296,8 @@ export class AuthorizationControlApi {
     if (!token) {
       return {
         success: false,
-        error: {
-          type: 'client',
-          error: 'This call requires a Merchant to have an active "token"',
-        },
-        body: merchant,
+        error: mkError('This call requires a merchant to have an active "token"'),
+        merchant,
       }
     }
     const resp = await this.client.fire('PUT',
@@ -318,6 +316,6 @@ export class AuthorizationControlApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, merchant: { ...resp.payload } }
   }
 }
