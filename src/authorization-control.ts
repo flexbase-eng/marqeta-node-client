@@ -14,6 +14,7 @@ export interface Association {
 export interface Merchant {
   token?: string;
   name: string;
+  active: boolean;
   association?: Association;
   mid?: string;
   merchantGroupToken: string;
@@ -222,6 +223,43 @@ export class AuthorizationControlApi {
   }> {
     const resp = await this.client.fire('GET',
       `authcontrols/exemptmids/${token}`,
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+  }
+
+  /*
+   * Function to take a series of arguments, most of which are optional,
+   * pass them to Marqeta, and have a *paged* list of Merchant Identifier
+   * Exemptions returned either for a Card Product, or a User, and that
+   * conforms to the optional search criteria such as count, fields, sortBy,
+   * startIndex.
+   */
+  async listMerchantExemptions(search: {
+    cardProduct?: string,
+    user?: string,
+    count?: number,
+    startIndex?: string,
+    fields?: string[],
+    sortBy?: string,
+  } = {}): Promise<{
+    success: boolean,
+    body?: MerchantList,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('GET',
+      'businesses',
+      { ...search }
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {
