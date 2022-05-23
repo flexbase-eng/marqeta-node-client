@@ -296,10 +296,8 @@ export class AuthorizationControlApi {
       return {
         success: false,
         error: {
-          type: 'marqeta',
-          error: 'This call requires a Merchant to have an active "token" ' +
-            '- and this one does not.',
-          status: 404,
+          type: 'client',
+          error: 'This call requires a Merchant to have an active "token"',
         },
         body: merchant,
       }
