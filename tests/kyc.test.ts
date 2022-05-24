@@ -13,8 +13,8 @@ import { Marqeta } from '../src'
   const userList = await client.user.list({ count: 1 })
 
   let user
-  if (userList?.body?.isMore && Array.isArray(userList?.body?.data)) {
-    user = userList.body.data.pop()
+  if (userList?.userList?.isMore && Array.isArray(userList?.userList?.data)) {
+    user = userList.userList.data.pop()
     if (user?.token) {
       console.log('sending a User KYC request to Marqeta...')
       const verified = await client.kyc.verify({
