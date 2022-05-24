@@ -85,4 +85,39 @@ export class MerchantGroupApi {
     }
     return { success: !resp?.payload?.errorCode, merchantGroup: { ...resp.payload } }
   }
+
+  /*
+   * Function to take a series of arguments, most of which are optional,
+   * as input, pass them to Marqeta, and have them return a *paged* list of
+   * Merchant Groups that fit the list of arguments criteria. If no arguments
+   * are given, this function returns a list of *all* the Merchant Groups in
+   * Marqeta.
+   */
+  async list(search: {
+    mid?: string,
+    count?: number,
+    startIndex?: number,
+    sortBy?: string,
+  } = {}): Promise<{
+    success: boolean,
+    merchantGroups?: MerchantGroupList,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('GET',
+      'businesses',
+      { ...search }
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, merchantGroups: { ...resp.payload } }
+  }
 }

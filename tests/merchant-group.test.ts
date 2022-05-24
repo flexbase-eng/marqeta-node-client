@@ -46,4 +46,15 @@ import { Marqeta } from '../src'
     console.log(merchantGroup)
   }
 
+  console.log('getting a list of Merchant Groups...')
+  const list = await client.merchantGroup.list()
+
+  if (list.merchantGroups?.isMore) {
+    console.log('Success! ' + list.merchantGroups!.count + ' Merchant Groups' +
+      ' were retrieved.')
+  } else {
+    console.log('Error! ' + list.merchantGroups!.count + ' Merchant Groups' +
+      ' were retrieved.')
+  }
+
 })()
