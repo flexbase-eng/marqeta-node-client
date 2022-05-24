@@ -37,7 +37,7 @@ import { Marqeta } from '../src'
   if (user?.token) {
     console.log('getting list of Marqeta User KYC results...')
     const userResults = await client.kyc.userResults({ ...user })
-    if (userResults?.success && Array.isArray(userResults?.body?.data)) {
+    if (userResults?.success && Array.isArray(userResults?.kycList?.data)) {
       console.log('Success! A list of KYC results was returned for user: ' +
         user.token
       )
@@ -55,8 +55,8 @@ import { Marqeta } from '../src'
   const businessList = await client.business.list({ count: 1 })
 
   let business
-  if (businessList?.body?.isMore && Array.isArray(businessList?.body?.data)) {
-    business = businessList.body.data.pop()
+  if (businessList?.businesses?.isMore && Array.isArray(businessList?.businesses?.data)) {
+    business = businessList.businesses.data.pop()
     if (business?.token) {
       console.log('sending a Business KYB request to Marqeta...')
       const verified = await client.kyc.verify({
@@ -79,7 +79,7 @@ import { Marqeta } from '../src'
   if (business?.token) {
     console.log('getting list of Marqeta Business KYC results...')
     const businessResults = await client.kyc.businessResults({ ...business })
-    if (businessResults?.success && Array.isArray(businessResults?.body?.data)) {
+    if (businessResults?.success && Array.isArray(businessResults?.kycList?.data)) {
       console.log('Success! A list of KYC results was returned for business: ' +
         business.token
       )
@@ -91,7 +91,7 @@ import { Marqeta } from '../src'
 
     console.log('getting single Marqeta Business KYC result...')
     const kycResult = await client.kyc.byTokenId(business.token)
-    if (kycResult?.success && kycResult?.body?.token) {
+    if (kycResult?.success && kycResult?.kyc?.token) {
       console.log('Success! KYC result retrieved for the business with token: ' +
         business.token
       )

@@ -43,7 +43,7 @@ export class KycApi {
     referenceId?: string,
   } = {}): Promise<{
     success: boolean,
-    body?: Kyc,
+    kyc?: Kyc,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('POST',
@@ -62,7 +62,7 @@ export class KycApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, kyc: { ...resp.payload } }
   }
 
   /*
@@ -77,7 +77,7 @@ export class KycApi {
     sortBy?: string,
   } = {}): Promise<{
     success: boolean,
-    body?: KycList,
+    kycList?: KycList,
     error?: MarqetaError,
   }> {
     const {
@@ -89,7 +89,7 @@ export class KycApi {
     } = search
     if (!token) {
       return {
-        success: true, body: {
+        success: true, kycList: {
           count: BigInt(0),
           startIndex: BigInt(0),
           endIndex: BigInt(0),
@@ -113,7 +113,7 @@ export class KycApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, kycList: { ...resp.payload } }
   }
 
   /*
@@ -128,7 +128,7 @@ export class KycApi {
     sortBy?: string,
   } = {}): Promise<{
     success: boolean,
-    body?: KycList,
+    kycList?: KycList,
     error?: MarqetaError,
   }> {
     const {
@@ -140,7 +140,7 @@ export class KycApi {
     } = search
     if (!token) {
       return {
-        success: true, body: {
+        success: true, kycList: {
           count: BigInt(0),
           startIndex: BigInt(0),
           endIndex: BigInt(0),
@@ -164,7 +164,7 @@ export class KycApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, kycList: { ...resp.payload } }
   }
 
   /*
@@ -173,7 +173,7 @@ export class KycApi {
    */
   async byTokenId(token: string): Promise<{
     success: boolean,
-    body?: Kyc,
+    kyc?: Kyc,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('GET',
@@ -190,6 +190,6 @@ export class KycApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, kyc: { ...resp.payload } }
   }
 }
