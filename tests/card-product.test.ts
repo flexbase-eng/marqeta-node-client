@@ -19,7 +19,7 @@ import { Marqeta } from '../src';
     console.log('getting Marqeta Card Products...')
 
     const products = await client.cardProduct.list()
-    const listItem1 = products?.body?.data?.pop()
+    const listItem1 = products?.cardProducts?.data?.pop()
 
     console.log('testing getting list of Marqeta Card Products...')
     if (listItem1?.token) {
@@ -27,20 +27,20 @@ import { Marqeta } from '../src';
       console.log(`getting Marqeta Card Product by id: ${listItem1.token}`)
       const fouA = await client.cardProduct.byTokenId(listItem1.token)
 
-      if (fouA?.body?.token) {
+      if (fouA?.cardProduct?.token) {
         console.log('Success! The Marqeta Card Product was found by id: ' +
-            JSON.stringify(fouA.body.token))
+            JSON.stringify(fouA.cardProduct.token))
         let upA
-        const fouAName = fouA.body.name
+        const fouAName = fouA.cardProduct.name
 
-        if (fouA.body?.name) {
-          fouA.body.name += Math.floor(Math.random() * 100) + 1
-          upA = await client.cardProduct.update(fouA.body)
+        if (fouA.cardProduct?.name) {
+          fouA.cardProduct.name += Math.floor(Math.random() * 100) + 1
+          upA = await client.cardProduct.update(fouA.cardProduct)
         }
 
         if (upA?.success) {
           console.log('Success! The Card Product  name was updated from "' +
-              fouAName + '" to "' + upA.body?.name + '"')
+              fouAName + '" to "' + upA.cardProduct?.name + '"')
         } else {
           console.log('Error! Unable to update the Card Product ')
           console.log(upA)
@@ -53,29 +53,29 @@ import { Marqeta } from '../src';
     console.log('testing creating Marqeta Card Product...')
     const cardProductA = await client.cardProduct.create(mockCardProduct)
 
-    if (cardProductA?.success && cardProductA?.body?.token) {
+    if (cardProductA?.success && cardProductA?.cardProduct?.token) {
       console.log('Success! The Card Product. "' +
-          cardProductA.body?.name +
-          '" was created with token: ' + cardProductA.body?.token)
-      console.log('getting Card Product by id: ' + cardProductA.body?.token)
-      const foundB = await client.cardProduct.byTokenId(cardProductA.body?.token)
+          cardProductA.cardProduct?.name +
+          '" was created with token: ' + cardProductA.cardProduct?.token)
+      console.log('getting Card Product by id: ' + cardProductA.cardProduct?.token)
+      const foundB = await client.cardProduct.byTokenId(cardProductA.cardProduct?.token)
 
-      if (foundB.success && foundB?.body?.token) {
+      if (foundB.success && foundB?.cardProduct?.token) {
         console.log('Success! The Card Product  "' +
-            cardProductA.body?.name + '" was found with Card Product id: ' +
-            cardProductA?.body?.token)
+            cardProductA.cardProduct?.name + '" was found with Card Product id: ' +
+            cardProductA?.cardProduct?.token)
         console.log('updating Card Product name...')
-        const orgNameB = foundB.body.name
+        const orgNameB = foundB.cardProduct.name
         let updatedB
 
-        if (foundB.body.name) {
-          foundB.body.name += Math.floor(Math.random() * 100) + 1
-          updatedB = await client.cardProduct.update(foundB.body)
+        if (foundB.cardProduct.name) {
+          foundB.cardProduct.name += Math.floor(Math.random() * 100) + 1
+          updatedB = await client.cardProduct.update(foundB.cardProduct)
         }
 
-        if (updatedB?.body?.token) {
+        if (updatedB?.cardProduct?.token) {
           console.log('Success! The Card Product name was updated from "' +
-              orgNameB + '" to "' + updatedB.body?.name + '"')
+              orgNameB + '" to "' + updatedB.cardProduct?.name + '"')
         } else {
           console.log('Error! Unable to update the Card Product')
           console.log(updatedB)

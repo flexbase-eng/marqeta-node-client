@@ -202,7 +202,7 @@ export class CardProductApi {
     sortBy?: string,
   } = {}): Promise<{
     success: boolean,
-    body?: CardProductList,
+    cardProducts?: CardProductList,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('GET',
@@ -220,7 +220,7 @@ export class CardProductApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, cardProducts: { ...resp.payload } }
   }
 
   /*
@@ -229,7 +229,7 @@ export class CardProductApi {
    */
   async byTokenId(tokenId: string):Promise<{
     success?: boolean,
-    body?: CardProduct,
+    cardProduct?: CardProduct,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('GET',
@@ -246,7 +246,7 @@ export class CardProductApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, cardProduct: { ...resp.payload } }
   }
 
   /*
@@ -256,7 +256,7 @@ export class CardProductApi {
    */
   async update(cardProduct: CardProduct): Promise<{
     success?: boolean,
-    body?: CardProduct,
+    cardProduct?: CardProduct,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('PUT',
@@ -275,7 +275,7 @@ export class CardProductApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, cardProduct: { ...resp.payload } }
   }
 
   /*
@@ -284,7 +284,7 @@ export class CardProductApi {
    */
   async create(cardProduct: Partial<CardProduct>): Promise<{
     success?: boolean,
-    body?: CardProduct,
+    cardProduct?: CardProduct,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('POST',
@@ -301,6 +301,6 @@ export class CardProductApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, cardProduct: { ...resp.payload } }
   }
 }
