@@ -27,29 +27,29 @@ import { Marqeta } from '../src'
   console.log('getting list of e User...')
   const listA = await client.user.list({ count: 1 })
 
-  if (listA?.body?.isMore && Array.isArray(listA?.body?.data)) {
-    console.log(`Success! ${listA.body!.count} Users were retrieved.`)
+  if (listA?.userList?.isMore && Array.isArray(listA?.userList?.data)) {
+    console.log(`Success! ${listA.userList!.count} Users were retrieved.`)
 
-    if (listA.body.data[0].token) {
+    if (listA.userList.data[0].token) {
       console.log('getting User by token Id...')
-      const foundUserA = await client.user.byTokenId(listA.body.data[0].token)
+      const foundUserA = await client.user.byTokenId(listA.userList.data[0].token)
 
-      if (foundUserA && foundUserA?.body?.token) {
+      if (foundUserA && foundUserA?.user?.token) {
         console.log('Success! Able to get Marqeta User by token id: ' +
-          foundUserA.body.token)
+          foundUserA.user.token)
         console.log('updating User...')
-        const orgNameA = foundUserA.body.firstName
+        const orgNameA = foundUserA.user.firstName
         let upUserA
 
-        if (foundUserA.body.firstName) {
-          foundUserA.body.firstName += Math.floor(Math.random() * 100) + 1
-          foundUserA.body.firstName = foundUserA.body.firstName.slice(0, 20)
-          upUserA = await client.user.update(foundUserA.body)
+        if (foundUserA.user.firstName) {
+          foundUserA.user.firstName += Math.floor(Math.random() * 100) + 1
+          foundUserA.user.firstName = foundUserA.user.firstName.slice(0, 20)
+          upUserA = await client.user.update(foundUserA.user)
         }
 
-        if (upUserA?.body?.token) {
+        if (upUserA?.user?.token) {
           console.log('Success! The User account name was updated from "' +
-            orgNameA + '" to "' + upUserA.body?.firstName + '"')
+            orgNameA + '" to "' + upUserA.user?.firstName + '"')
         } else {
           console.log('Error! Unable to update the User account')
           console.log(upUserA)
@@ -57,7 +57,7 @@ import { Marqeta } from '../src'
 
       } else {
         console.log('Error! Unable to get a Marqeta User by token id')
-        console.log(foundUserA.body)
+        console.log(foundUserA.user)
       }
     } else {
       console.log('Error! Unable to test get user by token id, no user ' +
@@ -73,29 +73,29 @@ import { Marqeta } from '../src'
   console.log('testing creating User...')
 
   const newA = await client.user.create(mockUser)
-  if (newA?.success && newA?.body?.token) {
+  if (newA?.success && newA?.user?.token) {
     console.log('Success! The User account with name "' +
-        newA.body?.firstName + ' ' + newA.body?.lastName + '" was created ' +
-        'with token: ' + newA.body?.token)
+        newA.user?.firstName + ' ' + newA.user?.lastName + '" was created ' +
+        'with token: ' + newA.user?.token)
 
     console.log('getting User by token id...')
-    const foundUserB = await client.user.byTokenId(newA.body.token)
+    const foundUserB = await client.user.byTokenId(newA.user.token)
 
-    if (foundUserB && foundUserB?.body?.token) {
+    if (foundUserB && foundUserB?.user?.token) {
       console.log('Success! Able to get Marqeta User by token id: ' +
-          foundUserB.body.token)
+          foundUserB.user.token)
       console.log('updating User...')
-      const orgNameB = foundUserB.body.firstName
+      const orgNameB = foundUserB.user.firstName
       let upUserB
 
-      if (foundUserB.body.firstName) {
-        foundUserB.body.firstName += Math.floor(Math.random() * 100) + 1
-        upUserB = await client.user.update(foundUserB.body)
+      if (foundUserB.user.firstName) {
+        foundUserB.user.firstName += Math.floor(Math.random() * 100) + 1
+        upUserB = await client.user.update(foundUserB.user)
       }
 
-      if (upUserB?.body?.token) {
+      if (upUserB?.user?.token) {
         console.log('Success! The User account name was updated from "' +
-            orgNameB + '" to "' + upUserB.body?.firstName + '"')
+            orgNameB + '" to "' + upUserB.user?.firstName + '"')
       } else {
         console.log('Error! Unable to update the User account')
         console.log(upUserB)
@@ -103,7 +103,7 @@ import { Marqeta } from '../src'
 
     } else {
       console.log('Error! Unable to get a Marqeta User by token id')
-      console.log(foundUserB.body)
+      console.log(foundUserB.user)
     }
 
   } else {
@@ -114,7 +114,7 @@ import { Marqeta } from '../src'
   const { email, ...searchFields } = mockUser // eslint-disable-line
   const userExists = await client.user.search(searchFields)
 
-  if (userExists?.body?.count) {
+  if (userExists?.user?.count) {
     console.log('Success! The User with email "' +
       mockUser.email + '" was found using search.')
   } else {
@@ -125,8 +125,8 @@ import { Marqeta } from '../src'
   console.log('testing User transition...')
   let trans
   let testUser
-  if (listA?.body?.isMore && Array.isArray(listA?.body?.data)) {
-    testUser = listA.body.data.pop()
+  if (listA?.userList?.isMore && Array.isArray(listA?.userList?.data)) {
+    testUser = listA.userList.data.pop()
     if (testUser?.token && testUser?.status) {
       //const originalStatus = testUser.status
       const state = {
@@ -137,9 +137,9 @@ import { Marqeta } from '../src'
       }
       trans = await client.user.transition(state)
 
-      if (trans?.body?.token) {
+      if (trans?.transition?.token) {
         console.log('Success! The User was transitioned to status: "' +
-          trans.body.status)
+          trans.transition.status)
       } else {
         console.log('Error! Unable to transition the User status.')
         console.log(trans)
@@ -151,11 +151,11 @@ import { Marqeta } from '../src'
   }
 
   console.log('testing get User transition by token Id...')
-  if (trans?.body?.token) {
+  if (trans?.transition?.token) {
     let getTrans
-    getTrans = await client.user.getTransition(trans?.body?.token)
+    getTrans = await client.user.getTransition(trans?.transition?.token)
 
-    if (getTrans?.body?.token) {
+    if (getTrans?.transition?.token) {
       console.log('Success! We were able to get the Transition status.')
     } else {
       console.log('Error! We were unable to get the Transition status.')
@@ -172,7 +172,7 @@ import { Marqeta } from '../src'
     let listTrans
     listTrans = await client.user.listTransition({ ...testUser })
 
-    if (listTrans?.success && listTrans?.body?.count) {
+    if (listTrans?.success && listTrans?.transitionList?.count) {
       console.log('Success! We were able to get a list of User transitions.')
     } else {
       console.log('Error! We were unable to get a list of User transitions.')
@@ -192,7 +192,7 @@ import { Marqeta } from '../src'
       count: 1,
     })
     if (listTransOne?.success
-      && listTransOne?.body?.count && listTransOne.body) {
+      && listTransOne?.transitionList?.count && listTransOne.transitionList) {
       console.log('Success! We were able to get a list of one User transitions.')
     } else {
       console.log('Error! We were unable to get a list of one User ' +

@@ -24,8 +24,8 @@ import { Marqeta } from '../src'
   let user, authControl
   const userList = await client.user.list({ count: 1 })
 
-  if (userList?.body?.isMore && Array.isArray(userList?.body?.data)) {
-    user = userList.body.data.pop()
+  if (userList?.userList?.isMore && Array.isArray(userList?.userList?.data)) {
+    user = userList.userList.data.pop()
 
     if (user?.token) {
       console.log('creating user authorization control ...')

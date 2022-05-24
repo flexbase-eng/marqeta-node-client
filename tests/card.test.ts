@@ -21,16 +21,16 @@ import { Marqeta } from '../src'
     const users = await client.user.list()
 
     if (
-      users?.body?.isMore
-      && users?.body?.count > 0
-      && Array.isArray(users?.body?.data)
+      users?.userList?.isMore
+      && users?.userList?.count > 0
+      && Array.isArray(users?.userList?.data)
     ) {
       console.log('getting the User Marqeta Card Products...')
       const products = await client.cardProduct.list()
-      const user = users?.body?.data.pop()
+      const user = users?.userList?.data.pop()
       let newCard
-      if (products?.body?.isMore && Array.isArray(products?.body?.data)) {
-        const product = products?.body?.data.pop()
+      if (products?.cardProducts?.isMore && Array.isArray(products?.cardProducts?.data)) {
+        const product = products?.cardProducts?.data.pop()
 
         if (user?.token && product?.token) {
           mockCard.userToken = user.token

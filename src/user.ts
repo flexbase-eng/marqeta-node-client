@@ -78,7 +78,7 @@ export class UserApi {
     sortBy?: string,
   } = {}): Promise<{
     success: boolean,
-    body?: UserList,
+    userList?: UserList,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('GET',
@@ -96,7 +96,7 @@ export class UserApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, userList: { ...resp.payload } }
   }
 
   /*
@@ -105,7 +105,7 @@ export class UserApi {
    */
   async byTokenId(userTokenId: string): Promise<{
     success: boolean,
-    body?: User,
+    user?: User,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('GET',
@@ -122,7 +122,7 @@ export class UserApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, user: { ...resp.payload } }
   }
 
   /*
@@ -131,7 +131,7 @@ export class UserApi {
    */
   async update(user: Partial<User>): Promise<{
     success: boolean,
-    body?: User,
+    user?: User,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('PUT',
@@ -150,7 +150,7 @@ export class UserApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, user: { ...resp.payload } }
   }
 
   /*
@@ -161,7 +161,7 @@ export class UserApi {
    */
   async create(user: Partial<User>): Promise<{
     success: boolean,
-    body?: User,
+    user?: User,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('POST',
@@ -180,7 +180,7 @@ export class UserApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, user: { ...resp.payload } }
   }
 
   /*
@@ -189,7 +189,7 @@ export class UserApi {
    */
   async search(user: Partial<User>): Promise<{
     success: boolean,
-    body?: UserList,
+    user?: UserList,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('POST',
@@ -208,7 +208,7 @@ export class UserApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, user: { ...resp.payload } }
   }
 
   /*
@@ -217,7 +217,7 @@ export class UserApi {
    */
   async transition(status: Partial<Transition>): Promise<{
     success: boolean,
-    body?: Transition,
+    transition?: Transition,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('POST',
@@ -236,7 +236,7 @@ export class UserApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, transition: { ...resp.payload } }
   }
 
   /*
@@ -245,7 +245,7 @@ export class UserApi {
    */
   async getTransition(token: string): Promise<{
     success: boolean,
-    body?: Transition,
+    transition?: Transition,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('GET',
@@ -262,7 +262,7 @@ export class UserApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, transition: { ...resp.payload } }
   }
 
   /*
@@ -284,7 +284,7 @@ export class UserApi {
     sortBy?: string,
   } = {}): Promise<{
     success: boolean,
-    body?: TransitionList,
+    transitionList?: TransitionList,
     error?: MarqetaError,
   }> {
     const {
@@ -296,7 +296,7 @@ export class UserApi {
     } = search
     if (!token) {
       return {
-        success: true, body: {
+        success: true, transitionList: {
           count: BigInt(0),
           startIndex: BigInt(0),
           endIndex: BigInt(0),
@@ -320,6 +320,6 @@ export class UserApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, transitionList: { ...resp.payload } }
   }
 }

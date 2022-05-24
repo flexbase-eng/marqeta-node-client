@@ -24,8 +24,8 @@ import { Marqeta } from '../src'
   let user
   const userList = await client.user.list({ count: 1 })
 
-  if (userList?.body?.isMore && Array.isArray(userList?.body?.data)) {
-    user = userList.body.data.pop()
+  if (userList?.userList?.isMore && Array.isArray(userList?.userList?.data)) {
+    user = userList.userList.data.pop()
     if (user?.token) {
       mockVelocityControl.association.userToken = user.token
       const control = await client.velocityControl.create(mockVelocityControl)
@@ -48,9 +48,9 @@ import { Marqeta } from '../src'
   const products = await client.cardProduct.list()
 
   let velocityList
-  if (products?.body?.isMore && Array.isArray(products?.body?.data)) {
+  if (products?.cardProducts?.isMore && Array.isArray(products?.cardProducts?.data)) {
     console.log('getting a list of velocity controls ...')
-    const oneProduct = products.body.data.pop()
+    const oneProduct = products.cardProducts.data.pop()
     if (oneProduct?.token) {
       velocityList = await client.velocityControl.list({
         cardProduct: oneProduct.token

@@ -13,8 +13,8 @@ import { Marqeta } from '../src'
   const userList = await client.user.list({ count: 1 })
 
   let user
-  if (userList?.body?.isMore && Array.isArray(userList?.body?.data)) {
-    user = userList.body.data.pop()
+  if (userList?.userList?.isMore && Array.isArray(userList?.userList?.data)) {
+    user = userList.userList.data.pop()
     if (user?.token) {
       console.log('getting user transactions by user token Id...')
       const transactions = await client.transactions.list({
@@ -42,12 +42,12 @@ import { Marqeta } from '../src'
 
   let newCard
   let getTransaction
-  if (users?.body?.isMore && Array.isArray(users?.body?.data)) {
+  if (users?.userList?.isMore && Array.isArray(users?.userList?.data)) {
     const products = await client.cardProduct.list()
-    const user = users?.body?.data.pop()
+    const user = users?.userList?.data.pop()
 
-    if (products?.body?.isMore && Array.isArray(products?.body?.data)) {
-      const product = products?.body?.data.pop()
+    if (products?.cardProducts?.isMore && Array.isArray(products?.cardProducts?.data)) {
+      const product = products?.cardProducts?.data.pop()
 
       if (user?.token && product?.token) {
         console.log('creating card for user...')
