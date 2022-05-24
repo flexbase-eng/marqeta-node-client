@@ -56,7 +56,7 @@ import { Marqeta } from '../src'
           cardProductToken: product.token,
         })
       }
-      if (newCard?.body?.token) {
+      if (newCard?.card?.token) {
         console.log('simulating a card transaction...')
         const response = await client.fire('POST',
           'simulate/authorization',
@@ -64,14 +64,14 @@ import { Marqeta } from '../src'
           {
             amount: '10',
             mid: '1234567890',
-            cardToken: newCard.body.token
+            cardToken: newCard.card.token
           }
         )
         if (response?.payload?.transaction?.token) {
           getTransaction = await client.transactions.byTokenId(
             response.payload.transaction.token
           )
-          if (getTransaction?.success && getTransaction?.body?.token) {
+          if (getTransaction?.success && getTransaction?.transaction?.token) {
             console.log('Success! Retrieved a transaction by token Id')
           } else {
             console.log('Error! Unable to retrieve a transaction by token Id')
@@ -92,12 +92,12 @@ import { Marqeta } from '../src'
   }
 
   console.log('getting related transactions ...')
-  if (getTransaction?.success && getTransaction?.body?.token) {
+  if (getTransaction?.success && getTransaction?.transaction?.token) {
     const related = await client.transactions.related({
-      token: getTransaction.body.token,
+      token: getTransaction.transaction.token,
       count: 1
     })
-    if (related.success && Array.isArray(related?.body?.data)) {
+    if (related.success && Array.isArray(related?.transactions?.data)) {
       console.log('Success! Related transactions retrieved by token Id')
     } else {
       console.log('Error! Unable to retrieve related transactions by token Id')
