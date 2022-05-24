@@ -21,7 +21,7 @@ import { Marqeta } from '../src'
   console.log('creating funding gateway source...')
   const funding = await client.fundingGatewayApi.create(mockSource)
   mockSource.basicAuthPassword = mockSource.basicAuthPassword.slice(0, 20)
-  if (funding.success && funding?.body?.token) {
+  if (funding.success && funding?.fundingGateway?.token) {
     console.log('Success! Funding gateway source created.')
   } else {
     console.log('Error! Unable to create a funding gateway source.')
@@ -30,9 +30,9 @@ import { Marqeta } from '../src'
 
   console.log('retrieving funding gateway source...')
   let found
-  if (funding?.body?.token) {
-    found = await client.fundingGatewayApi.get(funding?.body?.token)
-    if (found.success && found?.body?.token) {
+  if (funding?.fundingGateway?.token) {
+    found = await client.fundingGatewayApi.get(funding?.fundingGateway?.token)
+    if (found.success && found?.fundingGateway?.token) {
       console.log('Success! Funding gateway retrieved.')
     } else {
       console.log('Error! Unable to retrieve a funding gateway source.')
@@ -44,14 +44,14 @@ import { Marqeta } from '../src'
     console.log(funding)
   }
   console.log('updating funding gateway source active status...')
-  if (found?.body?.token && found?.body?.name) {
-    const foundName = found.body.name
-    found.body.name = 'updated_name_' + Math.floor(65536 * 100) + 1,
-    found.body.name = found.body.name.slice(0, 40)
-    const updated = await client.fundingGatewayApi.update(found.body)
-    if (updated.success && updated?.body?.token) {
+  if (found?.fundingGateway?.token && found?.fundingGateway?.name) {
+    const foundName = found.fundingGateway.name
+    found.fundingGateway.name = 'updated_name_' + Math.floor(65536 * 100) + 1,
+    found.fundingGateway.name = found.fundingGateway.name.slice(0, 40)
+    const updated = await client.fundingGatewayApi.update(found.fundingGateway)
+    if (updated.success && updated?.fundingGateway?.token) {
       console.log('Success! Funding gateway name changed from "' + foundName +
-        '" to "' + found.body.name + '"')
+        '" to "' + found.fundingGateway.name + '"')
     } else {
       console.log('Error! Unable to update funding gateway source.')
       console.log(updated)
