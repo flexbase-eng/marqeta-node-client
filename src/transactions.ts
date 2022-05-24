@@ -64,7 +64,7 @@ export class TransactionsApi {
     verbose?: boolean,
   } = {}): Promise<{
     success: boolean,
-    body?: TransactionList,
+    transactions?: TransactionList,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('GET',
@@ -82,7 +82,7 @@ export class TransactionsApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, transactions: { ...resp.payload } }
   }
 
   /*
@@ -91,7 +91,7 @@ export class TransactionsApi {
    */
   async byTokenId(token: string): Promise<{
     success: boolean,
-    body?: Transaction,
+    transaction?: Transaction,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('GET',
@@ -108,7 +108,7 @@ export class TransactionsApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, transaction: { ...resp.payload } }
   }
 
   /*
@@ -130,12 +130,12 @@ export class TransactionsApi {
     verbose?: boolean,
   } = {}): Promise<{
     success: boolean,
-    body?: TransactionList,
+    transactions?: TransactionList,
     error?: MarqetaError,
   }> {
     if (!search.token) {
       return {
-        success: true, body: {
+        success: true, transactions: {
           count: BigInt(0),
           startIndex: BigInt(0),
           endIndex: BigInt(0),
@@ -159,6 +159,6 @@ export class TransactionsApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, transactions: { ...resp.payload } }
   }
 }
