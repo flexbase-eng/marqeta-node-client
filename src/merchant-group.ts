@@ -15,6 +15,8 @@ export interface MerchantGroup {
   reason?: string;
   channel: string;
   userToken: string;
+  createdTime: string;
+  lastModifiedTime: string;
 }
 
 export interface MerchantGroupList {
@@ -121,6 +123,46 @@ export class MerchantGroupApi {
     return {
       success: !resp?.payload?.errorCode,
       merchantGroups: { ...resp.payload }
+    }
+  }
+
+  /*
+   * Function to take some Merchant Group attributes and update the Merchant
+   * Group in Marqeta with these values. The return value will be the updated
+   * Merchant Group.
+   */
+  async update(group: Partial<MerchantGroup>): Promise<{
+    success: boolean,
+    merchantGroup?: MerchantGroup,
+    error?: MarqetaError,
+  }> {
+    /* eslint-disable no-unused-vars */
+    const {
+      token,
+      lastModifiedTime,
+      createdTime,
+      ...updateOptions
+    } = group
+    /* eslint-enable no-unused-vars */
+    const resp = await this.client.fire('PUT',
+      `merchantgroups/${group.token}`,
+      undefined,
+      updateOptions,
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return {
+      success: !resp?.payload?.errorCode,
+      merchantGroup: { ...resp.payload }
     }
   }
 }

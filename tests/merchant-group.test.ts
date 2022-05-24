@@ -59,4 +59,34 @@ import { Marqeta } from '../src'
     console.log(JSON.stringify(list))
   }
 
+  console.log('updating a Merchant Group...')
+
+  if (foundMerchantGroup?.merchantGroup?.token) {
+    let originalName
+
+    if (foundMerchantGroup?.merchantGroup?.token
+      && foundMerchantGroup?.merchantGroup?.name) {
+      originalName = foundMerchantGroup?.merchantGroup.name
+    }
+    foundMerchantGroup.merchantGroup.name =
+      'UpdatedMerchantGroup.' + Math.floor(Math.random() * 50) + 1
+
+    const updatedGroup = await client.merchantGroup.update(
+      foundMerchantGroup.merchantGroup
+    )
+
+    if (updatedGroup?.success &&
+      updatedGroup?.merchantGroup?.name != originalName
+      && originalName != undefined) {
+      console.log('Success! Merchant Group name updated from "' + originalName +
+        '" to: "' + updatedGroup?.merchantGroup?.name + '"')
+    } else {
+      console.log('Error! Unable to update Merchant Group name.')
+      console.log(updatedGroup)
+    }
+  } else {
+    console.log('Error! Empty Merchant Group token Id.')
+    console.log(merchantGroup)
+  }
+
 })()
