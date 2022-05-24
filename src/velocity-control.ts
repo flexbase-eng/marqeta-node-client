@@ -51,7 +51,7 @@ export class VelocityControlApi {
    */
   async create(control: Partial<VelocityControl>): Promise<{
     success: boolean,
-    body?: VelocityControl,
+    velocity?: VelocityControl,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('POST',
@@ -70,7 +70,7 @@ export class VelocityControlApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, velocity: { ...resp.payload } }
   }
 
   /*
@@ -85,7 +85,7 @@ export class VelocityControlApi {
     sortBy?: string,
   }): Promise<{
     success: boolean,
-    body?: VelocityControlList,
+    velocityList?: VelocityControlList,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('GET',
@@ -103,7 +103,7 @@ export class VelocityControlApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, velocityList: { ...resp.payload } }
   }
 
   /*
@@ -114,7 +114,7 @@ export class VelocityControlApi {
     fields?: string[],
   }): Promise<{
     success: boolean,
-    body?: VelocityControl,
+    velocity?: VelocityControl,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('GET',
@@ -132,7 +132,7 @@ export class VelocityControlApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, velocity: { ...resp.payload } }
   }
 
   /*
@@ -141,7 +141,7 @@ export class VelocityControlApi {
    */
   async update(control: Partial<VelocityControl>): Promise<{
     success: boolean,
-    body?: VelocityControl,
+    velocity?: VelocityControl,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('PUT',
@@ -160,7 +160,7 @@ export class VelocityControlApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, velocity: { ...resp.payload } }
   }
 
   /*
@@ -176,7 +176,7 @@ export class VelocityControlApi {
     sortBy?: string,
   }): Promise<{
     success: boolean,
-    body?: VelocityControlList,
+    velocityList?: VelocityControlList,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('GET',
@@ -194,6 +194,6 @@ export class VelocityControlApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, velocityList: { ...resp.payload } }
   }
 }

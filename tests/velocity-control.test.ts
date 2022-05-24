@@ -29,7 +29,7 @@ import { Marqeta } from '../src'
     if (user?.token) {
       mockVelocityControl.association.userToken = user.token
       const control = await client.velocityControl.create(mockVelocityControl)
-      if (control.success && control?.body?.token) {
+      if (control.success && control?.velocity?.token) {
         console.log('Success! A velocity control was created for user: ' +
           user?.token)
       } else {
@@ -73,8 +73,8 @@ import { Marqeta } from '../src'
 
   console.log('getting a velocity control by token Id...')
   let oneVelocity
-  if (velocityList?.success && Array.isArray(velocityList?.body?.data)) {
-    oneVelocity = velocityList?.body?.data.pop()
+  if (velocityList?.success && Array.isArray(velocityList?.velocityList?.data)) {
+    oneVelocity = velocityList?.velocityList?.data.pop()
     if (oneVelocity?.token) {
       const foundVelocity = await client.velocityControl.byTokenId(
         oneVelocity.token
@@ -104,9 +104,9 @@ import { Marqeta } from '../src'
     const updateVelocity = await client.velocityControl.update(
       oneVelocity
     )
-    if (updateVelocity.success && updateVelocity?.body?.active != undefined) {
+    if (updateVelocity.success && updateVelocity?.velocity?.active != undefined) {
       console.log('Success! The Velocity Control active status was updated ' +
-          'from "' + origActive + '" to "' + updateVelocity.body.active + '"')
+          'from "' + origActive + '" to "' + updateVelocity.velocity.active + '"')
     } else {
       console.log('Error! Unable to update the Velocity Control active status.')
       console.log(updateVelocity)
@@ -121,7 +121,7 @@ import { Marqeta } from '../src'
       token: user.token,
       count: 1
     })
-    if (control.success && control?.body?.isMore) {
+    if (control.success && control?.velocityList?.isMore) {
       console.log('Success! A list of velocity controls was retrieved for user: ' +
         user?.token)
     } else {
