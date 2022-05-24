@@ -32,6 +32,10 @@ export class MerchantGroupApi {
     this.client = client
   }
 
+  /*
+   * Function to take optional MerchantGroup arguments, send those to Marqeta,
+   * and have a new Merchant Group created and returned to the caller.
+   */
   async create(group: Partial<MerchantGroup>): Promise<{
     success: boolean,
     merchantGroup?: MerchantGroup,
@@ -41,6 +45,32 @@ export class MerchantGroupApi {
       'merchantgroups',
       undefined,
       group,
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, merchantGroup: { ...resp.payload } }
+  }
+
+  /*
+   * Function to take a Merchant Group Token Id, send that to Marqeta, and have
+   * the Merchant Group returned to the caller.
+   */
+  async byTokenId(token: string): Promise<{
+    success: boolean,
+    merchantGroup?: MerchantGroup,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('GET',
+      `merchantgroups/${token}`,
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {

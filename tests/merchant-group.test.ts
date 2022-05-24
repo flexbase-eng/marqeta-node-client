@@ -17,13 +17,32 @@ import { Marqeta } from '../src'
     active: true
   }
 
-  console.log('getting a user ...')
+  console.log('creating a Merchant Group...')
   const merchantGroup = await client.merchantGroup.create(mockMerchantGroup)
 
   if (merchantGroup?.success) {
     console.log('Success! Merchant Group created.')
   } else {
     console.log('Error! Unable to create Merchant Group.')
+    console.log(merchantGroup)
+  }
+
+  console.log('getting a Merchant Group by token Id...')
+
+  let foundMerchantGroup
+  if (merchantGroup?.merchantGroup?.token) {
+    foundMerchantGroup = await client.merchantGroup.byTokenId(
+      merchantGroup?.merchantGroup?.token
+    )
+
+    if (foundMerchantGroup?.success) {
+      console.log('Success! Merchant Group found by token Id.')
+    } else {
+      console.log('Error! Merchant Group not found by token Id.')
+      console.log(foundMerchantGroup)
+    }
+  } else {
+    console.log('Error! Empty Merchant Group token Id.')
     console.log(merchantGroup)
   }
 
