@@ -54,7 +54,7 @@ export class WebhooksApi {
     sortBy?: string,
   } = {}): Promise<{
     success: boolean,
-    body?: WebhooksList,
+    webhooksList?: WebhooksList,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('GET',
@@ -72,7 +72,7 @@ export class WebhooksApi {
         }
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, webhooksList: { ...resp.payload } }
   }
 
   /*
@@ -83,7 +83,7 @@ export class WebhooksApi {
    */
   async update (hook: Webhook): Promise<{
     success: boolean,
-    body?: Webhook,
+    webhook?: Webhook,
     error?: MarqetaError,
   }> {
     const { token, ...body } = hook  // eslint-disable-line
@@ -103,7 +103,7 @@ export class WebhooksApi {
         }
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, webhook: { ...resp.payload } }
   }
 
   /*
@@ -112,7 +112,7 @@ export class WebhooksApi {
    */
   async create (hook: Partial<Webhook>): Promise<{
     success: boolean,
-    body?: Webhook,
+    webhook?: Webhook,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('POST',
@@ -131,7 +131,7 @@ export class WebhooksApi {
         }
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, webhook: { ...resp.payload } }
   }
 
   /*
@@ -139,7 +139,7 @@ export class WebhooksApi {
    */
   async byTokenId (token: string): Promise<{
     success: boolean,
-    body?: Webhook,
+    webhook?: Webhook,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('GET',
@@ -156,6 +156,6 @@ export class WebhooksApi {
         }
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, webhook: { ...resp.payload } }
   }
 }

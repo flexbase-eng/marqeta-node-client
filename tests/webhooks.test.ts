@@ -28,8 +28,8 @@ import { Marqeta } from '../src'
   console.log('getting a list of Webhooks...')
   const list = await client.webHooks.list()
 
-  if (list.body?.isMore) {
-    console.log(`Success! ${list.body!.count} Webhooks were retrieved.`)
+  if (list.webhooksList?.isMore) {
+    console.log(`Success! ${list.webhooksList!.count} Webhooks were retrieved.`)
   } else {
     console.log('Error! Unable to get a list of Webhooks.')
     console.log(list)
@@ -38,9 +38,9 @@ import { Marqeta } from '../src'
   console.log('getting a list of one Webhooks...')
   const listOne = await client.webHooks.list({ count: 1 })
 
-  if (listOne.body?.data && Array.isArray(listOne.body?.data)) {
-    if (listOne.body.data.length === 1) {
-      console.log(`Success! One ${listOne.body!.count} Webhook was retrieved.`)
+  if (listOne.webhooksList?.data && Array.isArray(listOne.webhooksList?.data)) {
+    if (listOne.webhooksList.data.length === 1) {
+      console.log(`Success! One ${listOne.webhooksList!.count} Webhook was retrieved.`)
     } else {
       console.log('Error! Unable to get a list of one Webhook.')
       console.log(listOne)
@@ -52,18 +52,18 @@ import { Marqeta } from '../src'
 
   console.log('updating one Webhook...')
 
-  if (listOne.body?.data && Array.isArray(listOne.body?.data)) {
-    const update = listOne.body.data.pop()
+  if (listOne.webhooksList?.data && Array.isArray(listOne.webhooksList?.data)) {
+    const update = listOne.webhooksList.data.pop()
 
     if (update && update?.name) {
       const originalName = update.name
       update.name = mockWebhook.name
       const updatedHook = await client.webHooks.update(update)
 
-      if (updatedHook?.body?.name != undefined
-        && updatedHook?.body?.name != originalName) {
+      if (updatedHook?.webhook?.name != undefined
+        && updatedHook?.webhook?.name != originalName) {
         console.log('Success! Webhook name was updated from "' + originalName +
-        '" to "' + updatedHook?.body?.name + '" was retrieved.')
+        '" to "' + updatedHook?.webhook?.name + '" was retrieved.')
       } else {
         console.log('Error! Unable to update Webhook.')
         console.log(updatedHook)
@@ -77,9 +77,9 @@ import { Marqeta } from '../src'
   console.log('creating Webhook...')
   const created = await client.webHooks.create(mockWebhook)
 
-  if (created?.success && created?.body?.token) {
+  if (created?.success && created?.webhook?.token) {
     console.log('Success! Webhook created with token id: "' +
-      created?.body?.token + '"')
+      created?.webhook?.token + '"')
   } else {
     console.log('Error! Unable to create Webhook.')
     console.log(created)
@@ -87,14 +87,14 @@ import { Marqeta } from '../src'
 
   console.log('get Webhook by token Id...')
 
-  if (list.body?.data && Array.isArray(list.body?.data)) {
-    const item = list.body.data.pop()
+  if (list.webhooksList?.data && Array.isArray(list.webhooksList?.data)) {
+    const item = list.webhooksList.data.pop()
 
     if (item && item?.token) {
       const found = await client.webHooks.byTokenId(item.token)
 
-      if (found?.body?.token) {
-        console.log('Success! Webhook was retrieved by token Id: ' + found.body.token)
+      if (found?.webhook?.token) {
+        console.log('Success! Webhook was retrieved by token Id: ' + found.webhook.token)
       } else {
         console.log('Error! Unable to get Webhook by token Id.')
         console.log(found)
