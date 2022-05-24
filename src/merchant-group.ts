@@ -104,7 +104,7 @@ export class MerchantGroupApi {
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('GET',
-      'businesses',
+      'merchantgroups',
       { ...search }
     )
     // catch any errors...
@@ -118,6 +118,9 @@ export class MerchantGroupApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, merchantGroups: { ...resp.payload } }
+    return {
+      success: !resp?.payload?.errorCode,
+      merchantGroups: { ...resp.payload }
+    }
   }
 }

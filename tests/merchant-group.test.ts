@@ -11,8 +11,8 @@ import { Marqeta } from '../src'
   })
 
   const mockMerchantGroup = {
-    token: 'test_merchantgroup',
-    name: 'Test Merchant Group',
+    token: '',
+    name: 'TestMerchantGroup.' + Math.floor(Math.random() * 50) + 1,
     mids: ['123456789012345', '000123456789012', '123456789012'],
     active: true
   }
@@ -49,12 +49,14 @@ import { Marqeta } from '../src'
   console.log('getting a list of Merchant Groups...')
   const list = await client.merchantGroup.list()
 
-  if (list.merchantGroups?.isMore) {
+  if (list?.merchantGroups?.count
+    && Array.isArray(list?.merchantGroups?.data)) {
     console.log('Success! ' + list.merchantGroups!.count + ' Merchant Groups' +
       ' were retrieved.')
   } else {
     console.log('Error! ' + list.merchantGroups!.count + ' Merchant Groups' +
       ' were retrieved.')
+    console.log(JSON.stringify(list))
   }
 
 })()
