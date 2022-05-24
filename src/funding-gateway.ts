@@ -35,7 +35,7 @@ export class FundingGatewayApi {
    */
   async create(source: Partial<FundingGateway>): Promise<{
     success: boolean,
-    body?: FundingGateway,
+    fundingGateway?: FundingGateway,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('POST',
@@ -54,7 +54,7 @@ export class FundingGatewayApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, fundingGateway: { ...resp.payload } }
   }
 
   /*
@@ -63,7 +63,7 @@ export class FundingGatewayApi {
    */
   async get(token: string): Promise<{
     success: boolean,
-    body?: FundingGateway,
+    fundingGateway?: FundingGateway,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('GET',
@@ -80,7 +80,7 @@ export class FundingGatewayApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, fundingGateway: { ...resp.payload } }
   }
 
   /*
@@ -89,7 +89,7 @@ export class FundingGatewayApi {
    */
   async update(source: Partial<FundingGateway>): Promise<{
     success: boolean,
-    body?: FundingGateway,
+    fundingGateway?: FundingGateway,
     error?: MarqetaError,
   }> {
     /* eslint-disable no-unused-vars */
@@ -119,7 +119,7 @@ export class FundingGatewayApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, body: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode, fundingGateway: { ...resp.payload } }
   }
 
 }
