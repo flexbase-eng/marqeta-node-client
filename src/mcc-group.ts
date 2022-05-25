@@ -60,4 +60,30 @@ export class MccGroupApi {
     }
     return { success: !resp?.payload?.errorCode, mccGroup: { ...resp.payload } }
   }
+
+  /*
+   * Function to take a MCC Group token Id, send that to Marqeta, and return
+   * the MCC Group information.
+   */
+  async get(token: string): Promise<{
+    success: boolean,
+    mccGroup?: MccGroup,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('GET',
+      `mccgroups/${token}`,
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, mccGroup: { ...resp.payload } }
+  }
 }
