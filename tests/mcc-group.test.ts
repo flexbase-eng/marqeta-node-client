@@ -37,8 +37,9 @@ import { Marqeta } from '../src'
 
   console.log('getting MCC Group by token Id...')
 
+  let found
   if (result?.mccGroup?.token) {
-    const found = await client.mccGroup.get(result.mccGroup.token)
+    found = await client.mccGroup.get(result.mccGroup.token)
     if (found?.success) {
       console.log('Success! MCC Group found.')
     } else {
@@ -58,5 +59,24 @@ import { Marqeta } from '../src'
     console.log(list)
   }
 
+  console.log('updating a MCC Group...')
+
+  if (found?.mccGroup?.name) {
+    const originalName = found.mccGroup.name
+    found.mccGroup.name = 'UpdatedMccGroup.' +
+      Math.floor(Math.random() * 50) + 1
+    const updated = await client.mccGroup.update(found.mccGroup)
+
+    if (updated.success && updated?.mccGroup?.name) {
+      console.log('Success! Updated the MCC Group name from: "' + originalName +
+        '" to: "' + updated.mccGroup.name + '"')
+    } else {
+      console.log('Error! Unable to update the MCC Group name.')
+      console.log(updated)
+    }
+  } else {
+    console.log('Error! Empty MCC Group name.')
+    console.log(found)
+  }
 
 })()
