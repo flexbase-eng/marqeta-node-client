@@ -26,6 +26,14 @@ export interface MccGroup {
   };
 }
 
+export interface MccGroupList {
+  count: bigint;
+  startIndex: bigint;
+  endIndex: bigint;
+  isMore: boolean;
+  data?: MccGroup[];
+}
+
 export class MccGroupApi {
   client: Marqeta;
 
@@ -85,5 +93,39 @@ export class MccGroupApi {
       }
     }
     return { success: !resp?.payload?.errorCode, mccGroup: { ...resp.payload } }
+  }
+
+  /*
+   * Function to take a series of MCC Group arguments, most of which are
+   * optional, as input, pass them to Marqeta and have them return a *paged*
+   * list of MCC Groups that fit the list criteria. If no list arguments are
+   * given, this returns a list of *all* the MCC Groups in Marqeta.
+   */
+  async list(search: {
+    mcc?: string,
+    count?: number,
+    startIndex?: number,
+    sortBy?: string,
+  } = {}): Promise<{
+    success: boolean,
+    mccGroups?: MccGroupList,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('GET',
+      'businesses',
+      { ...search }
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, mccGroups: { ...resp.payload } }
   }
 }

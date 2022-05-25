@@ -35,6 +35,8 @@ import { Marqeta } from '../src'
     console.log(result)
   }
 
+  console.log('getting MCC Group by token Id...')
+
   if (result?.mccGroup?.token) {
     const found = await client.mccGroup.get(result.mccGroup.token)
     if (found?.success) {
@@ -44,5 +46,17 @@ import { Marqeta } from '../src'
       console.log(found)
     }
   }
+
+  console.log('getting list of MCC Groups...')
+
+  const list = await client.mccGroup.list({ startIndex: 0 })
+
+  if (list?.success) {
+    console.log('Success! List of MCC Groups retrieved.')
+  } else {
+    console.log('Error! Unable to get a list of MCC Groups.')
+    console.log(list)
+  }
+
 
 })()
