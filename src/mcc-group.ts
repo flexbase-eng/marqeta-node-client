@@ -112,7 +112,7 @@ export class MccGroupApi {
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('GET',
-      'businesses',
+      'mccgroups',
       { ...search }
     )
     // catch any errors...
