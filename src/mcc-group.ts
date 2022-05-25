@@ -24,6 +24,8 @@ export interface MccGroup {
   config?: {
     authorizationControls: AuthorizationControls;
   };
+  lastModifiedTime: string;
+  createdTime: string;
 }
 
 export interface MccGroupList {
@@ -112,7 +114,7 @@ export class MccGroupApi {
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('GET',
-      'businesses',
+      'mccgroups',
       { ...search }
     )
     // catch any errors...
@@ -127,5 +129,42 @@ export class MccGroupApi {
       }
     }
     return { success: !resp?.payload?.errorCode, mccGroups: { ...resp.payload } }
+  }
+
+  /*
+  * Function to take some MCC Group attributes and update that MCC Group in
+  * Marqeta with these values. The return value will be the updated MCC Group.
+  */
+  async update(group: Partial<MccGroup>): Promise<{
+    success: boolean,
+    mccGroup?: MccGroup,
+    error?: MarqetaError,
+  }> {
+    /* eslint-disable no-unused-vars */
+    const {
+      token,
+      createdTime,
+      lastModifiedTime,
+      ...updateOptions
+    } = group
+    /* eslint-enable no-unused-vars */
+
+    const resp = await this.client.fire('PUT',
+      `mccgroups/${group?.token}`,
+      undefined,
+      updateOptions,
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, mccGroup: { ...resp.payload } }
   }
 }
