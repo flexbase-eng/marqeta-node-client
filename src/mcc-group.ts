@@ -13,7 +13,7 @@ export interface HoldIncrease {
 
 export interface AuthorizationControls {
   holdIncrease?: HoldIncrease;
-  holdExpirationDays: bigint;
+  holdExpirationDays: number;
 }
 
 export interface MccGroup {
@@ -22,13 +22,7 @@ export interface MccGroup {
   mccs: string[];
   active?: boolean;
   config?: {
-    authorizationControls?: {
-      holdIncrease?: {
-        type: string;
-        value: number;
-      };
-      holdExpirationDays?: number;
-    };
+    authorizationControls: AuthorizationControls;
   };
 }
 
