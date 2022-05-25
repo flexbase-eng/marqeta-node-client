@@ -19,6 +19,7 @@ import { TransactionsApi } from './transactions'
 import { VelocityControlApi } from './velocity-control'
 import { AuthorizationControlApi } from './authorization-control'
 import { MerchantGroupApi } from './merchant-group'
+import { MccGroupApi } from './mcc-group'
 
 const PROTOCOL = 'https'
 const MARQETA_HOST = 'sandbox-api.marqeta.com/v3'
@@ -80,6 +81,7 @@ export class Marqeta {
   velocityControl: VelocityControlApi
   authorizationControl: AuthorizationControlApi
   merchantGroup: MerchantGroupApi
+  mccGroup: MccGroupApi
 
   constructor (options?: MarqetaOptions) {
     this.host = options?.host || MARQETA_HOST
@@ -99,6 +101,7 @@ export class Marqeta {
     this.velocityControl = new VelocityControlApi(this, options)
     this.authorizationControl = new AuthorizationControlApi(this, options)
     this.merchantGroup = new MerchantGroupApi(this, options)
+    this.mccGroup = new MccGroupApi(this, options)
   }
 
   /*
