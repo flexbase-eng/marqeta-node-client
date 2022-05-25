@@ -200,7 +200,6 @@ export class BusinessApi {
     /* eslint-disable no-unused-vars */
     const {
       createdTime,
-      status,
       active,
       lastModifiedTime,
       ...updateOptions
