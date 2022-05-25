@@ -72,7 +72,6 @@ export class MccGroupApi {
   }> {
     const resp = await this.client.fire('GET',
       `mccgroups/${token}`,
-      undefined,
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {
