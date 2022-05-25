@@ -26,13 +26,23 @@ import { Marqeta } from '../src'
     }
   }
   console.log('creating a MCC Group...')
-  const mccGroup = await client.mccGroup.create(mockMccGroup)
+  const result = await client.mccGroup.create(mockMccGroup)
 
-  if (mccGroup?.success) {
+  if (result?.success) {
     console.log('Success! MCC Group created.')
   } else {
     console.log('Error! Unable to create MCC Group.')
-    console.log(mccGroup)
+    console.log(result)
+  }
+
+  if (result?.mccGroup?.token) {
+    const found = await client.mccGroup.get(result.mccGroup.token)
+    if (found?.success) {
+      console.log('Success! MCC Group found.')
+    } else {
+      console.log('Error! Unable to find MCC Group.')
+      console.log(found)
+    }
   }
 
 })()
