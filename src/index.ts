@@ -21,6 +21,7 @@ import { AuthorizationControlApi } from './authorization-control'
 import { MerchantGroupApi } from './merchant-group'
 import { MccGroupApi } from './mcc-group'
 import { FundingProgramApi } from './funding-program'
+import { FundingAchApi } from './funding-ach'
 
 const PROTOCOL = 'https'
 const MARQETA_HOST = 'sandbox-api.marqeta.com/v3'
@@ -84,6 +85,7 @@ export class Marqeta {
   merchantGroup: MerchantGroupApi
   mccGroup: MccGroupApi
   fundingProgram: FundingProgramApi
+  funcingAch: FundingAchApi
 
   constructor (options?: MarqetaOptions) {
     this.host = options?.host || MARQETA_HOST
@@ -105,6 +107,7 @@ export class Marqeta {
     this.merchantGroup = new MerchantGroupApi(this, options)
     this.mccGroup = new MccGroupApi(this, options)
     this.fundingProgram = new FundingProgramApi(this, options)
+    this.fundingAch = new FundingAchApi(this, options)
   }
 
   /*
