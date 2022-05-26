@@ -24,6 +24,7 @@ import { FundingProgramApi } from './funding-program'
 import { FundingAchApi } from './funding-ach'
 import { AutoReloadApi } from './auto-reload'
 import { BalancesApi } from './balances'
+import { ProgramReserveApi } from './program-reserve'
 
 const PROTOCOL = 'https'
 const MARQETA_HOST = 'sandbox-api.marqeta.com/v3'
@@ -90,6 +91,7 @@ export class Marqeta {
   fundingAch: FundingAchApi
   autoReload: AutoReloadApi
   balances: BalancesApi
+  programReserve: ProgramReserveApi
 
   constructor (options?: MarqetaOptions) {
     this.host = options?.host || MARQETA_HOST
@@ -114,6 +116,7 @@ export class Marqeta {
     this.fundingAch = new FundingAchApi(this, options)
     this.autoReload = new AutoReloadApi(this, options)
     this.balances = new BalancesApi(this, options)
+    this.programReserve = new ProgramReserveApi(this, options)
   }
 
   /*
