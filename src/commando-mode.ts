@@ -1,7 +1,8 @@
 'use strict'
 
 import type {
-  Marqeta, MarqetaError,
+  Marqeta,
+  MarqetaError,
   MarqetaOptions,
 } from './'
 
@@ -22,10 +23,10 @@ export interface CommandoMode {
 }
 
 export interface CommandoModeList {
-  count: 1;
-  startIndex: 0;
-  endIndex: 0;
-  isMore: false;
+  count: bigint;
+  startIndex: bigint;
+  endIndex: bigint;
+  isMore: boolean;
   data: CommandoMode[];
 }
 

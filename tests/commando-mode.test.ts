@@ -14,7 +14,6 @@ import { Marqeta } from '../src';
 
   if (modes?.success) {
     console.log('Success! A list of Commando Modes was retrieved.')
-    console.log(JSON.stringify(modes))
   } else {
     console.log('Error! Unable to get a list of Commando Modes.')
     console.log(modes)
