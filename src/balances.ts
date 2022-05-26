@@ -2,28 +2,6 @@
 
 import { Marqeta, MarqetaError, MarqetaOptions } from './index'
 
-export interface Balances {
-  gpa: {
-    currencyCode: string;
-    ledgerBalance: number;
-    availableBalance: number;
-    pendingCredits: number;
-    balances: {
-      USD: {
-        currencyCode: string;
-        ledgerBalance: number;
-        availableBalance: number;
-        pendingCredits: number;
-        }
-      }
-  };
-  links: {
-    rel: string;
-    method: string;
-    href: string;
-  }
-}
-
 export class BalancesApi {
   client: Marqeta;
 
@@ -37,7 +15,7 @@ export class BalancesApi {
    */
   async byTokenId(token: string): Promise<{
     success: boolean,
-    balances?: Balances,
+    balances?: any,
     error?: MarqetaError,
   }> {
     const resp = await this.client.fire('GET',

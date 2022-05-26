@@ -21,6 +21,7 @@ import { Marqeta } from '../src';
       if (balances?.success) {
         console.log('Success! Balances retrieved for Business with token Id:' +
           business.token)
+        console.log(JSON.stringify(balances))
       } else {
         console.log('Error! Unable to get Business token Id.')
         console.log(balances)
