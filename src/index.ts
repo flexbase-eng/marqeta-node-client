@@ -20,7 +20,6 @@ import { VelocityControlApi } from './velocity-control'
 import { AuthorizationControlApi } from './authorization-control'
 import { MerchantGroupApi } from './merchant-group'
 import { MccGroupApi } from './mcc-group'
-import { CommandoModeApi } from './commando-mode'
 
 const PROTOCOL = 'https'
 const MARQETA_HOST = 'sandbox-api.marqeta.com/v3'
@@ -83,7 +82,6 @@ export class Marqeta {
   authorizationControl: AuthorizationControlApi
   merchantGroup: MerchantGroupApi
   mccGroup: MccGroupApi
-  commandoMode: CommandoModeApi
 
   constructor (options?: MarqetaOptions) {
     this.host = options?.host || MARQETA_HOST
@@ -104,7 +102,6 @@ export class Marqeta {
     this.authorizationControl = new AuthorizationControlApi(this, options)
     this.merchantGroup = new MerchantGroupApi(this, options)
     this.mccGroup = new MccGroupApi(this, options)
-    this.commandoMode = new CommandoModeApi(this, options)
   }
 
   /*
