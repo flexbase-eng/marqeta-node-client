@@ -23,6 +23,14 @@ export interface CardTransition {
   }
 }
 
+export interface CardTransitionList {
+  count: bigint;
+  startIndex: bigint;
+  endIndex: bigint;
+  isMore: boolean;
+  data?: CardTransition[];
+}
+
 export class CardTransitionApi {
   client: Marqeta;
 
@@ -89,6 +97,43 @@ export class CardTransitionApi {
     return {
       success: !resp?.payload?.errorCode,
       cardTransition: { ...resp.payload }
+    }
+  }
+
+  /*
+   * Function to take a Card Transition token and a series of optional search
+   * arguments as input, pass them to Marqeta, and have them return any Card
+   * Transitions that fit the criteria. If no search arguments are given, then
+   * *all* the Card Transitions will be returned.
+   */
+  async list(token: string, options: {
+    count?: number,
+    startIndex?: number,
+    fields?: string[],
+    sortBy?: string,
+  } = {}): Promise<{
+    success: boolean,
+    cardTransitions?: CardTransitionList,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('GET',
+      `cardtransitions/card/${token}`,
+      options
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return {
+      success: !resp?.payload?.errorCode,
+      cardTransitions: { ...resp.payload },
     }
   }
 }
