@@ -25,12 +25,11 @@ import { Marqeta } from '../src';
   const users = await client.user.list()
 
   if (users?.userList?.count && Array.isArray(users?.userList?.data)) {
+    let newCard, cardTransition
 
-    console.log('getting the User Card Products...')
+    console.log('getting Card Products...')
     const products = await client.cardProduct.list()
     const user = users?.userList?.data.pop()
-    console.log(user)
-    let newCard
 
     if (products?.cardProducts?.count
       && Array.isArray(products?.cardProducts?.data)) {
@@ -43,26 +42,27 @@ import { Marqeta } from '../src';
           channel: 'API',
           userToken: user.token,
         }
+        console.log('transitioning User to ACTIVE status...')
         const userTransition = await client.user.transition(state)
-        console.log('transition')
-        console.log(userTransition)
+
         if (userTransition?.success) {
+          console.log('creating a new Card...')
           mockCard.userToken = user.token
           mockCard.cardProductToken = product.token
           newCard = await client.card.create(mockCard)
 
           if (newCard.success && newCard?.card?.token) {
+            console.log('transitioning Card to ACTIVE status...')
             mockCardTransition.cardToken = newCard.card.token
-            const transitioned = await client.cardTransition.create(
+            cardTransition = await client.cardTransition.create(
               mockCardTransition
             )
 
-            if (transitioned?.success) {
+            if (cardTransition?.success) {
               console.log('Success! Card transitioned to "ACTIVE" state.')
-              console.log(transitioned)
             } else {
               console.log('Error! Unable to transition card.')
-              console.log(transitioned)
+              console.log(cardTransition)
             }
           } else {
             console.log('Error! Unable to create a new Card.')
@@ -82,6 +82,19 @@ import { Marqeta } from '../src';
       console.log(products)
     }
 
+    if (cardTransition?.cardTransition?.token) {
+      const foundTransition = await client.cardTransition.byTokenId(
+        cardTransition.cardTransition.token
+      )
+      if (foundTransition) {
+        console.log('Success! Card Transition found.')
+      } else {
+        console.log('Error! Unable to find Card transition by token Id.')
+        console.log(foundTransition)
+      }
+    } else {
+      console.log('Error! Card transition failed.')
+    }
   } else {
     console.log('Error! Unable to get a list of Users')
     console.log(users)
