@@ -24,12 +24,12 @@ import { Marqeta } from '../src';
   console.log('getting a list of users...')
   const users = await client.user.list()
 
+  let user, newCard, cardTransition, newCardToken
   if (users?.userList?.count && Array.isArray(users?.userList?.data)) {
-    let newCard, cardTransition
 
     console.log('getting Card Products...')
     const products = await client.cardProduct.list()
-    const user = users?.userList?.data.pop()
+    user = users?.userList?.data.pop()
 
     if (products?.cardProducts?.count
       && Array.isArray(products?.cardProducts?.data)) {
@@ -50,8 +50,8 @@ import { Marqeta } from '../src';
           mockCard.userToken = user.token
           mockCard.cardProductToken = product.token
           newCard = await client.card.create(mockCard)
-
           if (newCard.success && newCard?.card?.token) {
+            newCardToken = newCard.card.token
             console.log('transitioning Card to ACTIVE status...')
             mockCardTransition.cardToken = newCard.card.token
             cardTransition = await client.cardTransition.create(
@@ -82,6 +82,8 @@ import { Marqeta } from '../src';
       console.log(products)
     }
 
+    console.log('getting Card Transition by token Id...')
+
     if (cardTransition?.cardTransition?.token) {
       const foundTransition = await client.cardTransition.byTokenId(
         cardTransition.cardTransition.token
@@ -94,6 +96,21 @@ import { Marqeta } from '../src';
       }
     } else {
       console.log('Error! Card transition failed.')
+    }
+
+    console.log('getting a list of Card Transitions...')
+
+    if (newCardToken != undefined) {
+      const list = await client.cardTransition.list(newCardToken)
+      if (list?.success) {
+        console.log('Success! A list of Card Transitions was retrieved.')
+      } else {
+        console.log('Error! Unable to get a list of Card Transitions.')
+        console.log(list)
+      }
+    } else {
+      console.log('Error! Empty new Card token.')
+      console.log(newCard)
     }
   } else {
     console.log('Error! Unable to get a list of Users')
