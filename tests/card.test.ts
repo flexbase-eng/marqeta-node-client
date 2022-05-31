@@ -82,11 +82,11 @@ import { Marqeta } from '../src'
         } else {
           console.log('Error! Unable to update the new Marqeta Card as the ' +
           ' expiration date is missing.')
-          console.log(updatedCard)
+          console.log(newCard)
         }
       } else {
         console.log('Error! Card barcode empty, cannot update Card')
-        console.log(updatedCard)
+        console.log(newCard)
       }
 
       console.log('getting a list of Marqeta Cards by User token Id...')
@@ -102,6 +102,20 @@ import { Marqeta } from '../src'
         }
       } else {
         console.log('Error! User token empty, cannot get a list of Cards')
+        console.log(user)
+      }
+
+      console.log('getting Card by Token Id...')
+      if (newCard?.card?.token) {
+        const byToken = await client.card.byTokenId(newCard.card.token)
+        if (byToken?.success) {
+          console.log('Success! Found a Marqeta Card by a Card token Id')
+        } else {
+          console.log('Error! Unable to find a Marqeta Card by a Card token Id')
+          console.log(byToken)
+        }
+      } else {
+        console.log('Error! Card token empty, cannot get a Card by token Id')
         console.log(user)
       }
 

@@ -247,4 +247,30 @@ export class CardApi {
     }
     return { success: !resp?.payload?.errorCode, card: { ...resp.payload } }
   }
+
+  /*
+   * Function to take a Marqeta Card token Id, send that to Marqeta, and have
+   * them return the Business information for that token Id.
+   */
+  async byTokenId(token: string): Promise<{
+    success: boolean,
+    card?: Card,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('GET',
+      `cards/${token}`,
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, card: { ...resp.payload } }
+  }
 }
