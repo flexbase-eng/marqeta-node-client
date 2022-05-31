@@ -26,6 +26,7 @@ import { AutoReloadApi } from './auto-reload'
 import { BalancesApi } from './balances'
 import { ProgramReserveApi } from './program-reserve'
 import { CardTransitionApi } from './card-transition'
+import { CardPinApi } from './card-pin'
 
 const PROTOCOL = 'https'
 const MARQETA_HOST = 'sandbox-api.marqeta.com/v3'
@@ -94,6 +95,7 @@ export class Marqeta {
   balances: BalancesApi
   programReserve: ProgramReserveApi
   cardTransition: CardTransitionApi
+  cardPin: CardPinApi
 
   constructor (options?: MarqetaOptions) {
     this.host = options?.host || MARQETA_HOST
@@ -120,6 +122,7 @@ export class Marqeta {
     this.balances = new BalancesApi(this, options)
     this.programReserve = new ProgramReserveApi(this, options)
     this.cardTransition = new CardTransitionApi(this, options)
+    this.cardPin = new CardPinApi(this, options)
   }
 
   /*
