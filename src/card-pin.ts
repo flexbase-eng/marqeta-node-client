@@ -16,9 +16,10 @@ export class CardPinApi {
 
   /*
    * Function to take a Card token Id, an optional Control Token type, send
-   * those to Marqeta, and have them create and return a Card PIN.
+   * those to Marqeta, and have them create and return a Control Token which is
+   * required when creating or updating a Card PIN.
    */
-  async create(card: Partial<CardPin>): Promise<{
+  async createControlToken(cardPin: Partial<CardPin>): Promise<{
     success: boolean,
     cardPin?: CardPin,
     error?: MarqetaError,
@@ -26,7 +27,7 @@ export class CardPinApi {
     const resp = await this.client.fire('POST',
       'pins/controltoken',
       undefined,
-      card,
+      cardPin,
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {

@@ -14,7 +14,10 @@ import { Marqeta } from '../src';
 
   const mockPin = {
     cardToken: '',
+    cardTokenType: '',
+    pin: '',
   }
+
   console.log('getting a list of users...')
 
   let newCard, user
@@ -29,6 +32,7 @@ import { Marqeta } from '../src';
       && Array.isArray(products?.cardProducts?.data)) {
       const product = products?.cardProducts?.data.pop()
 
+      console.log('creating new card PIN...')
       if (user?.token && product?.token) {
         console.log('creating a new Card...')
         mockCard.userToken = user.token
