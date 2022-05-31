@@ -3,9 +3,11 @@
 import { Marqeta, MarqetaError, MarqetaOptions } from './index'
 
 export interface CardPin {
-  cardToken: string;
+  cardToken?: string;
   cardTokenType?: string;
   controlToken?: string;
+  controltokenType?: string;
+  cardholderVerificationMethod?: string;
   pin?: string;
 }
 
@@ -26,10 +28,14 @@ export class CardPinApi {
     cardPin?: CardPin,
     error?: MarqetaError,
   }> {
+    const {
+      cardToken,
+      controltokenType,
+    } = cardPin
     const resp = await this.client.fire('POST',
       'pins/controltoken',
       undefined,
-      cardPin,
+      { cardToken, controltokenType }
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {
@@ -47,8 +53,7 @@ export class CardPinApi {
 
   /*
    * Function to take a Card PIN and Control Token and create, send those to
-   * Marqeta, and have the PIN updated or created for the CARD. The response
-   * will be a 204 code with message: "PIN was successfully set."
+   * Marqeta, and have the PIN updated or created for the CARD.
    */
   async upsert(cardPin: Partial<CardPin>): Promise<{
     success: boolean,
@@ -76,5 +81,38 @@ export class CardPinApi {
       }
     }
     return { success: !resp?.payload?.errorCode, cardPin: { ...resp.payload } }
+  }
+
+  /*
+   * Function to take a required Card PIN Control Token and Cardholder
+   * Verification Method, send those to Marqeta, and have the PIN revealed for
+   * an existing, active card.
+   */
+  async revealPin(cardPin: Partial<CardPin>): Promise<{
+    success: boolean,
+    cardPin?: CardPin,
+    error?: MarqetaError,
+  }> {
+    const {
+      controlToken,
+      cardholderVerificationMethod,
+    } = cardPin
+    const resp = await this.client.fire('POST',
+      'pins/reveal',
+      undefined,
+      { controlToken, cardholderVerificationMethod }
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, cardPin: { ...resp.response } }
   }
 }
