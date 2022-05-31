@@ -15,12 +15,13 @@ import { Marqeta } from '../src';
   const mockPin = {
     cardToken: '',
     cardTokenType: '',
+    controlToken: '',
     pin: '',
   }
 
   console.log('getting a list of users...')
 
-  let newCard, user
+  let newCard, user, pin
   const users = await client.user.list()
 
   if (users?.userList?.count && Array.isArray(users?.userList?.data)) {
@@ -41,7 +42,7 @@ import { Marqeta } from '../src';
 
         if (newCard.success && newCard?.card?.token) {
           mockPin.cardToken = newCard.card.token
-          const pin = await client.cardPin.create(mockPin)
+          pin = await client.cardPin.createControlToken(mockPin)
 
           if (pin.success) {
             console.log('Success! Card PIN created.')
@@ -49,6 +50,26 @@ import { Marqeta } from '../src';
             console.log('Error! Unable to create card PIN.')
             console.log(pin)
           }
+
+          console.log('creating new card PIN...')
+
+          if (pin?.cardPin?.controlToken) {
+            mockPin.pin = '1234'
+            mockPin.controlToken = pin.cardPin.controlToken
+            const upsertPin = await client.cardPin.upsert(mockPin)
+
+            if (upsertPin?.success) {
+              console.log('Success! Card PIN was set successfully.')
+              console.log(upsertPin)
+            } else {
+              console.log('Error! Unable to set Card PIN.')
+              console.log(upsertPin)
+            }
+          } else {
+            console.log('Error! Empty card PIN control token .')
+            console.log(pin)
+          }
+
         } else {
           console.log('Error! Empty new card token Id.')
           console.log(newCard)

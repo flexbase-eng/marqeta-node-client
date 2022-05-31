@@ -5,6 +5,8 @@ import { Marqeta, MarqetaError, MarqetaOptions } from './index'
 export interface CardPin {
   cardToken: string;
   cardTokenType?: string;
+  controlToken?: string;
+  pin?: string;
 }
 
 export class CardPinApi {
@@ -28,6 +30,39 @@ export class CardPinApi {
       'pins/controltoken',
       undefined,
       cardPin,
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, cardPin: { ...resp.payload } }
+  }
+
+  /*
+   * Function to take a Card PIN and Control Token and create, send those to
+   * Marqeta, and have the PIN updated or created for the CARD. The response
+   * will be a 204 code with message: "PIN was successfully set."
+   */
+  async upsert(cardPin: Partial<CardPin>): Promise<{
+    success: boolean,
+    cardPin?: CardPin,
+    error?: MarqetaError,
+  }> {
+    const {
+      controlToken,
+      pin,
+    } = cardPin
+    const resp = await this.client.fire('PUT',
+      'pins',
+      undefined,
+      { controlToken, pin }
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {
