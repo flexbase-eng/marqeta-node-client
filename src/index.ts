@@ -30,6 +30,7 @@ import { CardPinApi } from './card-pin'
 import { UserTransitionApi } from './user-transition'
 import { BusinessTransitionApi } from './business-transition'
 import { AccountHolderGroupsApi } from './account-holder-groups'
+import { FundingAddressApi } from './funding-address'
 
 const PROTOCOL = 'https'
 const MARQETA_HOST = 'sandbox-api.marqeta.com/v3'
@@ -102,6 +103,7 @@ export class Marqeta {
   userTransition: UserTransitionApi
   businessTransition: BusinessTransitionApi
   accountHolderGroups: AccountHolderGroupsApi
+  fundingAddress: FundingAddressApi
 
   constructor (options?: MarqetaOptions) {
     this.host = options?.host || MARQETA_HOST
@@ -132,6 +134,7 @@ export class Marqeta {
     this.userTransition = new UserTransitionApi(this, options)
     this.businessTransition = new BusinessTransitionApi(this, options)
     this.accountHolderGroups = new AccountHolderGroupsApi(this, options)
+    this.fundingAddress = new FundingAddressApi(this, options)
   }
 
   /*
