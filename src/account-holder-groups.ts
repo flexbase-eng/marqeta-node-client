@@ -5,7 +5,7 @@ import type {
   MarqetaOptions,
 } from './'
 
-export interface FundingProgram {
+export interface AccountHolderGroups {
   token?: string;
   name?: string;
   config?: {
