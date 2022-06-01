@@ -35,7 +35,7 @@ export class UserTransitionApi {
    * Function to a User token, status, reason code, and channel, send
    * those to Marqeta, and transition a User account between states.
    */
-  async transition(status: Partial<Transition>): Promise<{
+  async create(status: Partial<Transition>): Promise<{
     success: boolean,
     transition?: Transition,
     error?: MarqetaError,
@@ -63,7 +63,7 @@ export class UserTransitionApi {
    * Function to take a Transition token Id, send that to Marqeta, and have the
    * transition status information returned.
    */
-  async getTransition(token: string): Promise<{
+  async byTokenId(token: string): Promise<{
     success: boolean,
     transition?: Transition,
     error?: MarqetaError,
@@ -96,7 +96,7 @@ export class UserTransitionApi {
    * Transition field by which to sort the response, e.g. lastModifiedData,
    * createdTime, etc.
    */
-  async listTransition(search: {
+  async list(search: {
     token?: string,
     count?: number,
     startIndex?: number,
