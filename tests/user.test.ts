@@ -9,7 +9,7 @@ import { Marqeta } from '../src'
     apiAccessToken: process.env.MARQETA_API_ACCESS_TOKEN
   })
 
-  const emailNum = Math.floor(Math.random() * 50) + 1
+  const emailNum = Math.floor(Math.random() * 100) + 1
   const mockUser = {
     token: '',
     firstName: 'Ipsumi4',
@@ -135,7 +135,7 @@ import { Marqeta } from '../src'
         channel: 'API',
         userToken: testUser.token,
       }
-      trans = await client.userTransition.transition(state)
+      trans = await client.userTransition.create(state)
 
       if (trans?.transition?.token) {
         console.log('Success! The User was transitioned to status: "' +
@@ -153,7 +153,7 @@ import { Marqeta } from '../src'
   console.log('testing get User transition by token Id...')
   if (trans?.transition?.token) {
     let getTrans
-    getTrans = await client.userTransition.getTransition(trans?.transition?.token)
+    getTrans = await client.userTransition.byTokenId(trans?.transition?.token)
 
     if (getTrans?.transition?.token) {
       console.log('Success! We were able to get the Transition status.')
@@ -170,7 +170,7 @@ import { Marqeta } from '../src'
   console.log('testing list User transitions by User token Id...')
   if (testUser?.token) {
     let listTrans
-    listTrans = await client.userTransition.listTransition({ ...testUser })
+    listTrans = await client.userTransition.list({ ...testUser })
 
     if (listTrans?.success && listTrans?.transitionList?.count) {
       console.log('Success! We were able to get a list of User transitions.')
@@ -187,7 +187,7 @@ import { Marqeta } from '../src'
   console.log('testing list one User transitions by token Id...')
   if (testUser?.token) {
     let listTransOne
-    listTransOne = await client.userTransition.listTransition({
+    listTransOne = await client.userTransition.list({
       ...testUser,
       count: 1,
     })
