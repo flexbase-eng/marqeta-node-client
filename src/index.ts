@@ -32,6 +32,7 @@ import { BusinessTransitionApi } from './business-transition'
 import { AccountHolderGroupsApi } from './account-holder-groups'
 import { FundingAddressApi } from './funding-address'
 import { AcceptedCountriesApi } from './accepted-countries'
+import { GpaOrderApi } from './gpa-order'
 
 const PROTOCOL = 'https'
 const MARQETA_HOST = 'sandbox-api.marqeta.com/v3'
@@ -106,6 +107,7 @@ export class Marqeta {
   accountHolderGroups: AccountHolderGroupsApi
   fundingAddress: FundingAddressApi
   acceptedCountries: AcceptedCountriesApi
+  gpaOrder: GpaOrderApi
 
   constructor (options?: MarqetaOptions) {
     this.host = options?.host || MARQETA_HOST
@@ -138,6 +140,7 @@ export class Marqeta {
     this.accountHolderGroups = new AccountHolderGroupsApi(this, options)
     this.fundingAddress = new FundingAddressApi(this, options)
     this.acceptedCountries = new AcceptedCountriesApi(this, options)
+    this.gpaOrder = new GpaOrderApi(this, options)
   }
 
   /*
