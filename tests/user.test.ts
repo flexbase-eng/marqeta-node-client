@@ -33,8 +33,8 @@ import { Marqeta } from '../src'
     testUser = listA.userList.data.pop()
 
     if (testUser?.token) {
-      console.log('getting User by token Id...')
-      foundUserA = await client.user.byTokenId(testUser.token)
+      console.log('retrieving User by token Id...')
+      foundUserA = await client.user.retrieve(testUser.token)
 
       if (foundUserA?.user?.token) {
         console.log('Success! Marqeta User found by token id: ' +

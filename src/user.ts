@@ -6,24 +6,6 @@ import type {
   MarqetaError,
 } from './'
 
-export interface Transition {
-  idempotentHash?: string;
-  token?: string;
-  status: string;
-  reasonCode: string;
-  reason?: string;
-  channel: string;
-  userToken: string;
-}
-
-export interface TransitionList {
-  count: bigint;
-  startIndex: bigint;
-  endIndex: bigint;
-  isMore: boolean;
-  data?: Transition[];
-}
-
 export interface UserIdentification {
   type: string;
   value: string;
@@ -103,7 +85,7 @@ export class UserApi {
    * Function to take a token Id and return the Marqeta User account associated
    * with that token Id.
    */
-  async byTokenId(userTokenId: string): Promise<{
+  async retrieve(userTokenId: string): Promise<{
     success: boolean,
     user?: User,
     error?: MarqetaError,
