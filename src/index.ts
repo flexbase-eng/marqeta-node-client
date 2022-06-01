@@ -33,6 +33,7 @@ import { AccountHolderGroupsApi } from './account-holder-groups'
 import { FundingAddressApi } from './funding-address'
 import { AcceptedCountriesApi } from './accepted-countries'
 import { GpaOrderApi } from './gpa-order'
+import { CommandoModeApi } from './commando-mode'
 
 const PROTOCOL = 'https'
 const MARQETA_HOST = 'sandbox-api.marqeta.com/v3'
@@ -108,6 +109,7 @@ export class Marqeta {
   fundingAddress: FundingAddressApi
   acceptedCountries: AcceptedCountriesApi
   gpaOrder: GpaOrderApi
+  commandoMode: CommandoModeApi
 
   constructor (options?: MarqetaOptions) {
     this.host = options?.host || MARQETA_HOST
@@ -141,6 +143,7 @@ export class Marqeta {
     this.fundingAddress = new FundingAddressApi(this, options)
     this.acceptedCountries = new AcceptedCountriesApi(this, options)
     this.gpaOrder = new GpaOrderApi(this, options)
+    this.commandoMode = new CommandoModeApi(this, options)
   }
 
   /*
