@@ -28,6 +28,7 @@ import { ProgramReserveApi } from './program-reserve'
 import { CardTransitionApi } from './card-transition'
 import { CardPinApi } from './card-pin'
 import { UserTransitionApi } from './user-transition'
+import { BusinessTransitionApi } from './business-transition'
 
 const PROTOCOL = 'https'
 const MARQETA_HOST = 'sandbox-api.marqeta.com/v3'
@@ -98,6 +99,7 @@ export class Marqeta {
   cardTransition: CardTransitionApi
   cardPin: CardPinApi
   userTransition: UserTransitionApi
+  businessTransition: BusinessTransitionApi
 
   constructor (options?: MarqetaOptions) {
     this.host = options?.host || MARQETA_HOST
@@ -126,6 +128,7 @@ export class Marqeta {
     this.cardTransition = new CardTransitionApi(this, options)
     this.cardPin = new CardPinApi(this, options)
     this.userTransition = new UserTransitionApi(this, options)
+    this.businessTransition = new BusinessTransitionApi(this, options)
   }
 
   /*
