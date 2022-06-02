@@ -252,7 +252,7 @@ export class CardApi {
    * Function to take a Marqeta Card token Id, send that to Marqeta, and have
    * them return the Business information for that token Id.
    */
-  async byTokenId(token: string): Promise<{
+  async retrieve(token: string): Promise<{
     success: boolean,
     card?: Card,
     error?: MarqetaError,
