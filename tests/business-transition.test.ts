@@ -9,14 +9,15 @@ import { Marqeta } from '../src';
     apiAccessToken: process.env.MARQETA_API_ACCESS_TOKEN
   })
 
+  let listItem, trans
   const businesses = await client.business.list()
 
-  let listItem
-  let trans
   if (businesses.businesses?.isMore) {
     listItem = businesses?.businesses?.data?.pop()
+
     if (listItem?.token) {
       console.log('transition Business status to Active...')
+
       if (listItem?.token && listItem?.status) {
         const state = {
           status: 'ACTIVE',
@@ -26,6 +27,9 @@ import { Marqeta } from '../src';
         }
         trans = await client.businessTransition.create(state)
       }
+
+      console.log(`${JSON.stringify(trans)}`)
+
       if (trans?.transition?.token) {
         console.log('Success! The Business was transitioned to status: "' +
           trans.transition.status + '"')
@@ -44,11 +48,14 @@ import { Marqeta } from '../src';
   }
 
   console.log('testing get Business transition by token Id...')
+
   if (trans?.transition?.token) {
     let getTrans
-    getTrans = await client.businessTransition.byTokenId(
+    getTrans = await client.businessTransition.retrieve(
       trans?.transition?.token
     )
+
+    console.log(`${JSON.stringify(getTrans)}`)
     if (getTrans?.transition?.token) {
       console.log('Success! We were able to get the Business ' +
         'transition status.')
@@ -64,9 +71,12 @@ import { Marqeta } from '../src';
   }
 
   console.log('testing list Business transitions by token Id...')
+
   if (listItem?.token) {
     let listTrans
     listTrans = await client.businessTransition.list({ ...listItem })
+
+    console.log(`${JSON.stringify(listTrans)}`)
     if (listTrans?.success && listTrans?.transitions?.count) {
       console.log('Success! We were able to get a list of Business ' +
         'transitions.')
@@ -82,9 +92,14 @@ import { Marqeta } from '../src';
   }
 
   console.log('testing list one Business transitions by token Id...')
+
   if (listItem?.token) {
     let listTrans
-    listTrans = await client.businessTransition.list({ ...listItem, count: 1 })
+    listTrans = await client.businessTransition.list({
+      ...listItem,
+      count: 1
+    })
+
     if (listTrans?.success && listTrans?.transitions?.count) {
       console.log('Success! We were able to get a list of one Business ' +
         'transitions.')
