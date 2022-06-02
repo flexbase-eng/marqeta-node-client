@@ -64,7 +64,7 @@ export class BusinessTransitionApi {
    * Function to take a Transition token, send that to Marqeta, and have
    * the transition status information returned.
    */
-  async byTokenId(token: string): Promise<{
+  async retrieve(token: string): Promise<{
     success: boolean,
     transition?: Transition,
     error?: MarqetaError,

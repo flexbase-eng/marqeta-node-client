@@ -1540,6 +1540,117 @@ and the response will look something like this:
 }
 ```
 
+### Business Account Transition Calls
+[documentation](https://www.marqeta.com/docs/core-api/business-transitions)
+
+> Use the /businesstransitions endpoints to transition business resources 
+> between states, and to retrieve and list state changes for a business 
+> resource.
+
+#### [Create Business Account Transition](https://www.marqeta.com/docs/core-api/business-transitions#postBusinesstransitions)
+
+To transition a Business accounts status, use this call:
+
+```typescript
+const resp = await client.businessTransition.create({
+  status: 'ACTIVE',
+  reasonCode: '02',
+  channel: 'API',
+  businessToken: listItem.token,
+})
+```
+
+and the response will look something like this:
+
+```javascript
+{
+  "success": true,
+  "transition": {
+    "token": "124ccc74-b4ef-43b7-af77-dfde687a14d7",
+    "status": "ACTIVE",
+    "reasonCode": "02",
+    "channel": "API",
+    "createdTime": "2022-06-02T20:44:26Z",
+    "lastModifiedTime": "2022-06-02T20:44:26Z",
+    "businessToken": "c1e98151-d230-48b3-b063-d8be437c1d60"
+  }
+}
+```
+
+#### [Retrieve Business Account Transition](https://www.marqeta.com/docs/core-api/business-transitions#getBusinesstransitionsToken)
+
+To retrieve a Business account transition by token Id, this call can be used:
+
+```typescript
+const resp = await client.businessTransition.retrieve(
+  '124ccc74-b4ef-43b7-af77-dfde687a14d7'
+)
+```
+and the response will look something like this:
+
+```javascript
+{
+  "success": true,
+  "transition": {
+    "token": "124ccc74-b4ef-43b7-af77-dfde687a14d7",
+    "status": "ACTIVE",
+    "reasonCode": "02",
+    "channel": "API",
+    "createdTime": "2022-06-02T20:44:26Z",
+    "lastModifiedTime": "2022-06-02T20:44:26Z",
+    "businessToken": "c1e98151-d230-48b3-b063-d8be437c1d60"
+  }
+}
+```
+#### [List Business Account Transitions](https://www.marqeta.com/docs/core-api/business-transitions#getBusinesstransitionsBusinessBusinesstoken)
+
+And finally, to get a list of Business Account transitions, use this call 
+with a Business token Id, and or optional filter fields: count, sortBy, 
+etc.
+
+```typescript
+const resp = await client.businessTransition.list({
+  '24ccc74-b4ef-43b7-af77-dfde687a14d7',
+  count: 2,
+  sortBy: 'lastModifiedTime',
+})
+```
+
+and the list response will look something like this:
+
+```javascript
+{
+  "success": true,
+  "transitions": {
+    "count": 2,
+    "startIndex": 0,
+    "endIndex": 1,
+    "isMore": false,
+    "data": [
+      {
+        "token": "124ccc74-b4ef-43b7-af77-dfde687a14d7",
+        "status": "ACTIVE",
+        "reasonCode": "02",
+        "channel": "API",
+        "createdTime": "2022-06-02T20:44:26Z",
+        "lastModifiedTime": "2022-06-02T20:44:26Z",
+        "businessToken": "c1e98151-d230-48b3-b063-d8be437c1d60"
+      },
+      {
+        "token": "9dc20b01-1652-438f-bded-e1a2df240fef",
+        "status": "ACTIVE",
+        "reasonCode": "14",
+        "reason": "CardHolder creation",
+        "channel": "SYSTEM",
+        "createdTime": "2022-06-02T13:09:45Z",
+        "lastModifiedTime": "2022-06-02T13:09:45Z",
+        "businessToken": "c1e98151-d230-48b3-b063-d8be437c1d60"
+      }
+    ]
+  }
+}
+```
+
 ## Development
 
 For those interested in working on the library, there are a few things that
