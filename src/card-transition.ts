@@ -75,7 +75,7 @@ export class CardTransitionApi {
    * Function to take a Card Transition token Id, send that to Marqeta, and
    * have them return the found Card Transition information.
    */
-  async byTokenId(token: string): Promise<{
+  async retrieve(token: string): Promise<{
     success: boolean,
     cardTransition?: CardTransition,
     error?: MarqetaError,

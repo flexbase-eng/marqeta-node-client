@@ -49,7 +49,7 @@ const client = new Marqeta({
 ### User Account Calls
 [documentation](https://www.marqeta.com/docs/core-api/users)
 
-> The users resource represents a person who accesses Marqeta-administered 
+> The user resource represents a person who accesses Marqeta-administered 
 > funds via a Marqeta card (whether physical or virtual). This endpoint 
 > enables you to create and manage users on the Marqeta platform.
 
@@ -268,6 +268,14 @@ and the result will look something like this:
   }
 }
 ```
+
+### Business Account Calls
+[documentation](https://www.marqeta.com/docs/core-api/businesses)
+
+> A business is a type of account holder that cannot directly 
+> hold cards, but can have a parent/child relationships with 
+> card-holding users. A business can monitor and control card 
+> use by a specified group of users. 
 
 #### [Create Business Account](https://www.marqeta.com/docs/core-api/businesses#postBusinesses)
 
@@ -498,6 +506,12 @@ and the response would look something like this:
 }
 ```
 
+### Card Account Calls
+[documentation](https://www.marqeta.com/docs/core-api/cards)
+
+> The card resource represents a payment card. Cards are derived 
+> from and controlled by the card-product resource.
+
 #### [Create Card](https://www.marqeta.com/docs/core-api/cards#postCards)
 
 You can create a Marqeta Card with a single call:
@@ -703,6 +717,19 @@ and the response will be something like this:
   }
 }
 ```
+
+### Card Products Calls
+[documentation](https://www.marqeta.com/docs/core-api/card-products)
+
+> The card products resource represents the behavior and functionality 
+> of one or more cards (either physical or virtual). For example, 
+> attributes of the card product determine whether the associated 
+> cards can be used at an ATM and/or online and whether they are 
+> currently enabled. For physical cards, the card product determines 
+> color and other printing specifications for when the cards are 
+> manufactured and personalized. You can optionally associate 
+> authorization controls and/or velocity controls with card products 
+> to restrict where and how associated cards are used.
 
 #### [Create Card Product](https://www.marqeta.com/docs/core-api/card-products#postCardproducts)
 
@@ -1025,7 +1052,7 @@ and the response would be something like this:
 }
 ```
 
-[Retrieve Card Product](https://www.marqeta.com/docs/core-api/card-products#getCardproductsToken)
+#### [Retrieve Card Product](https://www.marqeta.com/docs/core-api/card-products#getCardproductsToken)
 
 To retrieve a Card Product, use the Card Product token in this call:
 
@@ -1165,7 +1192,7 @@ and the response will look something like this:
 }
 ```
 
-[List Card Products](https://www.marqeta.com/docs/core-api/card-products#getCardproducts)
+#### [List Card Products](https://www.marqeta.com/docs/core-api/card-products#getCardproducts)
 
 To get a list of Card Products, use this call:
 
@@ -1302,6 +1329,213 @@ and the response would look like this:
     },
     "createdTime": "2022-06-02T18:02:52Z",
     "lastModifiedTime": "2022-06-02T18:02:52Z"
+  }
+}
+```
+### Card Transition Calls
+[documentation](https://www.marqeta.com/docs/core-api/card-transitions)
+
+> Use the /cardtransitions API to set the state of an existing card.
+
+#### [Create Card Transition](https://www.marqeta.com/docs/core-api/card-transitions#postCardtransitions)
+
+You can change the status an existing Card by using this call: 
+
+```typescript
+const resp = await client.userTransition.create({
+  status: 'ACTIVE',
+  reasonCode: '02',
+  channel: 'API',
+  userToken: user.token,
+})
+```
+
+and the response should look something like this:
+
+```javascript
+{
+  "success": true,
+  "cardTransition": {
+    "token": "e6e52036-2002-4455-87cf-f49b7e581e8d",
+    "cardToken": "39f3e8e9-740e-4d53-be61-b73fee9b4baf",
+    "userToken": "09d921f5-5a0b-4a31-b76a-603bb12b1329",
+    "state": "ACTIVE",
+    "reason": "I want to use this card, so activate it.",
+    "reasonCode": "00",
+    "channel": "API",
+    "fulfillmentStatus": "ISSUED",
+    "validations": {
+      "user": {
+        "birthDate": false,
+        "phone": false,
+        "ssn": false,
+        "randomNameLine1Postfix": false
+      }
+    },
+    "type": "state.activated",
+    "createdTime": "2022-06-02T20:10:33Z",
+    "cardProductToken": "ffa4020f-e42c-4e98-a63f-43ba2ad446b3",
+    "lastFour": "5992",
+    "pan": "111111______5992",
+    "expiration": "0626",
+    "expirationTime": "2026-06-30T23:59:59.000Z",
+    "barcode": "21328141077422732522",
+    "pinIsSet": false,
+    "user": {
+      "metadata": { }
+    },
+    "card": {
+      "metadata": { }
+    }
+  }
+}
+```
+
+#### [Retrieve Card Transition](https://www.marqeta.com/docs/core-api/card-transitions#getCardtransitionsToken)
+
+To retrieve a card transition by token Id, you can use this call:
+
+```typescript
+const resp = await client.cardTransition.retrieve(
+  'e6e52036-2002-4455-87cf-f49b7e581e8d'
+)
+```
+
+and the response will look something like this:
+
+```javascript
+{
+  "success": true,
+  "cardTransition": {
+    "token": "e6e52036-2002-4455-87cf-f49b7e581e8d",
+    "cardToken": "39f3e8e9-740e-4d53-be61-b73fee9b4baf",
+    "userToken": "09d921f5-5a0b-4a31-b76a-603bb12b1329",
+    "state": "ACTIVE",
+    "reason": "I want to use this card, so activate it.",
+    "reasonCode": "00",
+    "channel": "API",
+    "fulfillmentStatus": "ISSUED",
+    "validations": {
+      "user": {
+        "birthDate": false,
+        "phone": false,
+        "ssn": false,
+        "randomNameLine1Postfix": false
+      }
+    },
+    "type": "state.activated",
+    "createdTime": "2022-06-02T20:10:33Z",
+    "cardProductToken": "ffa4020f-e42c-4e98-a63f-43ba2ad446b3",
+    "lastFour": "5992",
+    "pan": "111111______5992",
+    "expiration": "0626",
+    "expirationTime": "2026-06-30T23:59:59.000Z",
+    "barcode": "21328141077422732522",
+    "pinIsSet": false,
+    "user": {
+      "metadata": { }
+    },
+    "card": {
+      "metadata": { }
+    }
+  }
+}
+```
+
+#### [List Card Transitions](https://www.marqeta.com/docs/core-api/card-transitions#getCardtransitionsCardToken)
+
+To get a list of Card Transitions, use this call with a Card token Id and 
+optional filter fields:
+
+```typescript
+const resp = await client.cardTransition.list(
+ '39f3e8e9-740e-4d53-be61-b73fee9b4baf',
+  { 
+    count: 2, 
+    startIndex: 0,
+    sortBy: 'lastModifiedTime',
+  }
+)
+```
+
+and the response will look something like this:
+
+```javascript
+{
+  "success": true,
+  "cardTransitions": {
+    "count": 2,
+    "startIndex": 0,
+    "endIndex": 1,
+    "isMore": false,
+    "data": [
+      {
+        "token": "4d1ddec6-0a38-4deb-8e99-55248cee11b0",
+        "cardToken": "39f3e8e9-740e-4d53-be61-b73fee9b4baf",
+        "userToken": "09d921f5-5a0b-4a31-b76a-603bb12b1329",
+        "state": "UNACTIVATED",
+        "reason": "New card",
+        "reasonCode": "00",
+        "channel": "SYSTEM",
+        "fulfillmentStatus": "ISSUED",
+        "validations": {
+          "user": {
+            "birthDate": false,
+            "phone": false,
+            "ssn": false,
+            "randomNameLine1Postfix": false
+          }
+        },
+        "type": "fulfillment.issued",
+        "createdTime": "2022-06-02T20:10:33Z",
+        "cardProductToken": "ffa4020f-e42c-4e98-a63f-43ba2ad446b3",
+        "lastFour": "5992",
+        "pan": "111111______5992",
+        "expiration": "0626",
+        "expirationTime": "2026-06-30T23:59:59.000Z",
+        "barcode": "21328141077422732522",
+        "pinIsSet": false,
+        "user": {
+          "metadata": { }
+        },
+        "card": {
+          "metadata": { }
+        }
+      },
+      {
+        "token": "e6e52036-2002-4455-87cf-f49b7e581e8d",
+        "cardToken": "39f3e8e9-740e-4d53-be61-b73fee9b4baf",
+        "userToken": "09d921f5-5a0b-4a31-b76a-603bb12b1329",
+        "state": "ACTIVE",
+        "reason": "I want to use this card, so activate it.",
+        "reasonCode": "00",
+        "channel": "API",
+        "fulfillmentStatus": "ISSUED",
+        "validations": {
+          "user": {
+            "birthDate": false,
+            "phone": false,
+            "ssn": false,
+            "randomNameLine1Postfix": false
+          }
+        },
+        "type": "state.activated",
+        "createdTime": "2022-06-02T20:10:33Z",
+        "cardProductToken": "ffa4020f-e42c-4e98-a63f-43ba2ad446b3",
+        "lastFour": "5992",
+        "pan": "111111______5992",
+        "expiration": "0626",
+        "expirationTime": "2026-06-30T23:59:59.000Z",
+        "barcode": "21328141077422732522",
+        "pinIsSet": false,
+        "user": {
+          "metadata": { }
+        },
+        "card": {
+          "metadata": { }
+        }
+      }
+    ]
   }
 }
 ```
