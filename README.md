@@ -127,7 +127,9 @@ So looking at the `success` value of the response will quickly let you know the 
 You can get a User by token id using the retrieve endpoint:
 
 ```typescript
-const resp = await client.user.retrieve('3b8dbcbb-48da-45fd-95a4-0f8ff9109499')
+const resp = await client.user.retrieve(
+   '3b8dbcbb-48da-45fd-95a4-0f8ff9109499',
+)
 ```
 
 and the output will look something like this:
@@ -197,7 +199,7 @@ const resp = await client.user.update({
 You can get a list of all Marqeta Users with no arguments:
 
 ```typescript
-  const resp = await client.user.list()
+const resp = await client.user.list()
 ```
 
 or you can add in filtering criteria like the `count` or the `createdTime`:
@@ -214,12 +216,12 @@ and the result will look something like this:
 ```javascript
 {
   "success": true,
-          "userList": {
+  "userList": {
     "count": 2,
-            "startIndex": 0,
-            "endIndex": 1,
-            "isMore": true,
-            "data": [
+    "startIndex": 0,
+    "endIndex": 1,
+    "isMore": true,
+    "data": [
       {
         "token": "6c432f59-26ec-48a7-b1f8-5da4c2e8efc1",
         "active": true,
@@ -496,7 +498,211 @@ and the response would look something like this:
 }
 ```
 
+#### [Create Card](https://www.marqeta.com/docs/core-api/cards#postCards)
 
+You can create a Marqeta Card with a single call:
+
+```typescript
+const resp = client.card.create({
+  userToken: '09d921f5-5a0b-4a31-b76a-603bb12b1329',
+  cardProductToken: 'eca757c9-a04e-4966-b102-1403900c7b82',
+})
+```
+
+and the response will look something like this:
+
+```javascript
+{
+  "success": true,
+  "card": {
+    "createdTime": "2022-06-02T15:23:19Z",
+    "lastModifiedTime": "2022-06-02T15:23:19Z",
+    "token": "bba520f8-cfd6-48da-a1f0-485b0c4b1641",
+    "userToken": "09d921f5-5a0b-4a31-b76a-603bb12b1329",
+    "cardProductToken": "eca757c9-a04e-4966-b102-1403900c7b82",
+    "lastFour": "0821",
+    "pan": "111111______0821",
+    "expiration": "0626",
+    "expirationTime": "2026-06-30T23:59:59Z",
+    "barcode": "15355409295917906161",
+    "pinIsSet": false,
+    "state": "UNACTIVATED",
+    "stateReason": "New card",
+    "fulfillmentStatus": "ISSUED",
+    "instrumentType": "PHYSICAL_MSR",
+    "expedite": false,
+    "metadata": { }
+  }
+}
+```
+
+#### [Retrieve Card by barcode](https://www.marqeta.com/docs/core-api/cards#getCardsBarcodeBarcode)
+
+To retrieve a Marqeta Card by barcode, use this call:
+
+```typescript
+const resp = await client.card.byBarcode(
+  '15355409295917906161',
+)
+```
+
+and the response will be something like this:
+
+```javascript
+{
+  "success": true,
+  "card": {
+    "createdTime": "2022-06-02T15:23:19Z",
+    "lastModifiedTime": "2022-06-02T15:23:19Z",
+    "token": "bba520f8-cfd6-48da-a1f0-485b0c4b1641",
+    "userToken": "09d921f5-5a0b-4a31-b76a-603bb12b1329",
+    "cardProductToken": "eca757c9-a04e-4966-b102-1403900c7b82",
+    "lastFour": "0821",
+    "pan": "111111______0821",
+    "expiration": "0626",
+    "expirationTime": "2026-06-30T23:59:59Z",
+    "barcode": "15355409295917906161",
+    "pinIsSet": false,
+    "state": "UNACTIVATED",
+    "stateReason": "New card",
+    "fulfillmentStatus": "ISSUED",
+    "instrumentType": "PHYSICAL_MSR",
+    "expedite": false,
+    "metadata": {}
+  }
+}
+```
+
+#### [Update Card](https://www.marqeta.com/docs/core-api/cards#putCardsToken)
+
+To update a Marqeta Card, use this call:
+
+```typescript
+const resp = await client.card.update(
+  'bba520f8-cfd6-48da-a1f0-485b0c4b1641',
+  { metadata: { name_1: 'ipsum' } },
+)
+```
+
+where the first argument is the Card token Id, and the second 
+is the data to update, and the response will be something 
+like this:
+
+```javascript
+{
+  "success": true,
+  "card": {
+    "createdTime": "2022-06-02T15:39:42Z",
+    "lastModifiedTime": "2022-06-02T15:39:42Z",
+    "token": "eed809f3-b34c-4c04-9ad2-b540e684ed87",
+    "userToken": "09d921f5-5a0b-4a31-b76a-603bb12b1329",
+    "cardProductToken": "eca757c9-a04e-4966-b102-1403900c7b82",
+    "lastFour": "7574",
+    "pan": "111111______7574",
+    "expiration": "0626",
+    "expirationTime": "2026-06-30T23:59:59Z",
+    "barcode": "37670272753733965645",
+    "pinIsSet": false,
+    "state": "UNACTIVATED",
+    "stateReason": "New card",
+    "fulfillmentStatus": "ISSUED",
+    "instrumentType": "PHYSICAL_MSR",
+    "expedite": false,
+    "metadata": {
+      "name1": "ipsum"
+    }
+  }
+}
+```
+
+#### [List Cards by User](https://www.marqeta.com/docs/core-api/cards#getCardsUserToken)
+
+To get a list of cards, the call would look like this:
+
+```typescript
+const resp = await client.card.listByUser({ 
+  '09d921f5-5a0b-4a31-b76a-603bb12b1329',
+  { count: 1, },
+})
+```
+
+where the first argument is the User token, the second being 
+optional filter fields, and the response would be something 
+like this:
+
+```javascript
+{
+  "success": true,
+  "cards": {
+    "count": 1,
+    "startIndex": 0,
+    "endIndex": 0,
+    "isMore": false,
+    "data": [
+      {
+        "createdTime": "2022-06-02T15:23:19Z",
+        "lastModifiedTime": "2022-06-02T15:23:19Z",
+        "token": "bba520f8-cfd6-48da-a1f0-485b0c4b1641",
+        "userToken": "09d921f5-5a0b-4a31-b76a-603bb12b1329",
+        "cardProductToken": "eca757c9-a04e-4966-b102-1403900c7b82",
+        "lastFour": "0821",
+        "pan": "111111______0821",
+        "expiration": "0626",
+        "expirationTime": "2026-06-30T23:59:59Z",
+        "barcode": "15355409295917906161",
+        "pinIsSet": false,
+        "state": "UNACTIVATED",
+        "stateReason": "New card",
+        "fulfillmentStatus": "ISSUED",
+        "instrumentType": "PHYSICAL_MSR",
+        "expedite": false,
+        "metadata": {
+          "name1": "ipsum"
+        }
+      }
+    ]
+  }
+}
+```
+
+#### [Retrieve Card](https://www.marqeta.com/docs/core-api/cards#getCardsToken)
+
+To retrieve a Marqeta Card by token Id, use this call:
+
+```typescript
+const resp = await client.card.retrieve(
+   'bba520f8-cfd6-48da-a1f0-485b0c4b1641',
+)
+```
+
+and the response will be something like this:
+
+```javascript
+{
+  "success": true,
+  "card": {
+    "createdTime": "2022-06-02T15:23:19Z",
+    "lastModifiedTime": "2022-06-02T15:23:19Z",
+    "token": "bba520f8-cfd6-48da-a1f0-485b0c4b1641",
+    "userToken": "09d921f5-5a0b-4a31-b76a-603bb12b1329",
+    "cardProductToken": "eca757c9-a04e-4966-b102-1403900c7b82",
+    "lastFour": "0821",
+    "pan": "111111______0821",
+    "expiration": "0626",
+    "expirationTime": "2026-06-30T23:59:59Z",
+    "barcode": "15355409295917906161",
+    "pinIsSet": false,
+    "state": "UNACTIVATED",
+    "stateReason": "New card",
+    "fulfillmentStatus": "ISSUED",
+    "instrumentType": "PHYSICAL_MSR",
+    "expedite": false,
+    "metadata": {
+      "name1": "ipsum"
+    }
+  }
+}
+```
 ## Development
 
 For those interested in working on the library, there are a few things that
