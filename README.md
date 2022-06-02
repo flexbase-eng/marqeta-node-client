@@ -53,7 +53,7 @@ const client = new Marqeta({
 > funds via a Marqeta card (whether physical or virtual). This endpoint 
 > enables you to create and manage users on the Marqeta platform.
 
-#### [Create User](https://www.marqeta.com/docs/core-api/users#postUsers)
+#### [Create User Account](https://www.marqeta.com/docs/core-api/users#postUsers)
 
 You can create a Marqeta User with a single call:
 
@@ -266,6 +266,236 @@ and the result will look something like this:
   }
 }
 ```
+
+#### [Create Business Account](https://www.marqeta.com/docs/core-api/businesses#postBusinesses)
+
+You can create a Marqeta Business with a single call:
+
+```typescript
+const resp = await client.business.create({
+  businessNameLegal: 'AcmeZinc INC',
+  businessNameDba: 'zinc inc',
+  incorporation: {
+    stateOfIncorporation: 'LA',
+    incorporationType: 'CORPORATION'
+  },
+  proprietorOrOfficer: {
+    firstName: '',
+    lastName: '',
+    home: {
+      address1: '106 Main St.',
+      address2: '',
+      city: 'Opelousas',
+      state: 'LA',
+      postalCode: '70570',
+      country: 'USA'
+    }
+  },
+  identifications: [
+    {
+      type: 'BUSINESS_TAX_ID',
+      value: '901721634'
+    }
+  ],
+})
+```
+
+and the response will be something like this:
+
+```javascript
+{
+  success: true,
+  business: {
+    token: '5984ac26-f653-437a-93f3-d6cef36c8fc1',
+    active: true,
+    accountHolderGroupToken: 'DEFAULT_AHG',
+    createdTime: '2022-06-02T12:49:19Z',
+    lastModifiedTime: '2022-06-02T12:49:19Z',
+    status: 'ACTIVE',
+    businessNameLegal: 'AcmeZinc INC',
+    businessNameDba: 'zinc inc',
+    incorporation: { stateOfIncorporation: 'LA', incorporationType: 'CORPORATION' },
+    proprietorOrOfficer: { home: [Object] },
+    identifications: [ [Object] ]
+  }
+}
+```
+
+and if there was an error, the response would be something like this:
+
+```javascript
+{
+  success: false,
+  error: {
+    type: 'marqeta',
+    error: "Malformed JSON request received: Can not construct instance of com.marqeta.mqpay.api.v3.enums.IdentificationType from String value 'BINESS_TAX_ID': value not one of declared Enum instance names: [NIN, PASSPORT_NUMBER, BUSINESS_NUMBER, TIN, DRIVERS_LICENSE, BUSINESS_TAX_ID, TAXPAYER_REFERENCE, SIN, SSN] at line: 1 column: 304",
+    status: '400037'
+  }
+}
+```
+
+#### [Update Business Account](https://www.marqeta.com/docs/core-api/businesses#putBusinessesToken)
+
+A call to update a Marqeta Business would look something like this:
+
+```typescript
+const resp = await client.business.update({
+  businessNameLegal: 'AcmeZinc INC',
+  businessNameDba: 'zinc inc',
+  incorporation: {
+    stateOfIncorporation: 'LA',
+    incorporationType: 'CORPORATION'
+  },
+  proprietorOrOfficer: {
+    firstName: '',
+    lastName: '',
+    home: {
+      address1: '106 Main St.',
+      address2: '',
+      city: 'Opelousas',
+      state: 'LA',
+      postalCode: '70570',
+      country: 'USA'
+    }
+  },
+  identifications: [{
+     type: 'BUSINESS_TAX_ID',
+     value: '901721634'
+  }],
+})
+```
+
+and the response would look like this:
+
+```javascript
+{
+  "success": true,
+  "business": {
+    "token": "a19807e9-501d-4162-8741-099b8fa75bc7",
+    "active": true,
+    "metadata": { },
+    "accountHolderGroupToken": "DEFAULT_AHG",
+    "createdTime": "2022-06-02T14:02:26Z",
+    "lastModifiedTime": "2022-06-02T14:02:26Z",
+    "status": "ACTIVE",
+    "businessNameLegal": "AcmeZinc INC68",
+    "businessNameDba": "zinc inc",
+    "incorporation": {
+      "stateOfIncorporation": "LA",
+      "incorporationType": "CORPORATION"
+    },
+    "proprietorOrOfficer": {
+      "home": {
+        "address1": "106 Main St.",
+        "city": "Opelousas",
+        "state": "LA",
+        "postalCode": "70570",
+        "country": "USA"
+      }
+    },
+    "identifications": [
+      {
+        "type": "BUSINESS_TAX_ID",
+        "value": "901721634"
+      }
+    ]
+  }
+}
+```
+
+#### [List Business Accounts](https://www.marqeta.com/docs/core-api/businesses#getBusinesses)
+
+And, you can get a list of Marqeta Business Accounts with a call like this:
+
+```typescript
+const resp = await client.business.list()
+```
+
+But you can also include several filtering criteria, like:
+
+```typescript
+const resp = await client.business.list({ 
+  count: 2,
+  sortBy: 'lastModifiedTime',
+})
+```
+
+and the response would look something like this:
+
+```javascript
+{
+  "success": true,
+  "businesses": {
+    "count": 2,
+    "startIndex": 0,
+    "endIndex": 1,
+    "isMore": true,
+    "data": [
+      {
+        "token": "244728d8-2f9b-4972-86fa-c7818fa7ade5",
+        "active": true,
+        "metadata": { },
+        "accountHolderGroupToken": "DEFAULT_AHG",
+        "createdTime": "2022-06-02T14:10:29Z",
+        "lastModifiedTime": "2022-06-02T14:10:29Z",
+        "status": "ACTIVE",
+        "businessNameLegal": "AcmeZinc INC",
+        "businessNameDba": "zinc inc",
+        "incorporation": {
+          "stateOfIncorporation": "LA",
+          "incorporationType": "CORPORATION"
+        },
+        "proprietorOrOfficer": {
+          "home": {
+            "address1": "106 Main St.",
+            "city": "Opelousas",
+            "state": "LA",
+            "postalCode": "70570",
+            "country": "USA"
+          }
+        },
+        "identifications": [
+          {
+            "type": "BUSINESS_TAX_ID",
+            "value": "901721634"
+          }
+        ]
+      },
+      {
+        "token": "a19807e9-501d-4162-8741-099b8fa75bc7",
+        "active": true,
+        "metadata": { },
+        "accountHolderGroupToken": "DEFAULT_AHG",
+        "createdTime": "2022-06-02T14:02:26Z",
+        "lastModifiedTime": "2022-06-02T14:02:26Z",
+        "status": "ACTIVE",
+        "businessNameLegal": "AcmeZinc INC68",
+        "businessNameDba": "zinc inc",
+        "incorporation": {
+          "stateOfIncorporation": "LA",
+          "incorporationType": "CORPORATION"
+        },
+        "proprietorOrOfficer": {
+          "home": {
+            "address1": "106 Main St.",
+            "city": "Opelousas",
+            "state": "LA",
+            "postalCode": "70570",
+            "country": "USA"
+          }
+        },
+        "identifications": [
+          {
+            "type": "BUSINESS_TAX_ID",
+            "value": "901721634"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
 
 ## Development
 
