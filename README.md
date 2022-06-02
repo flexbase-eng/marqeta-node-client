@@ -40,12 +40,234 @@ construction of the client is:
 ```typescript
 import { Marqeta } from 'marqeta-node-client'
 const client = new Marqeta({
+  host: 'sandbox-api.marqeta.com/v3',  
   apiAppToken: '705b5bc0-c4d3-11ec-9d64-0242ac120002',
   apiAccessToken: 'abbykj26-z8a1-21ea-8c64-92d6ac1a0002'
 })
 ```
 
-## Development 
+### User Account Calls
+[documentation](https://www.marqeta.com/docs/core-api/users)
+
+> The users resource represents a person who accesses Marqeta-administered 
+> funds via a Marqeta card (whether physical or virtual). This endpoint 
+> enables you to create and manage users on the Marqeta platform.
+
+#### [Create User](https://www.marqeta.com/docs/core-api/users#postUsers)
+
+You can create a Marqeta User with a single call:
+
+```typescript
+const resp = await client.user.create({
+    token: '',
+    firstName: 'Ipsumi4',
+    lastName: 'Lorem',
+    email: `ipsum.lorem@mailinator.com`,
+    address1: '100 Main Street',
+    city: 'Canton',
+    state: 'GA',
+    postalCode: '30114-7531',
+    country: 'US',
+    birthDate: '1974-01-15',
+    phone: '555-867-5309'
+  })
+```
+
+and the response will look something like this:
+
+```javascript
+{
+  success: true,
+  user: {
+    token: '3b8dbcbb-48da-45fd-95a4-0f8ff9109499',
+    active: true,
+    firstName: 'Ipsumi4',
+    lastName: 'Lorem',
+    email: 'ipsum.lorem58@mailinator.com',
+    address1: '100 Main Street',
+    city: 'Canton',
+    state: 'GA',
+    postalCode: '30114-7531',
+    country: 'US',
+    birthDate: '1974-01-15',
+    phone: '555-867-5309',
+    usesParentAccount: false,
+    corporateCardHolder: false,
+    createdTime: '2022-06-01T20:23:56Z',
+    lastModifiedTime: '2022-06-01T20:23:56Z',
+    metadata: {},
+    accountHolderGroupToken: 'DEFAULT_AHG',
+    status: 'ACTIVE'
+  }
+}
+```
+
+If there had been an error, the response would be:
+
+```javascript
+{
+  success: false,
+  error: {
+    type: 'marqeta',
+    error: 'A card holder with the same email already exist',
+    status: '400057'
+  }
+}
+```
+
+where:
+
+* `status` is the HTTP response status from the call **_to_** Marqeta from
+  your process.
+
+So looking at the `success` value of the response will quickly let you know the outcome of the call.
+
+#### [Retrieve User](https://www.marqeta.com/docs/core-api/users#getUsersToken)
+
+You can get a User by token id using the retrieve endpoint:
+
+```typescript
+const resp = await client.user.retrieve('3b8dbcbb-48da-45fd-95a4-0f8ff9109499')
+```
+
+and the output will look something like this:
+
+```javascript
+{
+  success: true,
+  user: {
+    token: '8650c2c0-91d3-4d0b-a316-a6d71b02b3eb',
+    active: false,
+    firstName: 'Ipsumi425',
+    lastName: 'Lorem',
+    email: 'ipsum.lorem45@mailinator.com',
+    address1: '100 Main Street',
+    city: 'Canton',
+    state: 'GA',
+    postalCode: '30114-7531',
+    country: 'US',
+    birthDate: '1974-01-15',
+    phone: '555-867-5309',
+    usesParentAccount: false,
+    corporateCardHolder: false,
+    createdTime: '2022-06-01T20:53:13Z',
+    lastModifiedTime: '2022-06-01T21:09:45Z',
+    metadata: {},
+    accountHolderGroupToken: 'DEFAULT_AHG',
+    status: 'UNVERIFIED'
+  }
+}
+```
+
+and if the user is not found, the response would be:
+
+```javascript
+{
+  success: false,
+  error: { 
+    type: 'marqeta', 
+    error: 'Cardholder not found', 
+    status: '404004' 
+  }
+}
+```
+
+#### [Update Users](https://www.marqeta.com/docs/core-api/users#putUsersToken)
+
+An update to a User would look like this:
+
+```typescript
+const resp = await client.user.update({
+  token: '8650c2c0-91d3-4d0b-a316-a6d71b02b3eb',
+  firstName: 'Voluptate',
+  lastName: 'Lorem',
+  email: `voluptate.lorem@mailinator.com`,
+  address1: '100 Main Street',
+  city: 'Canton',
+  state: 'GA',
+  postalCode: '30114-7531',
+  country: 'US',
+  birthDate: '1974-01-15',
+  phone: '555-867-5309'
+})
+```
+
+#### [List Users](https://www.marqeta.com/docs/core-api/users#getUsers)
+
+You can get a list of all Marqeta Users with no arguments:
+
+```typescript
+  const resp = await client.user.list()
+```
+
+or you can add in filtering criteria like the `count` or the `createdTime`:
+
+```typescript
+const resp = await client.user.list({
+  count: 1,
+  sortBy: 'createdTime',
+})
+```
+
+and the result will look something like this:
+
+```javascript
+{
+  "success": true,
+          "userList": {
+    "count": 2,
+            "startIndex": 0,
+            "endIndex": 1,
+            "isMore": true,
+            "data": [
+      {
+        "token": "6c432f59-26ec-48a7-b1f8-5da4c2e8efc1",
+        "active": true,
+        "firstName": "Ipsumi447",
+        "lastName": "Lorem",
+        "email": "ipsum.lorem86@mailinator.com",
+        "address1": "100 Main Street",
+        "city": "Canton",
+        "state": "GA",
+        "postalCode": "30114-7531",
+        "country": "US",
+        "birthDate": "1974-01-15",
+        "phone": "555-867-5309",
+        "usesParentAccount": false,
+        "corporateCardHolder": false,
+        "createdTime": "2022-06-01T21:09:45Z",
+        "lastModifiedTime": "2022-06-01T21:39:14Z",
+        "metadata": { },
+        "accountHolderGroupToken": "DEFAULT_AHG",
+        "status": "ACTIVE"
+      },
+      {
+        "token": "8650c2c0-91d3-4d0b-a316-a6d71b02b3eb",
+        "active": false,
+        "firstName": "Ipsumi42513",
+        "lastName": "Lorem",
+        "email": "ipsum.lorem45@mailinator.com",
+        "address1": "100 Main Street",
+        "city": "Canton",
+        "state": "GA",
+        "postalCode": "30114-7531",
+        "country": "US",
+        "birthDate": "1974-01-15",
+        "phone": "555-867-5309",
+        "usesParentAccount": false,
+        "corporateCardHolder": false,
+        "createdTime": "2022-06-01T20:53:13Z",
+        "lastModifiedTime": "2022-06-01T21:23:53Z",
+        "metadata": { },
+        "accountHolderGroupToken": "DEFAULT_AHG",
+        "status": "UNVERIFIED"
+      }
+    ]
+  }
+}
+```
+
+## Development
 
 For those interested in working on the library, there are a few things that
 will make that job a little simpler. The organization of the code is all in
