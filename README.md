@@ -703,6 +703,609 @@ and the response will be something like this:
   }
 }
 ```
+
+#### [Create Card Product](https://www.marqeta.com/docs/core-api/card-products#postCardproducts)
+
+You can create a Marqeta Card Product with a single call:
+
+```typescript
+const resp = await client.cardProduct.create({
+  name: 'Acme Ipsum INC',
+  startDate: '2019-08-24T14:15:22Z'
+})
+```
+
+and if successful, the response would look something like this:
+
+```javascript
+{
+  "success": true,
+   "cardProduct": {
+    "token": "118a7f65-eef4-4774-a7c3-6f6c9cbe5f97",
+    "name": "Acme Ipsum INC",
+    "active": true,
+    "startDate": "2019-08-24",
+    "config": {
+      "poi": {
+        "other": {
+          "allow": true,
+          "cardPresenceRequired": false,
+          "cardholderPresenceRequired": false,
+          "track1DiscretionaryData": "000000",
+          "track2DiscretionaryData": "00000"
+        },
+        "ecommerce": false,
+        "atm": false
+      },
+      "transactionControls": {
+        "acceptedCountriesToken": "accept_us_only",
+          "alwaysRequirePin": false,
+          "alwaysRequireIcc": false,
+          "allowGpaAuth": true,
+          "requireCardNotPresentCardSecurityCode": false,
+          "allowMccGroupAuthorizationControls": true,
+          "allowFirstPinSetViaFinancialTransaction": false,
+          "ignoreCardSuspendedState": false,
+          "allowChipFallback": true,
+          "allowNetworkLoad": false,
+          "allowNetworkLoadCardActivation": false,
+          "allowQuasiCash": false,
+          "enablePartialAuthApproval": true,
+          "addressVerification": {
+          "avMessages": {
+            "validate": true,
+            "declineOnAddressNumberMismatch": false,
+            "declineOnPostalCodeMismatch": true
+          },
+          "authMessages": {
+            "validate": true,
+            "declineOnAddressNumberMismatch": false,
+            "declineOnPostalCodeMismatch": false
+          }
+        },
+        "strongCustomerAuthenticationLimits": { },
+        "quasiCashExemptMids": "984226812886,000984226812886",
+        "enableCreditService": false
+      },
+      "selectiveAuth": {
+        "saMode": 1,
+        "enableRegexSearchChain": false,
+        "dmdLocationSensitivity": 0
+      },
+      "special": {
+        "merchantOnBoarding": false
+      },
+      "cardLifeCycle": {
+        "activateUponIssue": false,
+        "expirationOffset": {
+          "unit": "YEARS",
+          "value": 4
+        },
+        "cardServiceCode": 101,
+         "updateExpirationUponActivation": false
+      },
+      "clearingAndSettlement": {
+        "overdraftDestination": "GPA"
+      },
+      "jitFunding": {
+        "paymentcardFundingSource": {
+          "enabled": false,
+          "refundsDestination": ""
+        },
+        "programgatewayFundingSource": {
+          "enabled": false,
+          "fundingSourceToken": "",
+          "refundsDestination": "",
+          "alwaysFund": true
+        },
+        "programFundingSource": {
+          "enabled": false,
+          "fundingSourceToken": "",
+          "refundsDestination": ""
+        }
+      },
+      "digitalWalletTokenization": {
+        "provisioningControls": {
+          "manualEntry": {
+            "enabled": false,
+            "addressVerification": {
+              "validate": true
+            }
+          },
+          "walletProviderCardOnFile": {
+            "enabled": false,
+            "addressVerification": {
+              "validate": true
+            }
+          },
+          "inAppProvisioning": {
+            "enabled": false,
+             "addressVerification": {
+              "validate": true
+            }
+          }
+        },
+        "cardArtId": ""
+      },
+      "fulfillment": {
+        "paymentInstrument": "PHYSICAL_MSR",
+        "packageId": "0",
+        "allZeroCardSecurityCode": false,
+        "binPrefix": "111111",
+        "bulkShip": false,
+        "panLength": "16",
+        "fulfillmentProvider": "PERFECTPLASTIC",
+        "allowCardCreation": true,
+        "uppercaseNameLines": true,
+        "enableOfflinePin": false
+      }
+    },
+    "createdTime": "2022-06-02T18:02:52Z",
+    "lastModifiedTime": "2022-06-02T18:02:52Z"
+  }
+}
+```
+
+#### [Update Card Product](https://www.marqeta.com/docs/core-api/card-products#putCardproductsToken)
+
+and to update a Card Product, use this call:
+
+```typescript
+const resp = await client.cardProduct.update({
+    "token": "118a7f65-eef4-4774-a7c3-6f6c9cbe5f97",
+    "name": "Acme Ipsum INC",
+    "active": true,
+    "startDate": "2019-08-24",
+    "config": {
+    "poi": {
+      "other": {
+        "allow": false
+      },
+      "ecommerce": false,
+      "atm": true
+    }
+    "cardLifeCycle": {
+      "activateUponIssue": false,
+      "expirationOffset": {
+        "unit": "YEARS",
+        "value": 4
+      },
+      "cardServiceCode": 101,
+       "updateExpirationUponActivation": false
+    },
+    "jitFunding": {
+      "paymentcardFundingSource": {
+        "enabled": false,
+         "refundsDestination": ""
+      }
+    },
+    "fulfillment": {
+      "paymentInstrument": "PHYSICAL_MSR",
+      "packageId": "0",
+      "allZeroCardSecurityCode": false,
+      "binPrefix": "111111",
+      "bulkShip": false,
+      "panLength": "16",
+      "fulfillmentProvider": "PERFECTPLASTIC",
+      "allowCardCreation": true,
+      "uppercaseNameLines": true,
+      "enableOfflinePin": false
+    }
+  }
+})
+```
+and the response would be something like this:
+
+```javascript
+{
+  "success": true,
+  "cardProduct": {
+    "token": "118a7f65-eef4-4774-a7c3-6f6c9cbe5f97",
+    "name": "Acme Ipsum INC100",
+    "active": true,
+    "startDate": "2019-08-24",
+    "config": {
+      "poi": {
+        "other": {
+          "allow": false,
+          "cardPresenceRequired": false,
+          "cardholderPresenceRequired": false,
+          "track1DiscretionaryData": "000000",
+          "track2DiscretionaryData": "00000"
+        },
+        "ecommerce": true,
+        "atm": false
+      },
+      "transactionControls": {
+        "acceptedCountriesToken": "accept_us_only",
+        "alwaysRequirePin": false,
+        "alwaysRequireIcc": false,
+        "allowGpaAuth": true,
+        "requireCardNotPresentCardSecurityCode": false,
+        "allowMccGroupAuthorizationControls": true,
+        "allowFirstPinSetViaFinancialTransaction": false,
+        "ignoreCardSuspendedState": false,
+        "allowChipFallback": true,
+        "allowNetworkLoad": false,
+        "allowNetworkLoadCardActivation": false,
+        "allowQuasiCash": false,
+        "enablePartialAuthApproval": true,
+        "addressVerification": {
+          "avMessages": {
+            "validate": true,
+            "declineOnAddressNumberMismatch": false,
+            "declineOnPostalCodeMismatch": true
+          },
+          "authMessages": {
+            "validate": true,
+            "declineOnAddressNumberMismatch": false,
+            "declineOnPostalCodeMismatch": false
+          }
+        },
+        "strongCustomerAuthenticationLimits": { },
+        "quasiCashExemptMids": "984226812886,000984226812886",
+        "enableCreditService": false
+      },
+      "selectiveAuth": {
+        "saMode": 1,
+        "enableRegexSearchChain": false,
+        "dmdLocationSensitivity": 0
+      },
+      "special": {
+        "merchantOnBoarding": false
+      },
+      "cardLifeCycle": {
+        "activateUponIssue": false,
+        "expirationOffset": {
+          "unit": "YEARS",
+          "value": 4
+        },
+        "cardServiceCode": 101,
+        "updateExpirationUponActivation": false
+      },
+      "clearingAndSettlement": {
+        "overdraftDestination": "GPA"
+      },
+      "jitFunding": {
+        "paymentcardFundingSource": {
+          "enabled": false,
+          "refundsDestination": ""
+        },
+        "programgatewayFundingSource": {
+          "enabled": false,
+          "fundingSourceToken": "",
+          "refundsDestination": "",
+          "alwaysFund": true
+        },
+        "programFundingSource": {
+          "enabled": false,
+          "fundingSourceToken": "",
+          "refundsDestination": ""
+        }
+      },
+      "digitalWalletTokenization": {
+        "provisioningControls": {
+          "manualEntry": {
+            "enabled": false,
+            "addressVerification": {
+              "validate": true
+            }
+          },
+          "walletProviderCardOnFile": {
+            "enabled": false,
+            "addressVerification": {
+              "validate": true
+            }
+          },
+          "inAppProvisioning": {
+            "enabled": false,
+            "addressVerification": {
+              "validate": true
+            }
+          }
+        },
+        "cardArtId": ""
+      },
+      "fulfillment": {
+        "paymentInstrument": "PHYSICAL_MSR",
+        "packageId": "0",
+        "allZeroCardSecurityCode": false,
+        "binPrefix": "111111",
+        "bulkShip": false,
+        "panLength": "16",
+        "fulfillmentProvider": "PERFECTPLASTIC",
+        "allowCardCreation": true,
+        "uppercaseNameLines": true,
+        "enableOfflinePin": false
+      }
+    },
+    "createdTime": "2022-06-02T18:02:52Z",
+    "lastModifiedTime": "2022-06-02T18:02:53Z"
+  }
+}
+```
+
+[Retrieve Card Product](https://www.marqeta.com/docs/core-api/card-products#getCardproductsToken)
+
+To retrieve a Card Product, use the Card Product token in this call:
+
+```typescript
+const resp = await client.cardProduct.retrieve(
+ '118a7f65-eef4-4774-a7c3-6f6c9cbe5f97',
+)
+```
+and the response will look something like this:
+
+```javascript
+{
+  "success": true,
+  "cardProduct": {
+    "token": "118a7f65-eef4-4774-a7c3-6f6c9cbe5f97",
+    "name": "Acme Ipsum INC",
+    "active": true,
+    "startDate": "2019-08-24",
+    "config": {
+      "poi": {
+        "other": {
+          "allow": true,
+          "cardPresenceRequired": false,
+          "cardholderPresenceRequired": false,
+          "track1DiscretionaryData": "000000",
+          "track2DiscretionaryData": "00000"
+        },
+        "ecommerce": true,
+        "atm": false
+      },
+      "transactionControls": {
+        "acceptedCountriesToken": "accept_us_only",
+        "alwaysRequirePin": false,
+        "alwaysRequireIcc": false,
+        "allowGpaAuth": true,
+        "requireCardNotPresentCardSecurityCode": false,
+        "allowMccGroupAuthorizationControls": true,
+        "allowFirstPinSetViaFinancialTransaction": false,
+        "ignoreCardSuspendedState": false,
+        "allowChipFallback": true,
+        "allowNetworkLoad": false,
+        "allowNetworkLoadCardActivation": false,
+        "allowQuasiCash": false,
+        "enablePartialAuthApproval": true,
+        "addressVerification": {
+          "avMessages": {
+            "validate": true,
+            "declineOnAddressNumberMismatch": false,
+            "declineOnPostalCodeMismatch": true
+          },
+          "authMessages": {
+            "validate": true,
+            "declineOnAddressNumberMismatch": false,
+            "declineOnPostalCodeMismatch": false
+          }
+        },
+        "strongCustomerAuthenticationLimits": { },
+        "quasiCashExemptMids": "984226812886,000984226812886",
+        "enableCreditService": false
+      },
+      "selectiveAuth": {
+        "saMode": 1,
+        "enableRegexSearchChain": false,
+        "dmdLocationSensitivity": 0
+      },
+      "special": {
+        "merchantOnBoarding": false
+      },
+      "cardLifeCycle": {
+        "activateUponIssue": false,
+        "expirationOffset": {
+          "unit": "YEARS",
+          "value": 4
+        },
+        "cardServiceCode": 101,
+        "updateExpirationUponActivation": false
+      },
+      "clearingAndSettlement": {
+        "overdraftDestination": "GPA"
+      },
+      "jitFunding": {
+        "paymentcardFundingSource": {
+          "enabled": false,
+          "refundsDestination": ""
+        },
+        "programgatewayFundingSource": {
+          "enabled": false,
+          "fundingSourceToken": "",
+          "refundsDestination": "",
+          "alwaysFund": true
+        },
+        "programFundingSource": {
+          "enabled": false,
+          "fundingSourceToken": "",
+          "refundsDestination": ""
+        }
+      },
+      "digitalWalletTokenization": {
+        "provisioningControls": {
+          "manualEntry": {
+            "enabled": false,
+            "addressVerification": {
+              "validate": true
+            }
+          },
+          "walletProviderCardOnFile": {
+            "enabled": false,
+            "addressVerification": {
+              "validate": true
+            }
+          },
+          "inAppProvisioning": {
+            "enabled": false,
+            "addressVerification": {
+              "validate": true
+            }
+          }
+        },
+        "cardArtId": ""
+      },
+      "fulfillment": {
+        "paymentInstrument": "PHYSICAL_MSR",
+        "packageId": "0",
+        "allZeroCardSecurityCode": false,
+        "binPrefix": "111111",
+        "bulkShip": false,
+        "panLength": "16",
+        "fulfillmentProvider": "PERFECTPLASTIC",
+        "allowCardCreation": true,
+        "uppercaseNameLines": true,
+        "enableOfflinePin": false
+      }
+    },
+    "createdTime": "2022-06-02T18:02:52Z",
+    "lastModifiedTime": "2022-06-02T18:02:52Z"
+  }
+}
+```
+
+[List Card Products](https://www.marqeta.com/docs/core-api/card-products#getCardproducts)
+
+To get a list of Card Products, use this call:
+
+```typescript
+const resp = await client.cardProduct.list(
+ '118a7f65-eef4-4774-a7c3-6f6c9cbe5f97',
+)
+```
+
+and the response would look like this:
+
+```javascript
+{
+  "success": true,
+  "cardProduct": {
+    "token": "118a7f65-eef4-4774-a7c3-6f6c9cbe5f97",
+    "name": "Acme Ipsum INC",
+    "active": true,
+    "startDate": "2019-08-24",
+    "config": {
+      "poi": {
+        "other": {
+          "allow": true,
+          "cardPresenceRequired": false,
+          "cardholderPresenceRequired": false,
+          "track1DiscretionaryData": "000000",
+          "track2DiscretionaryData": "00000"
+        },
+        "ecommerce": true,
+        "atm": false
+      },
+      "transactionControls": {
+        "acceptedCountriesToken": "accept_us_only",
+        "alwaysRequirePin": false,
+        "alwaysRequireIcc": false,
+        "allowGpaAuth": true,
+        "requireCardNotPresentCardSecurityCode": false,
+        "allowMccGroupAuthorizationControls": true,
+        "allowFirstPinSetViaFinancialTransaction": false,
+        "ignoreCardSuspendedState": false,
+        "allowChipFallback": true,
+        "allowNetworkLoad": false,
+        "allowNetworkLoadCardActivation": false,
+        "allowQuasiCash": false,
+        "enablePartialAuthApproval": true,
+        "addressVerification": {
+          "avMessages": {
+            "validate": true,
+            "declineOnAddressNumberMismatch": false,
+            "declineOnPostalCodeMismatch": true
+          },
+          "authMessages": {
+            "validate": true,
+            "declineOnAddressNumberMismatch": false,
+            "declineOnPostalCodeMismatch": false
+          }
+        },
+        "strongCustomerAuthenticationLimits": { },
+        "quasiCashExemptMids": "984226812886,000984226812886",
+        "enableCreditService": false
+      },
+      "selectiveAuth": {
+        "saMode": 1,
+        "enableRegexSearchChain": false,
+        "dmdLocationSensitivity": 0
+      },
+      "special": {
+        "merchantOnBoarding": false
+      },
+      "cardLifeCycle": {
+        "activateUponIssue": false,
+        "expirationOffset": {
+          "unit": "YEARS",
+          "value": 4
+        },
+        "cardServiceCode": 101,
+        "updateExpirationUponActivation": false
+      },
+      "clearingAndSettlement": {
+        "overdraftDestination": "GPA"
+      },
+      "jitFunding": {
+        "paymentcardFundingSource": {
+          "enabled": false,
+          "refundsDestination": ""
+        },
+        "programgatewayFundingSource": {
+          "enabled": false,
+          "fundingSourceToken": "",
+          "refundsDestination": "",
+          "alwaysFund": true
+        },
+        "programFundingSource": {
+          "enabled": false,
+          "fundingSourceToken": "",
+          "refundsDestination": ""
+        }
+      },
+      "digitalWalletTokenization": {
+        "provisioningControls": {
+          "manualEntry": {
+            "enabled": false,
+            "addressVerification": {
+              "validate": true
+            }
+          },
+          "walletProviderCardOnFile": {
+            "enabled": false,
+            "addressVerification": {
+              "validate": true
+            }
+          },
+          "inAppProvisioning": {
+            "enabled": false,
+            "addressVerification": {
+              "validate": true
+            }
+          }
+        },
+        "cardArtId": ""
+      },
+      "fulfillment": {
+        "paymentInstrument": "PHYSICAL_MSR",
+        "packageId": "0",
+        "allZeroCardSecurityCode": false,
+        "binPrefix": "111111",
+        "bulkShip": false,
+        "panLength": "16",
+        "fulfillmentProvider": "PERFECTPLASTIC",
+        "allowCardCreation": true,
+        "uppercaseNameLines": true,
+        "enableOfflinePin": false
+      }
+    },
+    "createdTime": "2022-06-02T18:02:52Z",
+    "lastModifiedTime": "2022-06-02T18:02:52Z"
+  }
+}
+```
+
 ## Development
 
 For those interested in working on the library, there are a few things that
