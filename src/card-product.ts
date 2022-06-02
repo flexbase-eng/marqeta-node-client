@@ -224,10 +224,10 @@ export class CardProductApi {
   }
 
   /*
-   * Function to take a Marqeta Card Product token Id and return the
-   * Card Product for that token Id.
+   * Function to take a Card Product token Id, send that to Marqeta, and have
+   * them return the Card Product for that token Id.
    */
-  async byTokenId(tokenId: string):Promise<{
+  async retrieve(tokenId: string):Promise<{
     success?: boolean,
     cardProduct?: CardProduct,
     error?: MarqetaError,
