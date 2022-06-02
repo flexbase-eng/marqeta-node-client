@@ -150,7 +150,7 @@ export class BusinessApi {
    * Function to take a Marqeta Business token Id and return the Business
    * for that token Id.
    */
-  async byTokenId(businessTokenId: string): Promise<{
+  async retrieve(businessTokenId: string): Promise<{
     success: boolean,
     business?: Business,
     error?: MarqetaError,
