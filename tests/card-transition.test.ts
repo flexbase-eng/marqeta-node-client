@@ -43,13 +43,14 @@ import { Marqeta } from '../src';
           userToken: user.token,
         }
         console.log('transitioning User to ACTIVE status...')
-        const userTransition = await client.user.transition(state)
+        const userTransition = await client.userTransition.create(state)
 
         if (userTransition?.success) {
           console.log('creating a new Card...')
           mockCard.userToken = user.token
           mockCard.cardProductToken = product.token
           newCard = await client.card.create(mockCard)
+
           if (newCard.success && newCard?.card?.token) {
             newCardToken = newCard.card.token
             console.log('transitioning Card to ACTIVE status...')
@@ -57,6 +58,8 @@ import { Marqeta } from '../src';
             cardTransition = await client.cardTransition.create(
               mockCardTransition
             )
+
+            console.log(`${JSON.stringify(cardTransition)}`)
 
             if (cardTransition?.success) {
               console.log('Success! Card transitioned to "ACTIVE" state.')
@@ -85,9 +88,10 @@ import { Marqeta } from '../src';
     console.log('getting Card Transition by token Id...')
 
     if (cardTransition?.cardTransition?.token) {
-      const foundTransition = await client.cardTransition.byTokenId(
+      const foundTransition = await client.cardTransition.retrieve(
         cardTransition.cardTransition.token
       )
+      console.log(`${JSON.stringify(foundTransition)}`)
       if (foundTransition) {
         console.log('Success! Card Transition found.')
       } else {
@@ -102,6 +106,7 @@ import { Marqeta } from '../src';
 
     if (newCardToken != undefined) {
       const list = await client.cardTransition.list(newCardToken)
+      console.log(`${JSON.stringify(list)}`)
       if (list?.success) {
         console.log('Success! A list of Card Transitions was retrieved.')
       } else {

@@ -107,7 +107,7 @@ import { Marqeta } from '../src'
 
       console.log('getting Card by Token Id...')
       if (newCard?.card?.token) {
-        const byToken = await client.card.byTokenId(newCard.card.token)
+        const byToken = await client.card.retrieve(newCard.card.token)
         if (byToken?.success) {
           console.log('Success! Found a Marqeta Card by a Card token Id')
         } else {
