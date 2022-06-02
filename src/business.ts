@@ -82,7 +82,7 @@ export class BusinessApi {
 
   /*
    * Function to take a series of list arguments, most of which are optional,
-   * as input, pass them to Marqeta, and have them return a *paged* list of
+   * as input, pass those to Marqeta, and have them return a *paged* list of
    * Businesses that fit the list criteria. If no list arguments are given,
    * this returns a list of *all* the Businesses in Marqeta.
    */
