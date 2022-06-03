@@ -16,12 +16,10 @@ import { Marqeta } from '../src';
     const business = list.businesses?.data.pop()
 
     if (business?.token) {
-      const balances = await client.balances.byTokenId(business.token)
-
+      const balances = await client.balances.retrieve(business.token)
       if (balances?.success) {
         console.log('Success! Balances retrieved for Business with token Id:' +
           business.token)
-        console.log(JSON.stringify(balances))
       } else {
         console.log('Error! Unable to get Business token Id.')
         console.log(balances)
