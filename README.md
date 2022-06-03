@@ -59,18 +59,36 @@ You can create a Marqeta User with a single call:
 
 ```typescript
 const resp = await client.user.create({
-    token: '',
-    firstName: 'Ipsumi4',
-    lastName: 'Lorem',
-    email: `ipsum.lorem@mailinator.com`,
-    address1: '100 Main Street',
-    city: 'Canton',
-    state: 'GA',
-    postalCode: '30114-7531',
-    country: 'US',
-    birthDate: '1974-01-15',
-    phone: '555-867-5309'
-  })
+  firstName: 'Jon',
+  lastName: 'Doe',
+  email: `jon.doe@company.com`,
+  password: 'P@ssw0rd',
+  'identifications' : [
+    {
+      type: 'SSN',
+      value: '111234444'
+    }
+  ],
+  birthDate: '1991-01-01T00:00:00.000Z',
+  address1: '1234 Grove Street',
+  city: 'Berkeley',
+  state: 'CA',
+  country: 'USA',
+  postalCode: '94702',
+  phone: '5105551212',
+  gender: 'F',
+  usesParentAccount: false,
+  metadata: {
+    notificationEmail: 'jane.doe@home.com',
+    notificationLanguage: 'spa',
+    authenticationQuestion1: 'What was your first job?',
+    authenticationQuestion2: 'What make was your first car?',
+    authenticationQuestion3: 'What is your favorite color?',
+    authenticationAnswer1: 'Cashier',
+    authenticationAnswer2: 'Trabant',
+    authenticationAnswer3: 'Blue'
+  }
+})
 ```
 
 and the response will look something like this:
