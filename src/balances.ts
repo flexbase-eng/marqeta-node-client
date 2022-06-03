@@ -13,7 +13,7 @@ export class BalancesApi {
    * Function to retrieve the following general purpose account (GPA) balance
    * details for a user or business by token Id.
    */
-  async byTokenId(token: string): Promise<{
+  async retrieve(token: string): Promise<{
     success: boolean,
     balances?: any,
     error?: MarqetaError,

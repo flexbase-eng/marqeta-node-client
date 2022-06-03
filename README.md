@@ -1651,6 +1651,74 @@ and the list response will look something like this:
 }
 ```
 
+### Balance Calls
+[documentation](https://www.marqeta.com/docs/core-api/balances)
+
+> Use the /balances endpoint to retrieve the following general 
+> purpose account (GPA) balance details for a user or business:
+> 
+> Ledger balance - When using standard funding: The funds that 
+> are available to spend immediately, including funds from any 
+> authorized transactions that have not yet cleared. When using 
+> Just-in-Time (JIT) Funding: Authorized funds that are currently 
+> on hold, but not yet cleared.
+> 
+> Available balance - The ledger balance minus any authorized 
+> transactions that have not yet cleared. Also known as the 
+> cardholder’s purchasing power. If you are using JIT Funding, 
+> this balance is usually 0.00.
+> 
+> Cached balance - Not currently used.
+> 
+> Credit balance - Not currently used.
+> 
+> Pending credits - ACH loads that have been accepted, but for 
+> which the funding time has not yet elapsed.
+
+#### [Retrieve General Purpose Account Balances](https://www.marqeta.com/docs/core-api/balances#getBalancesToken)
+
+Use this call to get the GPA (General Purpose Account) 
+balances for a user or business by token Id.
+
+```typescript
+const resp = await client.balances.retrieve({
+  '9dc20b01-1652-438f-bded-e1a2df240fef'
+})
+```
+
+and the response would look something like this:
+
+```javascript
+{
+  "success": true,
+    "balances": {
+    "gpa": {
+      "currencyCode": "USD",
+        "ledgerBalance": 0,
+        "availableBalance": 0,
+        "creditBalance": 0,
+        "pendingCredits": 0,
+        "balances": {
+        "usd": {
+          "currencyCode": "USD",
+          "ledgerBalance": 0,
+          "availableBalance": 0,
+          "creditBalance": 0,
+          "pendingCredits": 0
+        }
+      }
+    },
+    "links": [
+      {
+        "rel": "msas",
+        "method": "GET",
+        "href": "/v3/balances/c1e98151-d230-48b3-b063-d8be437c1d60/msas"
+      }
+    ]
+  }
+}
+```
+
 ## Development
 
 For those interested in working on the library, there are a few things that
