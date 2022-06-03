@@ -21,7 +21,6 @@ import { Marqeta } from '../src'
   const merchantGroup = await client.merchantGroup.create(mockMerchantGroup)
   if (merchantGroup?.success) {
     console.log('Success! Merchant Group created.')
-    console.log(`${JSON.stringify(merchantGroup)}`)
   } else {
     console.log('Error! Unable to create Merchant Group.')
     console.log(merchantGroup)
@@ -37,7 +36,6 @@ import { Marqeta } from '../src'
 
     if (foundMerchantGroup?.success) {
       console.log('Success! Merchant Group was retrieved by token Id.')
-      console.log(`${JSON.stringify(foundMerchantGroup)}`)
     } else {
       console.log('Error! Unable to retrieve Merchant Group by token Id.')
       console.log(foundMerchantGroup)
@@ -53,10 +51,8 @@ import { Marqeta } from '../src'
   if (list?.merchantGroups?.count
     && Array.isArray(list?.merchantGroups?.data)) {
     console.log('Success! A list of Merchant Groups was retrieved.')
-    console.log(`${JSON.stringify(list)}`)
   } else {
     console.log('Error! Unable to retrieve a list of Merchant Groups.')
-    console.log(JSON.stringify(list))
   }
 
   console.log('updating a Merchant Group...')
@@ -80,7 +76,6 @@ import { Marqeta } from '../src'
       && originalName != undefined) {
       console.log('Success! Merchant Group name updated from "' + originalName +
         '" to: "' + updatedGroup?.merchantGroup?.name + '"')
-      console.log(`${JSON.stringify(updatedGroup)}`)
     } else {
       console.log('Error! Unable to update Merchant Group name.')
       console.log(updatedGroup)

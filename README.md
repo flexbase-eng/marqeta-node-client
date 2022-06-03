@@ -1877,7 +1877,336 @@ and the response will look something like this:
 }
 ```
 
+### Authorization Control Calls
+[documentation](https://www.marqeta.com/docs/core-api/authorization-controls)
+
+> An authorization control object represents spending limits of specified users 
+> at specified merchants. You can limit spending at a single merchant or at a 
+> group of merchants, and you can limit spending by a single user, users with 
+> a particular card product, or all users.
+
+> You can block spending at all merchants by default and then allow it for 
+> specific merchants, or you can allow spending at all merchants by default 
+> and block it at specific merchants.
+
+
+#### [Create Authorization Control](https://www.marqeta.com/docs/core-api/authorization-controls#postAuthcontrols)
+
+You can create an Authorization Control with a single call 
+looking something like this:
+
+```typescript
+const resp = await client.authorizationControl.create({
+  merchantScope: {
+    mid: '98765'
+  },
+  association: {
+    userToken: ''
+  },
+  token: '',
+  name: 'TestAuthControl'
+})
+```
+
+and the response will look something like this:
+
+```javascript
+{
+  "success": true,
+  "authorizationControl": {
+    "token": "f278fa6d-0cd0-44a6-b936-4326dcf51e66",
+    "name": "TestAuthControl",
+    "association": {
+      "userToken": "09d921f5-5a0b-4a31-b76a-603bb12b1329"
+    },
+    "merchantScope": {
+      "mid": "98765"
+    },
+    "active": true
+  }
+}
+```
+
+#### [Retrieve Authorization Controls](https://www.marqeta.com/docs/core-api/authorization-controls#getAuthcontrolsToken)
+
+You can retrieve an Authorization Control with a single call
+looking something like this:
+
+```typescript
+const resp = await client.authorizationControl.retrieve({
+  'f278fa6d-0cd0-44a6-b936-4326dcf51e66',
+})
+```
+and the response will look something like this:
+
+```javascript
+{
+  "success": true,
+  "authorizationControl": {
+    "token": "f278fa6d-0cd0-44a6-b936-4326dcf51e66",
+    "name": "TestAuthControl",
+    "association": {
+      "userToken": "09d921f5-5a0b-4a31-b76a-603bb12b1329"
+    },
+    "merchantScope": {
+      "mid": "98765"
+    },
+    "active": true
+  }
+}
+```
+
+#### [Update Authorization Control](https://www.marqeta.com/docs/core-api/authorization-controls#putAuthcontrolsToken)
+
+You can update an Authorization Control with a single call
+looking something like this:
+
+
+```typescript
+const resp = await client.authorizationControl.update({
+  token: 'f278fa6d-0cd0-44a6-b936-4326dcf51e66',
+  name: 'TestAuthControl',
+  association: {
+    userToken: '09d921f5-5a0b-4a31-b76a-603bb12b1329'
+  },
+  merchantScope: {
+    mid: '98765'
+  },
+  active: false
+})
+```
+
+and the response will look something like this:
+
+```javascript
+{
+  "success": true,
+  "authorizationControl": {
+    "token": "f278fa6d-0cd0-44a6-b936-4326dcf51e66",
+    "name": "TestAuthControl",
+    "association": {
+      "userToken": "09d921f5-5a0b-4a31-b76a-603bb12b1329"
+    },
+    "merchantScope": {
+      "mid": "98765"
+    },
+    "active": false
+  }
+}
+```
+
+#### [List Authorization Controls](https://www.marqeta.com/docs/core-api/authorization-controls#putAuthcontrolsToken)
+
+You can get a list of Authorization Controls with a single call
+looking something like this:
+
+```typescript
+const resp = await client.authorizationControl.list({
+  user: '09d921f5-5a0b-4a31-b76a-603bb12b1329',
+  count: 1,
+  sortBy: 'createdTime',
+})
+```
+
+and the response will look something like this:
+
+```javascript
+{
+  "success": true,
+  "authorizationControls": {
+    "count": 1,
+    "startIndex": 0,
+    "endIndex": 0,
+    "isMore": true,
+    "data": [
+      {
+        "token": "244728d8-2f9b-4972-86fa-c7818fa7ade5",
+        "active": true,
+        "metadata": { },
+        "accountHolderGroupToken": "DEFAULT_AHG",
+        "createdTime": "2022-06-02T14:10:29Z",
+        "lastModifiedTime": "2022-06-02T14:10:30Z",
+        "status": "ACTIVE",
+        "businessNameLegal": "AcmeZinc INC46",
+        "businessNameDba": "zinc inc",
+        "incorporation": {
+          "stateOfIncorporation": "LA",
+          "incorporationType": "CORPORATION"
+        },
+        "proprietorOrOfficer": {
+          "home": {
+            "address1": "106 Main St.",
+            "city": "Opelousas",
+            "state": "LA",
+            "postalCode": "70570",
+            "country": "USA"
+          }
+        },
+        "identifications": [
+          {
+            "type": "BUSINESS_TAX_ID",
+            "value": "901721634"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+#### [Create Merchant Identifier (MID) Exemption](https://www.marqeta.com/docs/core-api/authorization-controls#postAuthcontrolsExemptmids)
+
+You can create a Merchant Identifier (MID) Exemption with a single call. 
+This identifier will exempt an individual merchant from authorization 
+controls by thier merchant identifier (MID). Transactions originating 
+from this MID ignore any otherwise applicable authorization controls.
+The call will look something like this:
+
+```typescript
+const resp = await client.authorizationControl.createMerchant({
+  name: 'test_1111',
+  mid: '123456789102',
+})
+```
+
+and the response will look something like this:
+
+```javascript
+{
+  "success": true,
+  "merchant": {
+    "token": "6e036bbd-bcac-43cf-86c1-73ff95e188a0",
+    "name": "test_1111",
+    "association": { },
+    "mid": "123456789102",
+    "active": true,
+    "created": "2022-06-03T14:34:38Z",
+    "lastUpdated": "2022-06-03T14:34:38Z"
+  }
+}
+```
+
+#### [Retrieve Merchant Identifier (MID) Exemption](https://www.marqeta.com/docs/core-api/authorization-controls#getAuthcontrolsExemptmidsToken)
+
+You can retrieve a Merchant Identifier Exemption 
+with a single call using the MID token like this:
+
+```typescript
+const resp = await client.authorizationControl.retrieveMerchantExemption({
+  '6e036bbd-bcac-43cf-86c1-73ff95e188a0'
+})
+```
+
+and the response will look something like this:
+
+```javascript
+{
+  "success": true,
+  "merchant": {
+    "token": "6e036bbd-bcac-43cf-86c1-73ff95e188a0",
+    "name": "test_1111",
+    "association": { },
+    "mid": "123456789102",
+    "active": true,
+    "created": "2022-06-03T14:34:38Z",
+    "lastUpdated": "2022-06-03T14:34:38Z"
+  }
+}
+```
+
+#### [List Merchant Identifier (MID) Exemptions](https://www.marqeta.com/docs/core-api/authorization-controls#getAuthcontrolsExemptmids)
+
+You can retrieve a list of Merchant Identifier Exemptions 
+using optional field filtering arguments with a single 
+call that looks something like this:
+
+```typescript
+const resp = await client.authorizationControl.
+listMerchantExemptions({
+  user: '3b8dbcbb-48da-45fd-95a4-0f8ff9109499',
+  count: 1,
+})
+```
+
+and the response will look something like this:
+
+```javascript
+{
+  "success": true,
+    "merchants": {
+    "count": 1,
+    "startIndex": 0,
+    "endIndex": 0,
+    "isMore": true,
+    "data": [
+      {
+        "token": "244728d8-2f9b-4972-86fa-c7818fa7ade5",
+        "active": true,
+        "metadata": { },
+        "accountHolderGroupToken": "DEFAULT_AHG",
+        "createdTime": "2022-06-02T14:10:29Z",
+        "lastModifiedTime": "2022-06-02T14:10:30Z",
+        "status": "ACTIVE",
+        "businessNameLegal": "AcmeZinc INC46",
+        "businessNameDba": "zinc inc",
+        "incorporation": {
+          "stateOfIncorporation": "LA",
+          "incorporationType": "CORPORATION"
+        },
+        "proprietorOrOfficer": {
+          "home": {
+            "address1": "106 Main St.",
+            "city": "Opelousas",
+            "state": "LA",
+            "postalCode": "70570",
+            "country": "USA"
+          }
+        },
+        "identifications": [
+          {
+            "type": "BUSINESS_TAX_ID",
+            "value": "901721634"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+#### [Update Merchant Identifier (MID) Exemption](https://www.marqeta.com/docs/core-api/authorization-controls#putAuthcontrolsExemptmidsToken)
+
+You can update a Merchant Identifier Exemption using the 
+MID token and optional field filtering arguments with a single
+call that looks something like this:
+
+```typescript
+const resp = await client.authorizationControl.updateMerchantStatus({
+  token: '1781cc7b-5d0f-4c3d-9767-cf315213ad33',
+  name: 'test_1111',
+  association: { },
+  mid: '123456789102',
+  active: false,
+})
+```
+
+```javascript
+{
+  "success": true,
+  "authorizationControl": {
+    "token": "1781cc7b-5d0f-4c3d-9767-cf315213ad33",
+    "name": "test_1111",
+    "association": { },
+    "merchantScope": {
+      "mid": "123456789102"
+    },
+    "active": false
+  }
+}
+```
+
 ## Development
+
 
 For those interested in working on the library, there are a few things that
 will make that job a little simpler. The organization of the code is all in
