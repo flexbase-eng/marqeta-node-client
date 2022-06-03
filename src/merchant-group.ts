@@ -66,7 +66,7 @@ export class MerchantGroupApi {
    * Function to take a Merchant Group Token Id, send that to Marqeta, and have
    * the Merchant Group returned to the caller.
    */
-  async byTokenId(token: string): Promise<{
+  async retrieve(token: string): Promise<{
     success: boolean,
     merchantGroup?: MerchantGroup,
     error?: MarqetaError,

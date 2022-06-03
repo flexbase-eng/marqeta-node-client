@@ -19,9 +19,9 @@ import { Marqeta } from '../src'
 
   console.log('creating a Merchant Group...')
   const merchantGroup = await client.merchantGroup.create(mockMerchantGroup)
-
   if (merchantGroup?.success) {
     console.log('Success! Merchant Group created.')
+    console.log(`${JSON.stringify(merchantGroup)}`)
   } else {
     console.log('Error! Unable to create Merchant Group.')
     console.log(merchantGroup)
@@ -31,14 +31,15 @@ import { Marqeta } from '../src'
 
   let foundMerchantGroup
   if (merchantGroup?.merchantGroup?.token) {
-    foundMerchantGroup = await client.merchantGroup.byTokenId(
+    foundMerchantGroup = await client.merchantGroup.retrieve(
       merchantGroup?.merchantGroup?.token
     )
 
     if (foundMerchantGroup?.success) {
-      console.log('Success! Merchant Group found by token Id.')
+      console.log('Success! Merchant Group was retrieved by token Id.')
+      console.log(`${JSON.stringify(foundMerchantGroup)}`)
     } else {
-      console.log('Error! Merchant Group not found by token Id.')
+      console.log('Error! Unable to retrieve Merchant Group by token Id.')
       console.log(foundMerchantGroup)
     }
   } else {
@@ -47,15 +48,14 @@ import { Marqeta } from '../src'
   }
 
   console.log('getting a list of Merchant Groups...')
-  const list = await client.merchantGroup.list()
+  const list = await client.merchantGroup.list({ count: 2 })
 
   if (list?.merchantGroups?.count
     && Array.isArray(list?.merchantGroups?.data)) {
-    console.log('Success! ' + list.merchantGroups!.count + ' Merchant Groups' +
-      ' were retrieved.')
+    console.log('Success! A list of Merchant Groups was retrieved.')
+    console.log(`${JSON.stringify(list)}`)
   } else {
-    console.log('Error! ' + list.merchantGroups!.count + ' Merchant Groups' +
-      ' were retrieved.')
+    console.log('Error! Unable to retrieve a list of Merchant Groups.')
     console.log(JSON.stringify(list))
   }
 
@@ -80,6 +80,7 @@ import { Marqeta } from '../src'
       && originalName != undefined) {
       console.log('Success! Merchant Group name updated from "' + originalName +
         '" to: "' + updatedGroup?.merchantGroup?.name + '"')
+      console.log(`${JSON.stringify(updatedGroup)}`)
     } else {
       console.log('Error! Unable to update Merchant Group name.')
       console.log(updatedGroup)
