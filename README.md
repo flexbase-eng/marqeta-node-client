@@ -641,7 +641,7 @@ const resp = await client.card.listByUser({
 ```
 
 where the first argument is the User token, the second being 
-optional filter fields, and the response would be something 
+optional filter criteria, and the response would be something 
 like this:
 
 ```javascript
@@ -1335,7 +1335,9 @@ and the response would look like this:
 ### Card Transition Calls
 [documentation](https://www.marqeta.com/docs/core-api/card-transitions)
 
-> Use the /cardtransitions API to set the state of an existing card.
+> The Card Transitions object represents state of card resources,
+> and can be used to transition between states, and to retrieve and
+> list state changes for a card resource.
 
 #### [Create Card Transition](https://www.marqeta.com/docs/core-api/card-transitions#postCardtransitions)
 
@@ -1445,7 +1447,7 @@ and the response will look something like this:
 #### [List Card Transitions](https://www.marqeta.com/docs/core-api/card-transitions#getCardtransitionsCardToken)
 
 To get a list of Card Transitions, use this call with a Card token Id and 
-optional filter fields:
+optional filter criteria:
 
 ```typescript
 const resp = await client.cardTransition.list(
@@ -1543,9 +1545,9 @@ and the response will look something like this:
 ### Business Account Transition Calls
 [documentation](https://www.marqeta.com/docs/core-api/business-transitions)
 
-> Use the /businesstransitions endpoints to transition business resources 
-> between states, and to retrieve and list state changes for a business 
-> resource.
+> The Business Transitions object represents state of business resources,
+> and can be used to transition between states, and to retrieve and 
+> list state changes for a business resource.
 
 #### [Create Business Account Transition](https://www.marqeta.com/docs/core-api/business-transitions#postBusinesstransitions)
 
@@ -1605,7 +1607,7 @@ and the response will look something like this:
 #### [List Business Account Transitions](https://www.marqeta.com/docs/core-api/business-transitions#getBusinesstransitionsBusinessBusinesstoken)
 
 And finally, to get a list of Business Account transitions, use this call 
-with a Business token Id, and or optional filter fields: count, sortBy, 
+with a Business token Id, and or optional filter criteria: count, sortBy, 
 etc.
 
 ```typescript
@@ -1654,7 +1656,7 @@ and the list response will look something like this:
 ### Balance Calls
 [documentation](https://www.marqeta.com/docs/core-api/balances)
 
-> Use the /balances endpoint to retrieve the following general 
+> The balances object represents the general 
 > purpose account (GPA) balance details for a user or business:
 > 
 > Ledger balance - When using standard funding: The funds that 
@@ -1713,6 +1715,162 @@ and the response would look something like this:
         "rel": "msas",
         "method": "GET",
         "href": "/v3/balances/c1e98151-d230-48b3-b063-d8be437c1d60/msas"
+      }
+    ]
+  }
+}
+```
+
+### Merchant Group Calls
+[documentation](https://www.marqeta.com/docs/core-api/merchant-groups)
+
+> The Merchant Group Objects represent various merchant identifiers (MIDs). 
+> You can use merchant groups for authorization controls and in card 
+> product configurations. For example, use a merchant group to create 
+> a merchant exemption for a group of merchants rather than an individual 
+> merchant.
+
+#### [Create Merchant Group](https://www.marqeta.com/docs/core-api/merchant-groups#postMerchantGroup)
+
+To transition a Business accounts status, use this call, where the 
+`mids` argument equals a list of Merchant Identifiers:
+
+```typescript
+const resp = await client.merchantGroup.create({ 
+  name: 'TestMerchantGroup',
+  mids: ['123456789012345', '000123456789012', '123456789012'],
+})
+```
+
+and the response will look something like this:
+
+```javascript
+{
+  "success": true,
+  "merchantGroup": {
+    "token": "9c14471f-8c88-47fc-aad3-6b592c1c664f",
+    "name": "TestMerchantGroup.151",
+    "mids": [
+      "123456789012345",
+      "000123456789012",
+      "123456789012"
+    ],
+    "active": true,
+    "createdTime": "2022-06-03T13:36:56Z",
+    "lastModifiedTime": "2022-06-03T13:36:56Z"
+  }
+}
+```
+
+#### [Update Merchant Group](https://www.marqeta.com/docs/core-api/merchant-groups#putMerchantGroupsToken)
+
+To update a Merchant Group, use this call with the 
+Merchant Group token Id, and optional arguments 
+with the data to update. 
+
+```typescript
+const resp = await client.merchantGroup.update({
+   '9c14471f-8c88-47fc-aad3-6b592c1c664f',
+   'TestMerchantGroup.251', 
+})
+```
+
+and the response will look something like this:
+
+```javascript
+{
+  "success": true,
+  "merchantGroup": {
+    "token": "9c14471f-8c88-47fc-aad3-6b592c1c664f",
+    "name": "UpdatedMerchantGroup.251",
+    "mids": [
+      "123456789012345",
+      "000123456789012",
+      "123456789012"
+    ],
+    "active": true,
+    "createdTime": "2022-06-03T13:36:56Z",
+    "lastModifiedTime": "2022-06-03T13:36:57Z"
+  }
+}
+```
+
+#### [Retrieve Merchant Group](https://www.marqeta.com/docs/core-api/merchant-groups#getMerchantGroup)
+
+To retrieve a Merchant Group, use this call with the
+Merchant Group token Id, and optional arguments
+with the data to update.
+
+```typescript
+const resp = await client.merchantGroup.retrieve(
+  '9c14471f-8c88-47fc-aad3-6b592c1c664f',
+)
+```
+
+and the response will look something like this:
+
+```javascript
+{
+  "success": true,
+  "merchantGroup": {
+    "token": "9c14471f-8c88-47fc-aad3-6b592c1c664f",
+    "name": "TestMerchantGroup.151",
+    "mids": [
+      "123456789012345",
+      "000123456789012",
+      "123456789012"
+    ],
+    "active": true,
+    "createdTime": "2022-06-03T13:36:56Z",
+    "lastModifiedTime": "2022-06-03T13:36:56Z"
+  }
+}
+```
+
+#### [List Merchant Groups](https://www.marqeta.com/docs/core-api/merchant-groups#getMerchantGroups)
+
+To get a list of Merchant Groups, use this call with optional field filtering criteria:
+
+```typescript
+const resp = await client.merchantGroup.list({ 
+  count: 2,
+  sortBy: 'lastModifiedTime',
+})
+```
+and the response will look something like this:
+
+```javascript
+{
+  "success": true,
+  "merchantGroups": {
+    "count": 2,
+    "startIndex": 0,
+    "endIndex": 1,
+    "isMore": true,
+    "data": [
+      {
+        "token": "9c14471f-8c88-47fc-aad3-6b592c1c664f",
+        "name": "TestMerchantGroup.151",
+        "mids": [
+          "123456789012345",
+          "000123456789012",
+          "123456789012"
+        ],
+        "active": true,
+        "createdTime": "2022-06-03T13:36:56Z",
+        "lastModifiedTime": "2022-06-03T13:36:56Z"
+      },
+      {
+        "token": "0ea5324c-25b2-4ddf-9825-8285c6abc6f6",
+        "name": "UpdatedMerchantGroup.491",
+        "mids": [
+          "123456789012345",
+          "000123456789012",
+          "123456789012"
+        ],
+        "active": true,
+        "createdTime": "2022-05-24T21:43:50Z",
+        "lastModifiedTime": "2022-05-24T21:43:51Z"
       }
     ]
   }
