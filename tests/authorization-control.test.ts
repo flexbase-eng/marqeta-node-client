@@ -52,7 +52,7 @@ import { Marqeta } from '../src'
 
   if (authControl?.authorizationControl?.token) {
     console.log('getting user authorization control by token Id...')
-    const found = await client.authorizationControl.byTokenId({
+    const found = await client.authorizationControl.retrieve({
       token: authControl?.authorizationControl?.token
     })
     if (found.success && found?.authorizationControl?.token) {
@@ -120,10 +120,10 @@ import { Marqeta } from '../src'
     console.log(mid)
   }
 
-  console.log('getting Merchant Identifier exemption...')
+  console.log('retrieving Merchant Identifier exemption...')
   let foundMerchant
   if (mid?.merchant?.token) {
-    foundMerchant = await client.authorizationControl.getMerchantExemption(
+    foundMerchant = await client.authorizationControl.retrieveMerchantExemption(
       mid.merchant.token
     )
     if (foundMerchant?.success) {
@@ -148,7 +148,7 @@ import { Marqeta } from '../src'
       console.log('Success! List of Merchant Identifier Exemptions retrieved' +
         'for user with token Id: ' + user.token)
     } else {
-      console.log('Success! Unable to get a List of Merchant Identifier ' +
+      console.log('Error! Unable to get a List of Merchant Identifier ' +
         'Exemptions for user with token Id: ' + user.token)
       console.log(merchantList)
     }
@@ -166,7 +166,7 @@ import { Marqeta } from '../src'
         foundMerchant.merchant
       )
     const updatedStatus = await client.authorizationControl.
-      byTokenId({
+      retrieve({
         token: foundMerchant?.merchant?.token
       })
 

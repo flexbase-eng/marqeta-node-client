@@ -93,7 +93,7 @@ export class AuthorizationControlApi {
    * fields argument, send those to Marqeta, and have an Authorization Control
    * returned.
    */
-  async byTokenId(search: {
+  async retrieve(search: {
     token?: string,
     fields?: string[],
   } = {}): Promise<{
@@ -218,7 +218,7 @@ export class AuthorizationControlApi {
    * token, send that to Marqeta, and have an Authorization Control Merchant
    * Identifier Exemption object returned.
    */
-  async getMerchantExemption(token?: string): Promise<{
+  async retrieveMerchantExemption(token?: string): Promise<{
     success: boolean,
     merchant?: Merchant,
     error?: MarqetaError,
