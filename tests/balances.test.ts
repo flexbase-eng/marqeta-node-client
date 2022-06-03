@@ -17,7 +17,6 @@ import { Marqeta } from '../src';
 
     if (business?.token) {
       const balances = await client.balances.retrieve(business.token)
-      console.log(`${JSON.stringify(balances)}`)
       if (balances?.success) {
         console.log('Success! Balances retrieved for Business with token Id:' +
           business.token)
