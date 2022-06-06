@@ -5,7 +5,6 @@ import type {
   MarqetaOptions,
   MarqetaError,
 } from './'
-import { mkError } from './'
 
 export interface Kyc {
   notes?: string;
