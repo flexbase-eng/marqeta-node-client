@@ -49,4 +49,30 @@ export class FundingProgramApi {
     }
     return { success: !resp?.payload?.errorCode, funding: { ...resp.payload } }
   }
+
+  /*
+   * Function to take a Program Funding Source token Id, send that to Marqeta,
+   * and have them return the Program Funding Source information.
+   */
+  async retrieve(token: string): Promise<{
+    success: boolean,
+    funding?: FundingProgram,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('GET',
+      `/fundingsources/program/${token}`,
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, funding: { ...resp.payload } }
+  }
 }
