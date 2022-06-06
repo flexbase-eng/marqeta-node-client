@@ -75,4 +75,43 @@ export class FundingProgramApi {
     }
     return { success: !resp?.payload?.errorCode, funding: { ...resp.payload } }
   }
+
+  /*
+   * Function to take some Program Funding source attributes, send those to
+   * Marqeta, and have the Program Funding source updated and the information
+   * returned.
+   */
+  async update(funding: Partial<FundingProgram>): Promise<{
+    success: boolean,
+    funding?: FundingProgram,
+    error?: MarqetaError,
+  }> {
+    /* eslint-disable no-unused-vars */
+    const {
+      token,
+      account,
+      createdTime,
+      lastModifiedTime,
+      ...updateOptions
+    } = funding
+    /* eslint-enable no-unused-vars */
+
+    const resp = await this.client.fire('PUT',
+      `/fundingsources/program/${token}`,
+      undefined,
+      updateOptions,
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, funding: { ...resp.payload } }
+  }
 }
