@@ -36,32 +36,15 @@ export class KycApi {
    * perform KYC, or KYB, on the user or business based upon which token is
    * populated: userToken or businessToken.
    */
-  async verify(type: string, token: string, options: {
-    notes?: string,
-    manualOverride?: boolean,
-    referenceId?: string,
-  } = {}): Promise<{
+  async verify(kyc: Partial<Kyc>): Promise<{
     success: boolean,
     kyc?: Kyc,
     error?: MarqetaError,
   }> {
-    if (!type) {
-      return {
-        success: false,
-        error: mkError('This call requires a verification "type" parameter of ' +
-          '"business" or "user".'),
-      }
-    }
-    let args = { ...options } as Kyc
-    if (type === 'business') {
-      args.businessToken = token
-    } else {
-      args.userToken = token
-    }
     const resp = await this.client.fire('POST',
       'kyc',
       undefined,
-      { ...args }
+      kyc,
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {

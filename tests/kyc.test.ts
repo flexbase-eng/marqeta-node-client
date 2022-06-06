@@ -18,8 +18,7 @@ import { Marqeta } from '../src'
     if (user?.token) {
       console.log('sending a User KYC request to Marqeta...')
       const verified = await client.kyc.verify(
-        'user',
-        user.token
+        { userToken: user.token }
       )
       if (verified.success) {
         console.log('Success! KYC success for user: ' + user?.token)
@@ -61,8 +60,7 @@ import { Marqeta } from '../src'
     if (business?.token) {
       console.log('sending a Business KYB request to Marqeta...')
       const verified = await client.kyc.verify(
-        'business',
-        business.token,
+        { businessToken: business.token }
       )
       if (verified.success) {
         console.log('Success! KYB success for business: ' + business?.token)
