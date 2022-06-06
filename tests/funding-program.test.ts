@@ -15,13 +15,25 @@ import { Marqeta } from '../src'
   }
 
   console.log('getting list of one Marqeta user...')
-  const funding = await client.fundingProgram.create(mockFunding)
+  const fund = await client.fundingProgram.create(mockFunding)
 
-  if (funding.success) {
+  if (fund.success) {
     console.log('Success! Program Funding source created.')
   } else {
     console.log('Error! Program Funding source not created.')
-    console.log(funding)
+    console.log(fund)
+  }
+
+  if (fund?.funding?.token) {
+    const found = await client.fundingProgram.retrieve(fund.funding.token)
+
+    if (found.success) {
+      console.log('Success! Program Funding source found.')
+    } else {
+      console.log('Error! Program Funding source not found.')
+      console.log(found)
+    }
+
   }
 
 })()
