@@ -33,7 +33,7 @@ export class FundingProgramApi {
   }> {
     const resp = await this.client.fire('POST',
       'fundingsources/program',
-      {},
+      undefined,
       { ...funding })
     // catch any errors...
     if (resp?.payload?.errorCode) {
