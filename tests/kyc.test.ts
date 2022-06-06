@@ -17,9 +17,9 @@ import { Marqeta } from '../src'
     user = userList.userList.data.pop()
     if (user?.token) {
       console.log('sending a User KYC request to Marqeta...')
-      const verified = await client.kyc.verify({
-        userToken: user.token
-      })
+      const verified = await client.kyc.verify(
+        { userToken: user.token }
+      )
       if (verified.success) {
         console.log('Success! KYC success for user: ' + user?.token)
       } else {
@@ -59,14 +59,14 @@ import { Marqeta } from '../src'
     business = businessList.businesses.data.pop()
     if (business?.token) {
       console.log('sending a Business KYB request to Marqeta...')
-      const verified = await client.kyc.verify({
-        businessToken: business.token
-      })
+      const verified = await client.kyc.verify(
+        { businessToken: business.token }
+      )
       if (verified.success) {
         console.log('Success! KYB success for business: ' + business?.token)
       } else {
         console.log('Error! KYB failed for business: ' + business?.token)
-        console.log(business)
+        console.log(verified)
       }
     } else {
       console.log('Error! Empty business token Id.')
@@ -90,7 +90,7 @@ import { Marqeta } from '../src'
     }
 
     console.log('getting single Marqeta Business KYC result...')
-    const kycResult = await client.kyc.byTokenId(business.token)
+    const kycResult = await client.kyc.retrieve(business.token)
     if (kycResult?.success && kycResult?.kyc?.token) {
       console.log('Success! KYC result retrieved for the business with token: ' +
         business.token

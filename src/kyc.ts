@@ -35,13 +35,7 @@ export class KycApi {
    * perform KYC, or KYB, on the user or business based upon which token is
    * populated: userToken or businessToken.
    */
-  async verify(source: {
-    notes?: string,
-    userToken?: string,
-    businessToken?: string,
-    manualOverride?: boolean,
-    referenceId?: string,
-  } = {}): Promise<{
+  async verify(kyc: Partial<Kyc>): Promise<{
     success: boolean,
     kyc?: Kyc,
     error?: MarqetaError,
@@ -49,7 +43,7 @@ export class KycApi {
     const resp = await this.client.fire('POST',
       'kyc',
       undefined,
-      { ...source }
+      kyc,
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {
@@ -171,7 +165,7 @@ export class KycApi {
    * Function to take a KYC or KYB token, send that to Marqeta, and have
    * the KYC result returned.
    */
-  async byTokenId(token: string): Promise<{
+  async retrieve(token: string): Promise<{
     success: boolean,
     kyc?: Kyc,
     error?: MarqetaError,
