@@ -287,6 +287,114 @@ and the result will look something like this:
 }
 ```
 
+### User Transition Calls
+[documentation](https://www.marqeta.com/docs/core-api/user-transitions)
+
+> The Card Transitions object represents state of card resources,
+> and can be used to transition between states, and to retrieve and
+> list state changes for a card resource.
+
+#### [Create User Transition](https://www.marqeta.com/docs/core-api/user-transitions#postUsertransitions)
+
+You can change the status an existing User by making this call:
+
+```typescript
+const resp = await client.cafrdTransition.create({
+  status: 'UNVERIFIED',
+  reasonCode: '02',
+  channel: 'API',
+  userToken: '77d73971-a3ba-4225-b900-3a0b4c14e646',
+})
+```
+
+and the response would look something like this:
+
+```javascript
+{
+  success: true,
+  transition: {
+    token: 'a65311d6-a841-4a5b-b6de-2a592994a10f',
+    status: 'UNVERIFIED',
+    reasonCode: '02',
+    channel: 'API',
+    createdTime: '2022-06-07T21:37:28Z',
+    lastModifiedTime: '2022-06-07T21:37:28Z',
+    userToken: '77d73971-a3ba-4225-b900-3a0b4c14e646'
+  }
+}
+```
+
+#### [Retrieve User Transition](https://www.marqeta.com/docs/core-api/user-transitions#getUsertransitionsToken)
+
+You can change the status an existing User by making this call with a Transition token:
+
+```typescript
+const resp = await client.userTransition.retrieve('5a0de6f3-36cc-46e4-b7b2-436f0576608')
+})
+```
+
+and the response would look something like this:
+
+```javascript
+{
+  success: true,
+  transition: {
+    token: '5a0de6f3-36cc-46e4-b7b2-436f05766082',
+    status: 'UNVERIFIED',
+    reasonCode: '02',
+    channel: 'API',
+    createdTime: '2022-06-07T21:40:40Z',
+    lastModifiedTime: '2022-06-07T21:40:40Z',
+    userToken: '77d73971-a3ba-4225-b900-3a0b4c14e646'
+  }
+}
+```
+
+#### [List User Transition](https://www.marqeta.com/docs/core-api/user-transitions#getUsertransitionsUserUsertoken)
+
+You can get a list of User transitions by making this call with a User token:
+
+```typescript
+const resp = await client.userTransition.list({ 
+  token: '5a0de6f3-36cc-46e4-b7b2-436f0576608',
+  count: 2,
+})
+```
+
+and the output will look something like this:
+
+```javascript
+{
+  "success": true,
+  "transitionList": {
+    "count": 2,
+    "startIndex": 0,
+    "endIndex": 1,
+    "isMore": true,
+    "data": [
+      {
+        "token": "5c66c7ad-9abd-4f94-bdc5-376b017b5e3a",
+        "status": "UNVERIFIED",
+        "reasonCode": "02",
+        "channel": "API",
+        "createdTime": "2022-06-07T21:48:54Z",
+        "lastModifiedTime": "2022-06-07T21:48:54Z",
+        "userToken": "77d73971-a3ba-4225-b900-3a0b4c14e646"
+      },
+      {
+        "token": "695c8166-82a3-4834-be37-8f972ad90be1",
+        "status": "UNVERIFIED",
+        "reasonCode": "02",
+        "channel": "API",
+        "createdTime": "2022-06-07T21:45:16Z",
+        "lastModifiedTime": "2022-06-07T21:45:16Z",
+        "userToken": "77d73971-a3ba-4225-b900-3a0b4c14e646"
+      }
+    ]
+  }
+}
+```
+
 ### Business Account Calls
 [documentation](https://www.marqeta.com/docs/core-api/businesses)
 
@@ -1359,14 +1467,14 @@ and the response would look like this:
 
 #### [Create Card Transition](https://www.marqeta.com/docs/core-api/card-transitions#postCardtransitions)
 
-You can change the status an existing Card by using this call: 
+You can change the state of an existing Card by using this call: 
 
 ```typescript
-const resp = await client.userTransition.create({
-  status: 'ACTIVE',
+const resp = await client.cafrdTransition.create({
+  state: 'ACTIVE',
   reasonCode: '02',
   channel: 'API',
-  userToken: user.token,
+  cardToken: 'e6e52036-2002-4455-87cf-f49b7e581e8d',
 })
 ```
 
