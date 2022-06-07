@@ -15,7 +15,7 @@ export interface AccountHolderGroup {
     realTimeFeeGroupToken?: string;
     preKycControls?: {
       cashAccessEnabled?: boolean;
-      internationalEnabled?:	boolean;
+      internationalEnabled?: boolean;
       balanceMax?: number;
       enableNonProgramLoads?: boolean;
       isReloadablePreKyc?: boolean;
