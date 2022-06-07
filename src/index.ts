@@ -29,7 +29,7 @@ import { CardTransitionApi } from './card-transition'
 import { CardPinApi } from './card-pin'
 import { UserTransitionApi } from './user-transition'
 import { BusinessTransitionApi } from './business-transition'
-import { AccountHolderGroupsApi } from './account-holder-groups'
+import { AccountHolderGroupApi } from './account-holder-group'
 import { FundingAddressApi } from './funding-address'
 import { AcceptedCountriesApi } from './accepted-countries'
 import { GpaOrderApi } from './gpa-order'
@@ -105,7 +105,7 @@ export class Marqeta {
   cardPin: CardPinApi
   userTransition: UserTransitionApi
   businessTransition: BusinessTransitionApi
-  accountHolderGroups: AccountHolderGroupsApi
+  accountHolderGroup: AccountHolderGroupApi
   fundingAddress: FundingAddressApi
   acceptedCountries: AcceptedCountriesApi
   gpaOrder: GpaOrderApi
@@ -139,7 +139,7 @@ export class Marqeta {
     this.cardPin = new CardPinApi(this, options)
     this.userTransition = new UserTransitionApi(this, options)
     this.businessTransition = new BusinessTransitionApi(this, options)
-    this.accountHolderGroups = new AccountHolderGroupsApi(this, options)
+    this.accountHolderGroup = new AccountHolderGroupApi(this, options)
     this.fundingAddress = new FundingAddressApi(this, options)
     this.acceptedCountries = new AcceptedCountriesApi(this, options)
     this.gpaOrder = new GpaOrderApi(this, options)
