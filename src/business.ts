@@ -60,7 +60,7 @@ export interface Business {
   beneficialOwner3?: BeneficialOwner;
   beneficialOwner4?: BeneficialOwner;
   attestorName?: string;
-  attestationConsent?: string;
+  attestationConsent?: boolean;
   attestationDate?: string;
   dateEstablished?: string;
 }
