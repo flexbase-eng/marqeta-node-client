@@ -23,4 +23,20 @@ import { Marqeta } from '../src'
     console.log(group)
   }
 
+  let found
+  if (group?.group?.token) {
+
+    found = await client.accountHolderGroup.retrieve(group.group.token)
+
+    if (found.success) {
+      console.log('Success! Account Holder group found.')
+    } else {
+      console.log('Error! Account Holder group not found.')
+      console.log(found)
+    }
+  } else {
+    console.log('Error! Empty Account Holder group token.')
+    console.log(group)
+  }
+
 })()
