@@ -12,19 +12,10 @@ import { Marqeta } from '../src';
     userToken: '',
   }
 
-  const mockCardTransition = {
-    token: '',
-    state: 'ACTIVE',
-    reason: 'I want to use this card, so activate it.',
-    reasonCode: '00',
-    channel: 'API',
-    cardToken: '',
-  }
-
   console.log('getting a list of users...')
   const users = await client.user.list()
 
-  let user, newCard, cardTransition, newCardToken
+  let user, newCard, cardTransition
   if (users?.userList?.count && Array.isArray(users?.userList?.data)) {
 
     console.log('getting Card Products...')
@@ -34,47 +25,32 @@ import { Marqeta } from '../src';
     if (products?.cardProducts?.count
       && Array.isArray(products?.cardProducts?.data)) {
       const product = products?.cardProducts?.data.pop()
+      console.log('creating new Card...')
 
       if (user?.token && product?.token) {
-        const state = {
-          status: 'ACTIVE',
-          reasonCode: '02',
-          channel: 'API',
-          userToken: user.token,
-        }
-        console.log('transitioning User to ACTIVE status...')
-        const userTransition = await client.userTransition.create(state)
+        mockCard.userToken = user.token
+        mockCard.cardProductToken = product.token
+        newCard = await client.card.create(mockCard)
 
-        if (userTransition?.success) {
-          console.log('creating a new Card...')
-          mockCard.userToken = user.token
-          mockCard.cardProductToken = product.token
-          newCard = await client.card.create(mockCard)
-
-          if (newCard.success && newCard?.card?.token) {
-            newCardToken = newCard.card.token
-            console.log('transitioning Card to ACTIVE status...')
-            mockCardTransition.cardToken = newCard.card.token
-            cardTransition = await client.cardTransition.create(
-              mockCardTransition
-            )
-
-            console.log(`${JSON.stringify(cardTransition)}`)
-
-            if (cardTransition?.success) {
-              console.log('Success! Card transitioned to "ACTIVE" state.')
-            } else {
-              console.log('Error! Unable to transition card.')
-              console.log(cardTransition)
-            }
-          } else {
-            console.log('Error! Unable to create a new Card.')
-            console.log(newCard)
+        if (newCard?.card?.token) {
+          const state = {
+            state: 'ACTIVE',
+            reasonCode: '02',
+            channel: 'API',
+            cardToken: newCard.card.token,
           }
+          console.log('transitioning new Card to ACTIVE status...')
+          cardTransition = await client.cardTransition.create(state)
 
+          if (cardTransition?.success) {
+            console.log('Success! Card transitioned to "ACTIVE" state.')
+          } else {
+            console.log('Error! Unable to transition card.')
+            console.log(cardTransition)
+          }
         } else {
-          console.log('Error! Unable to transition user to "ACTIVE" status.')
-          console.log(userTransition)
+          console.log('Error! Unable to create a new Card.')
+          console.log(newCard)
         }
       } else {
         console.log('Error! Empty user token.')
@@ -91,7 +67,7 @@ import { Marqeta } from '../src';
       const foundTransition = await client.cardTransition.retrieve(
         cardTransition.cardTransition.token
       )
-      console.log(`${JSON.stringify(foundTransition)}`)
+
       if (foundTransition) {
         console.log('Success! Card Transition found.')
       } else {
@@ -104,9 +80,8 @@ import { Marqeta } from '../src';
 
     console.log('getting a list of Card Transitions...')
 
-    if (newCardToken != undefined) {
-      const list = await client.cardTransition.list(newCardToken)
-      console.log(`${JSON.stringify(list)}`)
+    if (newCard?.card?.token) {
+      const list = await client.cardTransition.list(newCard?.card.token)
       if (list?.success) {
         console.log('Success! A list of Card Transitions was retrieved.')
       } else {
