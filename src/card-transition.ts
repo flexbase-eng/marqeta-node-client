@@ -49,10 +49,15 @@ export class CardTransitionApi {
     cardTransition?: CardTransition,
     error?: MarqetaError,
   }> {
+    const {
+      cardToken,
+      channel,
+      state
+    } = transition
     const resp = await this.client.fire('POST',
       'cardtransitions',
       undefined,
-      transition,
+      { cardToken, channel, state }
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {
