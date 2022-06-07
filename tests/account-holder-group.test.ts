@@ -13,7 +13,7 @@ import { Marqeta } from '../src'
     name: 'account-holder-group-test-kyb',
   }
 
-  console.log('getting list of one Marqeta user...')
+  console.log('creating an Account Holder Group...')
   const group = await client.accountHolderGroup.create(mockGroup)
 
   if (group.success) {
@@ -24,6 +24,8 @@ import { Marqeta } from '../src'
   }
 
   let found
+  console.log('getting an Account Holder Group...')
+
   if (group?.group?.token) {
 
     found = await client.accountHolderGroup.retrieve(group.group.token)
@@ -39,6 +41,8 @@ import { Marqeta } from '../src'
     console.log(group)
   }
 
+  console.log('updating an Account Holder Group...')
+
   if (found?.group?.name && found?.group?.token) {
     const originalName = found.group.name
     found.group.name = 'updated-accountholder-group-test-kyb'
@@ -51,6 +55,16 @@ import { Marqeta } from '../src'
       console.log('Error! Account Holder group not updated.')
       console.log(updated)
     }
+  }
+
+  console.log('getting a list of Account Holder Groups...')
+  const list = await client.accountHolderGroup.list({ count: 2 })
+
+  if (list.groups?.count) {
+    console.log(`Success! ${list.groups!.count} Account Holder Groups were retrieved.`)
+  } else {
+    console.log('Error! Unable to get a list of Account Holder Groups.')
+    console.log(list)
   }
 
 })()
