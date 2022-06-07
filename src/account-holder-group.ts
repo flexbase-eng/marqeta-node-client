@@ -25,6 +25,14 @@ export interface AccountHolderGroup {
   lastModifiedTime?: string;
 }
 
+export interface AccountHolderGroupList {
+  count: bigint;
+  startIndex: bigint;
+  endIndex: bigint;
+  isMore: boolean;
+  data?: AccountHolderGroup[];
+}
+
 export class AccountHolderGroupApi {
   client: Marqeta;
 
@@ -122,5 +130,38 @@ export class AccountHolderGroupApi {
       }
     }
     return { success: !resp?.payload?.errorCode, group: { ...resp.payload } }
+  }
+
+  /*
+   * Function to take a series of list arguments, most of which are optional,
+   * as input, pass those to Marqeta, and have them return a *paged* list of
+   * Account Holder Groups that fit the list criteria. If no list arguments are
+   * given, this returns a list of *all* the Account Holders  Groups.
+   */
+  async list(search: {
+    count?: number,
+    startIndex?: number,
+    sortBy?: string,
+  } = {}): Promise<{
+    success: boolean,
+    groups?: AccountHolderGroupList,
+    error?: MarqetaError,
+  }> {
+    const resp = await this.client.fire('GET',
+      '/accountholdergroups',
+      { ...search }
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, groups: { ...resp.payload } }
   }
 }
