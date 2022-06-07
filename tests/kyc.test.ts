@@ -66,23 +66,21 @@ import { Marqeta } from '../src'
     accountHolderGroupToken: ''
   }
   console.log('getting list of one Marqeta user...')
+  let user, userVerified
   const userList = await client.user.list({ count: 1 })
-  let user
 
   if (userList?.userList?.isMore && Array.isArray(userList?.userList?.data)) {
     user = userList.userList.data.pop()
-
     if (user?.token) {
       console.log('sending a User KYC request to Marqeta...')
-      const verified = await client.kyc.verify(
+      userVerified = await client.kyc.verify(
         { userToken: user.token }
       )
-
-      if (verified.success) {
+      if (userVerified.success) {
         console.log('Success! KYC success for user: ' + user?.token)
       } else {
         console.log('Error! KYC failed for user: ' + user?.token)
-        console.log(verified)
+        console.log(userVerified)
       }
     } else {
       console.log('Error! Empty user token Id.')
@@ -92,10 +90,24 @@ import { Marqeta } from '../src'
     console.log(userList)
   }
 
+  console.log('retrieving User KYC result...')
+  if (userVerified?.kyc?.token) {
+    const retrieved = await client.kyc.retrieve(userVerified.kyc.token)
+
+    if (retrieved?.success && retrieved?.kyc?.token) {
+      console.log('Success! Retrieved User KYC result.')
+    } else {
+      console.log('Error! Unable to retrieve User KYC result.')
+      console.log(retrieved)
+    }
+  } else {
+    console.log('Error! Empty User KYC Verification token.')
+    console.log(userVerified)
+  }
+
   if (user?.token) {
     console.log('getting list of Marqeta User KYC results...')
     const userResults = await client.kyc.userResults({ ...user })
-
     if (userResults?.success && Array.isArray(userResults?.kycList?.data)) {
       console.log('Success! A list of KYC results was returned for user: ' +
         user.token
@@ -110,9 +122,9 @@ import { Marqeta } from '../src'
       'results')
   }
 
+
   console.log('getting list of one Marqeta business...')
   const acctHolderGroup = await client.accountHolderGroup.create(mockGroup)
-
   if (acctHolderGroup?.group?.token) {
     mockBusiness.accountHolderGroupToken = acctHolderGroup.group.token
   } else {
@@ -120,9 +132,6 @@ import { Marqeta } from '../src'
   }
 
   let newB = await client.business.create(mockBusiness)
-  console.log('NEW BUSINESS\n')
-  console.log(newB)
-  console.log('END NEW BUSINESS\n')
 
   if (newB?.business?.token) {
     const state = {
