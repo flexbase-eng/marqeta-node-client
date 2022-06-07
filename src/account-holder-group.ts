@@ -85,4 +85,42 @@ export class AccountHolderGroupApi {
     }
     return { success: !resp?.payload?.errorCode, group: { ...resp.payload } }
   }
+
+  /*
+   * Function to take some Account Holder group attributes, send those to
+   * Marqeta, and have the Account Holder group updated and the information
+   * returned.
+   */
+  async update(group: Partial<AccountHolderGroup>): Promise<{
+    success: boolean,
+    group?: AccountHolderGroup,
+    error?: MarqetaError,
+  }> {
+    /* eslint-disable no-unused-vars */
+    const {
+      token,
+      createdTime,
+      lastModifiedTime,
+      ...updateOptions
+    } = group
+    /* eslint-enable no-unused-vars */
+
+    const resp = await this.client.fire('PUT',
+      `/accountholdergroups/${token}`,
+      undefined,
+      updateOptions,
+    )
+    // catch any errors...
+    if (resp?.payload?.errorCode) {
+      return {
+        success: false,
+        error: {
+          type: 'marqeta',
+          error: resp?.payload?.errorMessage,
+          status: resp?.payload?.errorCode,
+        },
+      }
+    }
+    return { success: !resp?.payload?.errorCode, group: { ...resp.payload } }
+  }
 }

@@ -10,7 +10,7 @@ import { Marqeta } from '../src'
   })
 
   const mockGroup = {
-    name: 'account-hoder-group-test-kyb',
+    name: 'account-holder-group-test-kyb',
   }
 
   console.log('getting list of one Marqeta user...')
@@ -37,6 +37,20 @@ import { Marqeta } from '../src'
   } else {
     console.log('Error! Empty Account Holder group token.')
     console.log(group)
+  }
+
+  if (found?.group?.name && found?.group?.token) {
+    const originalName = found.group.name
+    found.group.name = 'updated-accountholder-group-test-kyb'
+    const updated = await client.accountHolderGroup.update(found.group)
+
+    if (updated.success && updated?.group?.name) {
+      console.log('Success! Account Holder group name updated from "' +
+        originalName + '" to "' + updated.group.name + '"')
+    } else {
+      console.log('Error! Account Holder group not updated.')
+      console.log(updated)
+    }
   }
 
 })()
