@@ -2944,6 +2944,213 @@ and the output will look something like this:
 }
 ```
 
+### Webhook Calls
+[documentation](https://www.marqeta.com/docs/core-api/webhooks-management)
+
+> The Webhooks object represents information about Marqeta API events as they occur,
+> e.g. when card transactions occur, or a card is activated, etc. 
+> 
+#### [Create Webhook](https://www.marqeta.com/docs/core-api/webhooks-management#postWebhooks)
+
+To create a webhook, make a single call to this endpoint:
+
+```typescript
+const resp = await client.webHooks.create({
+  name: 'webhooks.test',
+  active: false,
+  events: [
+    '*'
+  ],
+  config: {
+    url: 'https://baconipsum.com',
+    basicAuthUsername: 'ipsum',
+    basicAuthPassword: 'abcdfghi12385/'
+  }
+})
+```
+
+and the output will look something like this:
+
+```javascript
+{
+  "success": true,
+   "webhook": {
+   "token": "test.2022-06-08T18:09:04.378Z",
+   "name": "webhooks.test.2022-06-08T18:09:04.378Z",
+   "active": false,
+    "config": {
+      "url": "https://baconipsum.com",
+      "basicAuthUsername": "ipsum",
+      "basicAuthPassword": "WFx&Q44Roc/LUjaDjx2SvyK",
+      "customHeader": { },
+      "useMtls": false
+    },
+    "events": [
+      "*"
+    ],
+    "createdTime": "2022-06-08T18:07:50Z",
+    "lastModifiedTime": "2022-06-08T18:07:50Z"
+  }
+}
+```
+
+#### [Retrieve Webhook](https://www.marqeta.com/docs/core-api/webhooks-management#getWebhooksToken)
+
+To retrieve a webhook, make a single call to this endpoint:
+
+```typescript
+const resp = await client.webHooks.retrieve('test.create.token.75')
+```
+
+and the response will look something like this:
+
+```javascript
+{
+  "success": true,
+  "webhook": {
+    "token": "test.create.token.75",
+    "name": "test.create.name.2022-04-15",
+    "active": false,
+    "config": {
+      "url": "https://flxbmmq.free.beeceptor.com/kyc/user-kyc",
+      "basicAuthUsername": "flxbasekyc",
+      "basicAuthPassword": "WFx&Q44Roc/LUjaDjx2SvyK",
+      "customHeader": { },
+      "useMtls": false
+    },
+    "events": [
+      "usertransition.unverified"
+    ],
+    "createdTime": "2022-04-15T13:51:31Z",
+    "lastModifiedTime": "2022-04-15T13:51:31Z"
+  }
+}
+```
+
+#### [Update Webhook](https://www.marqeta.com/docs/core-api/webhooks-management#putWebhooksToken)
+
+To update a webhook, make a single call to this endpoint:
+
+```typescript
+const resp = await client.webHooks.update({
+  token: "fb17230d-3c59-4315-a0ce-6fdc93aa22e7",
+  name: "webhooks.test.2022-06-08T18:18:06.277Z",
+  active: false,
+  config: {
+    url: "https://flexbasemarqeta.free.beeceptor.com/kyc/fb17230d-3c59-4315-a0ce-6fdc93aa22e7",
+    basicAuthUsername: "flexbasekyc",
+    basicAuthPassword: "WFx&Q44Roc/LUjaDjx2SvyK",
+    customHeader: { },
+    useMtls: false
+  },
+  events: [
+    "usertransition.unverified",
+    "usertransition.limited",
+    "usertransition.active",
+    "usertransition.suspended",
+    "usertransition.closed"
+  ],
+  createdTime: "2022-04-08T19:45:54Z",
+  lastModifiedTime: "2022-06-08T18:12:52Z"
+})
+```
+
+and the response will look something like this:
+
+```javascript
+{
+  "success": true,
+  "webhook": {
+    "token": "fb17230d-3c59-4315-a0ce-6fdc93aa22e7",
+    "name": "webhooks.test.2022-06-08T18:18:06.277Z",
+    "active": false,
+    "config": {
+      "url": "https://flexbasemarqeta.free.beeceptor.com/kyc/fb17230d-3c59-4315-a0ce-6fdc93aa22e7",
+      "basicAuthUsername": "flexbasekyc",
+      "basicAuthPassword": "WFx&Q44Roc/LUjaDjx2SvyK",
+      "customHeader": { },
+      "useMtls": false
+    },
+    "events": [
+      "usertransition.unverified",
+      "usertransition.limited",
+      "usertransition.active",
+      "usertransition.suspended",
+      "usertransition.closed"
+    ],
+    "createdTime": "2022-04-08T19:45:54Z",
+    "lastModifiedTime": "2022-06-08T18:15:42Z"
+  }
+}
+```
+
+#### [List Webhooks](https://www.marqeta.com/docs/core-api/webhooks-management#getWebhooks)
+
+To list webhooks, make a single call to this endpoint with optional filter parameters:
+
+```typescript
+const resp = await client.webHooks.list({ 
+  count: 2,
+})
+```
+
+and the response will look something like this:
+
+```javascript
+{
+  "success": true,
+  "webhooksList": {
+  "count": 2,
+  "startIndex": 0,
+  "endIndex": 1,
+  "isMore": true,
+  "data": [
+      {
+        "token": "fb17230d-3c59-4315-a0ce-6fdc93aa22e7",
+        "name": "webhooks.test.2022-06-08T18:18:06.277Z",
+        "active": false,
+        "config": {
+          "url": "https://flexbasemarqeta.free.beeceptor.com/kyc/fb17230d-3c59-4315-a0ce-6fdc93aa22e7",
+          "basicAuthUsername": "flexbasekyc",
+          "basicAuthPassword": "WFx&Q44Roc/LUjaDjx2SvyK",
+          "customHeader": { },
+          "useMtls": false
+        },
+        "events": [
+          "usertransition.unverified",
+          "usertransition.limited",
+          "usertransition.active",
+          "usertransition.suspended",
+          "usertransition.closed"
+        ],
+        "createdTime": "2022-04-08T19:45:54Z",
+        "lastModifiedTime": "2022-06-08T18:15:42Z"
+      },
+      {
+        "token": "f1bd98c3-ee4a-4c6e-8109-bfbc7fadf41e",
+        "name": "marqeta-kyc-webhook",
+        "active": false,
+        "config": {
+          "url": "https://flexbasemarqeta.free.beeceptor.com/kyc/f1bd98c3-ee4a-4c6e-8109-bfbc7fadf41e",
+          "basicAuthUsername": "flexbasekyc",
+          "basicAuthPassword": "WFx&Q44Roc/LUjaDjx2SvyK",
+          "customHeader": { },
+          "useMtls": false
+        },
+        "events": [
+          "usertransition.unverified",
+          "usertransition.limited",
+          "usertransition.active",
+          "usertransition.suspended",
+          "usertransition.closed"
+        ],
+        "createdTime": "2022-04-09T14:14:44Z",
+        "lastModifiedTime": "2022-04-13T21:18:25Z"
+      }
+    ]
+  }
+}
+```
 ## Development
 
 For those interested in working on the library, there are a few things that

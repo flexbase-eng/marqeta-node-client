@@ -137,7 +137,7 @@ export class WebhooksApi {
   /*
    * Function to retrieve a Webhook by its token Id.
    */
-  async byTokenId (token: string): Promise<{
+  async retrieve (token: string): Promise<{
     success: boolean,
     webhook?: Webhook,
     error?: MarqetaError,
