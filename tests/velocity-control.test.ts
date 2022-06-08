@@ -98,7 +98,6 @@ import { Marqeta } from '../src'
   console.log('updating a velocity control...')
   if (oneVelocity?.token) {
     const origActive = oneVelocity.active
-    console.log(`[original active:] ${JSON.stringify(origActive)}`)
     oneVelocity.active = !oneVelocity.active
 
     const updateVelocity = await client.velocityControl.update(
