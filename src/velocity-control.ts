@@ -110,7 +110,7 @@ export class VelocityControlApi {
    * Function to take a Velocity token and some optional arguments, send those
    * to Marqeta, and have the found Velocity Control returned to the caller.
    */
-  async byTokenId(token: string, search?: {
+  async retrieve(token: string, search?: {
     fields?: string[],
   }): Promise<{
     success: boolean,
@@ -165,10 +165,10 @@ export class VelocityControlApi {
 
   /*
    * Function to take a user token with a set of optional arguments, send those
-   * to Marqeta, and have a list of User Velocity Controls returned to
+   * to Marqeta, and have a list of User Velocity Control Balances returned to
    * the caller.
    */
-  async byUser(search: {
+  async userBalances(search: {
     token?: string,
     count?: number,
     startIndex?: number,

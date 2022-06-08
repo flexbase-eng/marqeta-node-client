@@ -2638,8 +2638,313 @@ and the output will look something like this:
 }
 ```
 
-## Development
+### Velocity Control Calls
+[documentation](https://www.marqeta.com/docs/core-api/velocity-controls#postVelocitycontrols)
 
+> The velocity control object limits how much users can spend.
+> You can configure velocity controls to limit how much users
+> can spend and the number of transactions they can make in a
+> given span of time. You can apply velocity controls to a
+> single user, to all users associated with a particular card
+> product, or to all users in your program.
+
+#### [Create Velocity Control](https://www.marqeta.com/docs/core-api/velocity-controls#postVelocitycontrols)
+
+You can create a Velocity Control with a single call:
+
+```typescript
+const resp = await client.velocityControl.create({
+  usage_limit: 10,
+  amount_limit: 500,
+  velocity_window: 'DAY',
+  association: {
+    userToken: '77d73971-a3ba-4225-b900-3a0b4c14e646'
+  },
+  currency_code: 'USD',
+})
+```
+
+and the response will look something like this:
+
+```javascript
+{
+  "success": true,
+  "velocity": {
+    "token": "d5170ca3-42c1-435f-8cb5-0a16571c7f68",
+    "association": {
+      "userToken": "77d73971-a3ba-4225-b900-3a0b4c14e646"
+    },
+    "merchantScope": { },
+    "usageLimit": 10,
+    "approvalsOnly": true,
+    "includePurchases": true,
+    "includeWithdrawals": true,
+    "includeTransfers": true,
+    "includeCashback": true,
+    "includeCredits": false,
+    "currencyCode": "USD",
+    "amountLimit": 500,
+    "velocityWindow": "DAY",
+    "active": true
+  }
+}
+```
+
+#### [List Velocity Control](https://www.marqeta.com/docs/core-api/velocity-controls#getVelocitycontrols)
+
+You can list Velocity Controls for a Card Product, or User, with a single call:
+
+```typescript
+const resp = await client.velocityControl.list({
+  cardProduct: 'ffa4020f-e42c-4e98-a63f-43ba2ad446b3'
+})
+```
+
+and the response will look something like this:
+
+```javascript
+{
+  "success": true,
+  "velocityList": {
+    "count": 5,
+    "startIndex": 0,
+    "endIndex": 4,
+    "isMore": true,
+    "data": [
+      {
+        "token": "9f101aa8-374d-46af-a97d-e5c3dffdfc33",
+        "association": {
+          "userToken": "77d73971-a3ba-4225-b900-3a0b4c14e646"
+        },
+        "merchantScope": { },
+        "usageLimit": 10,
+        "approvalsOnly": true,
+        "includePurchases": true,
+        "includeWithdrawals": true,
+        "includeTransfers": true,
+        "includeCashback": true,
+        "includeCredits": false,
+        "currencyCode": "USD",
+        "amountLimit": 500,
+        "velocityWindow": "DAY",
+        "active": true
+      },
+      {
+        "token": "d5170ca3-42c1-435f-8cb5-0a16571c7f68",
+        "association": {
+          "userToken": "77d73971-a3ba-4225-b900-3a0b4c14e646"
+        },
+        "merchantScope": { },
+        "usageLimit": 10,
+        "approvalsOnly": true,
+        "includePurchases": true,
+        "includeWithdrawals": true,
+        "includeTransfers": true,
+        "includeCashback": true,
+        "includeCredits": false,
+        "currencyCode": "USD",
+        "amountLimit": 500,
+        "velocityWindow": "DAY",
+        "active": true
+      },
+      {
+        "token": "7b158172-b9da-4494-8b7c-e4991d75f778",
+        "association": {
+          "userToken": "77e5721e-709d-41e6-b47a-534a839dec25"
+        },
+        "merchantScope": { },
+        "usageLimit": 10,
+        "approvalsOnly": true,
+        "includePurchases": true,
+        "includeWithdrawals": true,
+        "includeTransfers": true,
+        "includeCashback": true,
+        "includeCredits": false,
+        "currencyCode": "USD",
+        "amountLimit": 500,
+        "velocityWindow": "DAY",
+        "active": true
+      },
+      {
+        "token": "d8621497-403e-47b1-b347-f82ec614ccf1",
+        "association": {
+          "userToken": "77e5721e-709d-41e6-b47a-534a839dec25"
+        },
+        "merchantScope": { },
+        "usageLimit": 10,
+        "approvalsOnly": true,
+        "includePurchases": true,
+        "includeWithdrawals": true,
+        "includeTransfers": true,
+        "includeCashback": true,
+        "includeCredits": false,
+        "currencyCode": "USD",
+        "amountLimit": 500,
+        "velocityWindow": "DAY",
+        "active": true
+      },
+      {
+        "token": "38e62ba0-4058-4273-ad36-eee9b865cd04",
+        "association": {
+          "userToken": "77e5721e-709d-41e6-b47a-534a839dec25"
+        },
+        "merchantScope": { },
+        "usageLimit": 10,
+        "approvalsOnly": true,
+        "includePurchases": true,
+        "includeWithdrawals": true,
+        "includeTransfers": true,
+        "includeCashback": true,
+        "includeCredits": false,
+        "currencyCode": "USD",
+        "amountLimit": 500,
+        "velocityWindow": "DAY",
+        "active": true
+      }
+    ]
+  }
+}
+```
+
+#### [Retrieve Velocity Control](https://www.marqeta.com/docs/core-api/velocity-controls#getVelocitycontrols)
+
+You can list Velocity Controls for a Card Product, or User, with a single call:
+
+```typescript
+const resp = await client.velocityControl.retrieve(
+  'd8621497-403e-47b1-b347-f82ec614ccf1'
+)
+```
+
+and the response will look something like this:
+
+```javascript
+{
+  "success": true,
+  "velocity": {
+    "token": "d8621497-403e-47b1-b347-f82ec614ccf1",
+    "association": {
+      "userToken": "77e5721e-709d-41e6-b47a-534a839dec25"
+    },
+    "merchantScope": { },
+    "usageLimit": 10,
+    "approvalsOnly": true,
+    "includePurchases": true,
+    "includeWithdrawals": true,
+    "includeTransfers": true,
+    "includeCashback": true,
+    "includeCredits": false,
+    "currencyCode": "USD",
+    "amountLimit": 500,
+    "velocityWindow": "DAY",
+    "active": true
+  }
+}
+```
+
+#### [Update Velocity Control](https://www.marqeta.com/docs/core-api/velocity-controls#putVelocitycontrolsToken)
+
+You can update a Velocity Controls by making this call using an updated velocity control object:
+
+```typescript
+const resp = await client.velocityControl.update({
+  token: '7b158172-b9da-4494-8b7c-e4991d75f778',
+  association: {
+    userToken: '77e5721e-709d-41e6-b47a-534a839dec25'
+  },
+  merchantScope: { },
+  usageLimit: 10,
+  approvalsOnly: true,
+  includePurchases: true,
+  includeWithdrawals: true,
+  includeTransfers: true,
+  includeCashback: true,
+  includeCredits: false,
+  currencyCode: 'USD',
+  amountLimit: 500,
+  velocityWindow: 'DAY',
+  active: false
+})
+```
+
+and the response will look something like this:
+
+```javascript
+{
+  "success": true,
+  "velocity": {
+    "token": "7b158172-b9da-4494-8b7c-e4991d75f778",
+    "association": {
+      "userToken": "77e5721e-709d-41e6-b47a-534a839dec25"
+    },
+    "merchantScope": { },
+    "usageLimit": 10,
+    "approvalsOnly": true,
+    "includePurchases": true,
+    "includeWithdrawals": true,
+    "includeTransfers": true,
+    "includeCashback": true,
+    "includeCredits": false,
+    "currencyCode": "USD",
+    "amountLimit": 500,
+    "velocityWindow": "DAY",
+    "active": false
+  }
+}
+```
+
+#### [List User Velocity Control Balances](https://www.marqeta.com/docs/core-api/velocity-controls#getVelocitycontrolsUserUsertokenAvailable)
+
+
+You can get a list of the available balances of the velocity controls associated with a user by making this call.
+
+```typescript
+const resp = await client.velocityControl.userBalances({
+  token: '77e5721e-709d-41e6-b47a-534a839dec25',
+  count: 1,
+})
+```
+
+and the output will look something like this:
+
+```javascript
+{
+  "success": true,
+  "velocityList": {
+    "count": 1,
+    "startIndex": 0,
+    "endIndex": 0,
+    "isMore": true,
+    "data": [
+      {
+        "token": "b5b4b7f8-624c-47e8-9eea-de498196ed45",
+        "association": {
+          "userToken": "77d73971-a3ba-4225-b900-3a0b4c14e646"
+        },
+        "merchantScope": { },
+        "usageLimit": 10,
+        "approvalsOnly": true,
+        "includePurchases": true,
+        "includeWithdrawals": true,
+        "includeTransfers": true,
+        "includeCashback": true,
+        "includeCredits": false,
+        "currencyCode": "USD",
+        "amountLimit": 500,
+        "velocityWindow": "DAY",
+        "active": true,
+        "available": {
+          "uses": 10,
+          "amount": 500,
+          "daysRemaining": 1
+        }
+      }
+    ]
+  }
+}
+```
+
+## Development
 
 For those interested in working on the library, there are a few things that
 will make that job a little simpler. The organization of the code is all in
