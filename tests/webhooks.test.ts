@@ -91,7 +91,7 @@ import { Marqeta } from '../src'
     const item = list.webhooksList.data.pop()
 
     if (item && item?.token) {
-      const found = await client.webHooks.byTokenId(item.token)
+      const found = await client.webHooks.retrieve(item.token)
 
       if (found?.webhook?.token) {
         console.log('Success! Webhook was retrieved by token Id: ' + found.webhook.token)
