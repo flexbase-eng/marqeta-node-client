@@ -68,7 +68,7 @@ import { Marqeta } from '../src'
           }
         )
         if (response?.payload?.transaction?.token) {
-          getTransaction = await client.transactions.byTokenId(
+          getTransaction = await client.transactions.retrieve(
             response.payload.transaction.token
           )
           if (getTransaction?.success && getTransaction?.transaction?.token) {
