@@ -290,9 +290,9 @@ and the result will look something like this:
 ### User Transition Calls
 [documentation](https://www.marqeta.com/docs/core-api/user-transitions)
 
-> The Card Transitions object represents state of card resources,
-> and can be used to transition between states, and to retrieve and
-> list state changes for a card resource.
+> The User Transitions object represents the status of user accounts,
+> and can be used to transition between statuses, and to retrieve and
+> list status changes for user accounts.
 
 #### [Create User Transition](https://www.marqeta.com/docs/core-api/user-transitions#postUsertransitions)
 
@@ -2328,6 +2328,313 @@ const resp = await client.authorizationControl.updateMerchantStatus({
     },
     "active": false
   }
+}
+```
+
+### Transactions Calls
+[documentation](https://www.marqeta.com/docs/core-api/transactions)
+
+> The transaction object represents information used for payment 
+> processing, when a cardholder makes a payment online or at a store.
+> Transactions information are captured webhook listeners.
+
+#### [List Transactions](https://www.marqeta.com/docs/core-api/transactions#getTransactions)
+
+You can get a list of transactions by business, user, acting user, merchant, or campaign by.
+supplying the resource token to this call:
+
+```typescript
+const resp = await client.transactions.list({
+  userToken: "43a2e6ea-ed03-4071-b93d-574af470472d",
+  count: 1,
+})
+
+```
+
+and the output will look something like this:
+
+```javascript
+{
+  "count": 2,
+          "start_index": 0,
+          "end_index": 1,
+          "is_more": true,
+          "data": [
+    {
+      "type": "authorization",
+      "state": "DECLINED",
+      "identifier": "36",
+      "token": "b05620ed-655c-46a4-a97f-685f52a82b95",
+      "userToken": "43a2e6ea-ed03-4071-b93d-574af470472d",
+      "actingUserToken": "43a2e6ea-ed03-4071-b93d-574af470472d",
+      "cardToken": "7d5e7a4b-10f8-4078-af0f-c9ce41c0c07e",
+      "cardProductToken": "ffa4020f-e42c-4e98-a63f-43ba2ad446b3",
+      "gpa": {
+        "currencyCode": "USD",
+        "ledgerBalance": 0,
+        "availableBalance": 0,
+        "creditBalance": 0,
+        "pendingCredits": 0,
+        "balances": {
+          "usd": {
+            "currencyCode": "USD",
+            "ledgerBalance": 0,
+            "availableBalance": 0,
+            "creditBalance": 0,
+            "pendingCredits": 0
+          }
+        }
+      },
+      "duration": 15,
+      "createdTime": "2022-06-08T13:37:38Z",
+      "userTransactionTime": "2022-06-08T13:37:38Z",
+      "settlementDate": "2022-06-08T00:00:00Z",
+      "requestAmount": 10,
+      "amount": 10,
+      "currencyCode": "USD",
+      "response": {
+        "code": "1901",
+        "memo": "Card not activated"
+      },
+      "network": "DISCOVER",
+      "acquirerFeeAmount": 0,
+      "acquirer": {
+        "systemTraceAuditNumber": "108641"
+      },
+      "user": {
+        "metadata": {
+          "authenticationAnswer1": "Cashier",
+          "authenticationAnswer2": "Trabant",
+          "authenticationAnswer3": "Blue",
+          "authenticationQuestion1": "What was your first job?",
+          "authenticationQuestion2": "What make was your first car?",
+          "authenticationQuestion3": "What is your favorite color?",
+          "notificationEmail": "jane.doe@home.com",
+          "notificationLanguage": "spa"
+        }
+      },
+      "card": {
+        "lastFour": "1761",
+        "metadata": { }
+      },
+      "issuerReceivedTime": "2022-06-08T13:37:38.141Z",
+      "issuerPaymentNode": "90d8f89dd75c0b6220f80a225b636f96",
+      "networkReferenceId": "091564476891",
+      "cardAcceptor": {
+        "mid": "1234567890",
+        "mcc": "6411",
+        "name": "Marqeta Storefront",
+        "streetAddress": "330 Central Ave. St.",
+        "city": "St. Petersburg",
+        "state": "CA",
+        "postalCode": "33705",
+        "countryCode": "USA"
+      },
+      "pos": {
+        "pinPresent": false,
+        "partialApprovalCapable": true,
+        "purchaseAmountOnly": false,
+        "isRecurring": false,
+        "isInstallment": false
+      }
+    }
+  ]
+}
+```
+#### [Retrieve Transaction](https://www.marqeta.com/docs/core-api/transactions#getTransactionsToken)
+
+You can retrieve a transaction by supplying the transaction token Id to this call:
+
+```typescript
+const resp = await client.transactions.retrieve(
+   'b05620ed-655c-46a4-a97f-685f52a82b95'
+)
+```
+
+and the output will look something like this:
+
+```javascript
+{
+  "success": true,
+  "transaction": {
+    "type": "authorization",
+    "state": "DECLINED",
+    "identifier": "36",
+    "token": "b05620ed-655c-46a4-a97f-685f52a82b95",
+    "userToken": "43a2e6ea-ed03-4071-b93d-574af470472d",
+    "actingUserToken": "43a2e6ea-ed03-4071-b93d-574af470472d",
+    "cardToken": "7d5e7a4b-10f8-4078-af0f-c9ce41c0c07e",
+    "cardProductToken": "ffa4020f-e42c-4e98-a63f-43ba2ad446b3",
+    "gpa": {
+      "currencyCode": "USD",
+      "ledgerBalance": 0,
+      "availableBalance": 0,
+      "creditBalance": 0,
+      "pendingCredits": 0,
+      "balances": {
+        "usd": {
+          "currencyCode": "USD",
+          "ledgerBalance": 0,
+          "availableBalance": 0,
+          "creditBalance": 0,
+          "pendingCredits": 0
+        }
+      }
+    },
+    "duration": 15,
+    "createdTime": "2022-06-08T13:37:38Z",
+    "userTransactionTime": "2022-06-08T13:37:38Z",
+    "settlementDate": "2022-06-08T00:00:00Z",
+    "requestAmount": 10,
+    "amount": 10,
+    "currencyCode": "USD",
+    "response": {
+      "code": "1901",
+      "memo": "Card not activated"
+    },
+    "network": "DISCOVER",
+    "acquirerFeeAmount": 0,
+    "acquirer": {
+      "systemTraceAuditNumber": "108641"
+    },
+    "user": {
+      "metadata": {
+        "authenticationAnswer1": "Cashier",
+        "authenticationAnswer2": "Trabant",
+        "authenticationAnswer3": "Blue",
+        "authenticationQuestion1": "What was your first job?",
+        "authenticationQuestion2": "What make was your first car?",
+        "authenticationQuestion3": "What is your favorite color?",
+        "notificationEmail": "jane.doe@home.com",
+        "notificationLanguage": "spa"
+      }
+    },
+    "card": {
+      "lastFour": "1761",
+      "metadata": { }
+    },
+    "issuerReceivedTime": "2022-06-08T13:37:38.141Z",
+    "issuerPaymentNode": "90d8f89dd75c0b6220f80a225b636f96",
+    "networkReferenceId": "091564476891",
+    "cardAcceptor": {
+      "mid": "1234567890",
+      "mcc": "6411",
+      "name": "Marqeta Storefront",
+      "streetAddress": "330 Central Ave. St.",
+      "city": "St. Petersburg",
+      "state": "CA",
+      "postalCode": "33705",
+      "countryCode": "USA"
+    },
+    "pos": {
+      "pinPresent": false,
+      "partialApprovalCapable": true,
+      "purchaseAmountOnly": false,
+      "isRecurring": false,
+      "isInstallment": false
+    }
+  }
+}
+```
+
+#### [Related Transactions](https://www.marqeta.com/docs/core-api/transactions#getTransactionsToken)
+
+You can retrieve a list of related transactions by supplying the transaction token Id to this call:
+
+```typescript
+const resp = await client.transactions.related(
+   'b05620ed-655c-46a4-a97f-685f52a82b95'
+)
+```
+
+and the output will look something like this:
+
+```javascript
+{
+  "count": 2,
+  "start_index": 0,
+  "end_index": 1,
+  "is_more": true,
+  "data": [
+    {
+      "type": "authorization",
+      "state": "DECLINED",
+      "identifier": "36",
+      "token": "b05620ed-655c-46a4-a97f-685f52a82b95",
+      "userToken": "43a2e6ea-ed03-4071-b93d-574af470472d",
+      "actingUserToken": "43a2e6ea-ed03-4071-b93d-574af470472d",
+      "cardToken": "7d5e7a4b-10f8-4078-af0f-c9ce41c0c07e",
+      "cardProductToken": "ffa4020f-e42c-4e98-a63f-43ba2ad446b3",
+      "gpa": {
+        "currencyCode": "USD",
+        "ledgerBalance": 0,
+        "availableBalance": 0,
+        "creditBalance": 0,
+        "pendingCredits": 0,
+        "balances": {
+          "usd": {
+            "currencyCode": "USD",
+            "ledgerBalance": 0,
+            "availableBalance": 0,
+            "creditBalance": 0,
+            "pendingCredits": 0
+          }
+        }
+      },
+      "duration": 15,
+      "createdTime": "2022-06-08T13:37:38Z",
+      "userTransactionTime": "2022-06-08T13:37:38Z",
+      "settlementDate": "2022-06-08T00:00:00Z",
+      "requestAmount": 10,
+      "amount": 10,
+      "currencyCode": "USD",
+      "response": {
+        "code": "1901",
+        "memo": "Card not activated"
+      },
+      "network": "DISCOVER",
+      "acquirerFeeAmount": 0,
+      "acquirer": {
+        "systemTraceAuditNumber": "108641"
+      },
+      "user": {
+        "metadata": {
+          "authenticationAnswer1": "Cashier",
+          "authenticationAnswer2": "Trabant",
+          "authenticationAnswer3": "Blue",
+          "authenticationQuestion1": "What was your first job?",
+          "authenticationQuestion2": "What make was your first car?",
+          "authenticationQuestion3": "What is your favorite color?",
+          "notificationEmail": "jane.doe@home.com",
+          "notificationLanguage": "spa"
+        }
+      },
+      "card": {
+        "lastFour": "1761",
+        "metadata": { }
+      },
+      "issuerReceivedTime": "2022-06-08T13:37:38.141Z",
+      "issuerPaymentNode": "90d8f89dd75c0b6220f80a225b636f96",
+      "networkReferenceId": "091564476891",
+      "cardAcceptor": {
+        "mid": "1234567890",
+        "mcc": "6411",
+        "name": "Marqeta Storefront",
+        "streetAddress": "330 Central Ave. St.",
+        "city": "St. Petersburg",
+        "state": "CA",
+        "postalCode": "33705",
+        "countryCode": "USA"
+      },
+      "pos": {
+        "pinPresent": false,
+        "partialApprovalCapable": true,
+        "purchaseAmountOnly": false,
+        "isRecurring": false,
+        "isInstallment": false
+      }
+    }
+  ]
 }
 ```
 

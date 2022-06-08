@@ -67,6 +67,7 @@ export class TransactionsApi {
     transactions?: TransactionList,
     error?: MarqetaError,
   }> {
+    console.log(`\nsearch: ${JSON.stringify(search)}`)
     const resp = await this.client.fire('GET',
       'transactions',
       { ...search },
@@ -89,7 +90,7 @@ export class TransactionsApi {
    * Function to take a Transaction token Id and return the Transaction
    * information for that token Id.
    */
-  async byTokenId(token: string): Promise<{
+  async retrieve(token: string): Promise<{
     success: boolean,
     transaction?: Transaction,
     error?: MarqetaError,
