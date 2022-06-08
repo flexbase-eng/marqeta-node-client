@@ -3151,6 +3151,225 @@ and the response will look something like this:
   }
 }
 ```
+
+### MCC Group Calls
+[documentation](https://www.marqeta.com/docs/core-api/mcc-groups)
+
+>The Merchant Category Code (MCC) is a four-digit number assigned 
+> by the card networks to a business based on the goods or 
+> services offered by the business. An MCC group allows you to 
+> automatically increase authorization amounts and to control 
+> expiration of authorizations for the specified MCCs.
+
+#### [Create MCC Group](https://www.marqeta.com/docs/core-api/mcc-groups#postMccgroups)
+
+To create an MCC Group, make a single call to this endpoint:
+
+```typescript
+const resp = await client.mccGroup.create({
+  name: 'TestMccGroup.291',
+  mccs: [
+    '0123',
+    '2224-2230',
+    '3876'
+  ],
+  active: true,
+  config: {
+    authorizationControls: {
+      holdIncrease: {
+        type: 'PERCENT',
+        value: 20
+      },
+      holdExpirationDays: 2
+    }
+  }
+})
+```
+
+and the output will look something like this:
+
+```javascript
+{
+  "success": true,
+  "mccGroup": {
+    "token": "fd172fbf-3bf6-469c-8cac-6a05365f6bc6",
+    "name": "TestMccGroup.291",
+    "mccs": [
+      "0123",
+      "2224-2230",
+      "3876"
+    ],
+    "active": true,
+    "config": {
+      "authorizationControls": {
+        "holdIncrease": {
+          "type": "PERCENT",
+          "value": 20
+        },
+        "holdExpirationDays": 2
+      }
+    }
+  }
+}
+```
+
+#### [Retrieve MCC Group](https://www.marqeta.com/docs/core-api/mcc-groups#getMccgroupsToken)
+
+To retrieve an MCC Group, make a single call to this endpoint:
+
+```typescript
+const resp = await client.mccGroup.retrieve(
+  'fd172fbf-3bf6-469c-8cac-6a05365f6bc6',
+)
+```
+
+and the output will look something like this:
+
+```javascript
+{
+  "success": true,
+  "mccGroup": {
+    "token": "fd172fbf-3bf6-469c-8cac-6a05365f6bc6",
+    "name": "TestMccGroup.291",
+    "mccs": [
+      "0123",
+      "2224-2230",
+      "3876"
+    ],
+    "active": true,
+    "config": {
+      "authorizationControls": {
+        "holdIncrease": {
+          "type": "PERCENT",
+          "value": 20
+        },
+        "holdExpirationDays": 2
+      }
+    }
+  }
+}
+```
+
+#### [List MCC Groups](https://www.marqeta.com/docs/core-api/mcc-groups#getMccgroups)
+
+To get a list of MCC Groups, make a single call to this endpoint with optional field
+filtering parameters:
+
+```typescript
+const resp = await client.mccGroup.list({ 
+  startIndex: 0,
+  count: 2,
+})
+```
+
+and the result will look something like this:
+
+```javascript
+{
+  "success": true,
+  "mccGroups": {
+    "count": 2,
+    "startIndex": 0,
+    "endIndex": 1,
+    "isMore": true,
+    "data": [
+      {
+        "token": "c732f60a-57cf-4ff8-83a7-c2e23027be3e",
+        "name": "TestMccGroup.201",
+        "mccs": [
+          "0123",
+          "2224-2230",
+          "3876"
+        ],
+        "active": true,
+        "config": {
+          "authorizationControls": {
+            "holdIncrease": {
+              "type": "PERCENT",
+              "value": 20
+            },
+            "holdExpirationDays": 2
+          }
+        }
+      },
+      {
+        "token": "fd172fbf-3bf6-469c-8cac-6a05365f6bc6",
+        "name": "UpdatedMccGroup.11",
+        "mccs": [
+          "0123",
+          "2224-2230",
+          "3876"
+        ],
+        "active": true,
+        "config": {
+          "authorizationControls": {
+            "holdIncrease": {
+              "type": "PERCENT",
+              "value": 20
+            },
+            "holdExpirationDays": 2
+          }
+        }
+      }
+    ]
+  }
+}
+```
+
+#### [Update MCC Group](https://www.marqeta.com/docs/core-api/mcc-groups#putMccgroupsToken)
+
+To update an MCC Groups, make a single call to this endpoint with an 
+updated MCC Group object.
+
+```typescript
+const resp = await client.mccGroup.update({
+  token: "4ad853ec-3367-4254-b3a4-a47c114510ea",
+  name: "UpdatedMccGroup.391",
+  mccs: [
+    "0123",
+    "2224-2230",
+    "3876"
+  ],
+  active: true,
+  config: {
+    authorizationControls: {
+      holdIncrease: {
+        type: "PERCENT",
+        value: 20
+      },
+      holdExpirationDays: 2
+    }
+  }
+})
+```
+
+and the result will look something like this:
+
+```javascript
+{
+  "success": true,
+  "mccGroup": {
+    "token": "4ad853ec-3367-4254-b3a4-a47c114510ea",
+    "name": "UpdatedMccGroup.391",
+    "mccs": [
+      "0123",
+      "2224-2230",
+      "3876"
+    ],
+    "active": true,
+    "config": {
+      "authorizationControls": {
+        "holdIncrease": {
+          "type": "PERCENT",
+          "value": 20
+        },
+        "holdExpirationDays": 2
+      }
+    }
+  }
+}
+```
+
 ## Development
 
 For those interested in working on the library, there are a few things that

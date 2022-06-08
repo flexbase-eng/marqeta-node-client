@@ -75,7 +75,7 @@ export class MccGroupApi {
    * Function to take a MCC Group token Id, send that to Marqeta, and return
    * the MCC Group information.
    */
-  async get(token: string): Promise<{
+  async retrieve(token: string): Promise<{
     success: boolean,
     mccGroup?: MccGroup,
     error?: MarqetaError,
