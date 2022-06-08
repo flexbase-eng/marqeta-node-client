@@ -2823,7 +2823,7 @@ and the response will look something like this:
   "success": true,
   "velocity": {
     "token": "d8621497-403e-47b1-b347-f82ec614ccf1",
-      "association": {
+     "association": {
       "userToken": "77e5721e-709d-41e6-b47a-534a839dec25"
     },
     "merchantScope": { },
