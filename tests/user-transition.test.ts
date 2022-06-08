@@ -46,7 +46,7 @@ import { Marqeta } from '../src'
 
   if (trans?.transition?.token) {
     let getTrans
-    getTrans = await client.userTransition.byTokenId(trans?.transition?.token)
+    getTrans = await client.userTransition.retrieve(trans?.transition?.token)
 
     if (getTrans?.transition?.token) {
       console.log('Success! We were able to get the Transition status.')
@@ -63,7 +63,11 @@ import { Marqeta } from '../src'
   console.log('testing list User transitions by User token Id...')
   if (testUser?.token) {
     let listTrans
-    listTrans = await client.userTransition.list({ ...testUser })
+    listTrans = await client.userTransition.list({
+      token: testUser.token,
+      count: 2,
+    })
+    console.log(`${JSON.stringify(listTrans)}`)
 
     if (listTrans?.success && listTrans?.transitionList?.count) {
       console.log('Success! We were able to get a list of User transitions.')
