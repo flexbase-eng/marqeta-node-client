@@ -76,7 +76,7 @@ import { Marqeta } from '../src'
   if (velocityList?.success && Array.isArray(velocityList?.velocityList?.data)) {
     oneVelocity = velocityList?.velocityList?.data.pop()
     if (oneVelocity?.token) {
-      const foundVelocity = await client.velocityControl.byTokenId(
+      const foundVelocity = await client.velocityControl.retrieve(
         oneVelocity.token
       )
       if (foundVelocity.success) {
@@ -116,7 +116,7 @@ import { Marqeta } from '../src'
 
   console.log('getting a list of user velocity controls...')
   if (user?.token) {
-    const control = await client.velocityControl.byUser({
+    const control = await client.velocityControl.userBalances({
       token: user.token,
       count: 1
     })
