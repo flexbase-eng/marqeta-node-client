@@ -3404,8 +3404,8 @@ Use this call to create, or update, a Card PIN:
 
 ```typescript
 const resp = await client.cardPin.upsert(
-        cardToken: '27419f5e-deef-4016-9c2a-58bfee6cef03',
-        pin: '1234',
+  cardToken: '27419f5e-deef-4016-9c2a-58bfee6cef03',
+  pin: '1234',
 )
 ```
 
