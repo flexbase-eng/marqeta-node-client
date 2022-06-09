@@ -3739,4 +3739,20 @@ $ npm run ts tests/business.test.ts
 > marqeta-node-client@0.1.0 ts
 > ts-node -r dotenv/config "tests/business.test.ts"
 
-Success! Marqeta Client created.
+creating Business account
+Success! The Business account "AcmeZinc INC" was created with token: 71e0662d-4d3c-4adc-adda-360af2241868
+getting a list of Businesses...
+Success! 2 Businesses were retrieved.
+retrieving Business account by token id...
+getting Business account by id: 71e0662d-4d3c-4adc-adda-360af2241868
+Success! The Business account was found by token id: "71e0662d-4d3c-4adc-adda-360af2241868"
+updating Business account...
+Success! The Business account name was updated from "AcmeZinc INC" to "AcmeZinc INC8"
+```
+
+Each of the tests will run a series of calls through the Client, and check the
+results to see that the operation succeeded. As shown, if the steps all
+report back with `Success!` then things are working.
+
+If there is an issue with one of the calls, then an `Error!` will be printed
+out, and the data returned from the client will be dumped to the console.
