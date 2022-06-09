@@ -39,7 +39,7 @@ import { Marqeta } from '../src';
             channel: 'API',
             cardToken: newCard.card.token,
           }
-          console.log('transitioning new Card to ACTIVE status...')
+          console.log('transitioning new Card to ACTIVE state...')
           cardTransition = await client.cardTransition.create(state)
 
           if (cardTransition?.success) {

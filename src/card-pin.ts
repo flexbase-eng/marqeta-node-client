@@ -87,7 +87,7 @@ export class CardPinApi {
    * Verification Method, send those to Marqeta, and have the PIN revealed for
    * an existing, active card.
    */
-  async revealPin(cardPin: Partial<CardPin>): Promise<{
+  async reveal(cardPin: Partial<CardPin>): Promise<{
     success: boolean,
     error?: MarqetaError,
   }> {

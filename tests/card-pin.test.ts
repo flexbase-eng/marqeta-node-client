@@ -54,7 +54,23 @@ import { Marqeta } from '../src'
     if (!newCard?.card?.token) {
       console.log('Error! Unable to create new Card.')
       console.log(newCard)
+    } else {
+      console.log('transitioning new Card to ACTIVE status...')
+      const cardTransition = await client.cardTransition.create({
+        state: 'ACTIVE',
+        reasonCode: '02',
+        channel: 'API',
+        cardToken: newCard.card.token,
+      })
+
+      if (cardTransition.success) {
+        console.log('Success! Card transitioned to ACTIVE state.')
+      } else {
+        console.log('Error! Card *not* transitioned to ACTIVE state.')
+        console.log(cardTransition)
+      }
     }
+
   } else if (!product?.token) {
     console.log('Error! Empty product token Id.')
     console.log(product)
@@ -68,9 +84,7 @@ import { Marqeta } from '../src'
   if (newCard?.card?.token) {
     mockPin.cardToken = newCard.card.token
     mockPin.controltokenType = 'SET_PIN'
-    console.log(`${JSON.stringify(mockPin)}\n`)
     controlToken = await client.cardPin.createControlToken(mockPin)
-    console.log(`${JSON.stringify(controlToken)}\n`)
 
     if (controlToken.success) {
       console.log('Success! Card PIN Control Token created.')
@@ -88,9 +102,7 @@ import { Marqeta } from '../src'
   if (controlToken?.cardPin?.controlToken) {
     mockPin.pin = '1234'
     mockPin.controlToken = controlToken.cardPin.controlToken
-    console.log(`${JSON.stringify(mockPin)}\n`)
     upsertPin = await client.cardPin.upsert(mockPin)
-    console.log(`${JSON.stringify(upsertPin)}\n`)
 
     if (upsertPin?.success) {
       console.log('Success! Card PIN was set successfully.')
@@ -109,9 +121,7 @@ import { Marqeta } from '../src'
     mockPin.controlToken = controlToken.cardPin.controlToken
     mockPin.cardholderVerificationMethod = 'LOGIN'
     console.log(mockPin)
-    console.log(`${JSON.stringify(mockPin)}\n`)
-    const revealPin = await client.cardPin.revealPin(mockPin)
-    console.log(`${JSON.stringify(revealPin)}\n`)
+    const revealPin = await client.cardPin.reveal(mockPin)
 
     if (revealPin?.success) {
       console.log('Success! Card PIN was successfully revealed.')
