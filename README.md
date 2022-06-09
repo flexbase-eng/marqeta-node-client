@@ -3435,6 +3435,96 @@ The response will look like this:
 }
 ```
 
+### Program Funding Source Calls
+[documentation](https://www.marqeta.com/docs/core-api/program-funding-sources)
+
+The Program Funding source object represents bank account information from 
+which funds are drawn for JIT (Just-in-Time) funded transactions. 
+
+#### [Create Program Funding Source](https://www.marqeta.com/docs/core-api/program-funding-sources#postFundingsourcesProgram)
+
+Use this call to create a Program Funding Source:
+
+```typescript
+const resp = await client.fundingProgram.create({
+  name: 'funding-test',
+  active: true,
+})
+```
+
+The response will look something like this:
+
+```javascript
+ {
+  "success": true,
+  "funding": {
+    "name": "funding-test",
+    "active": true,
+    "token": "7c745516-21bf-4cf1-8a77-b75ebf9af125",
+    "createdTime": "2022-06-09T18:06:07Z",
+    "lastModifiedTime": "2022-06-09T18:06:07Z",
+    "account": "12.003.001.000000"
+  }
+} 
+```
+
+#### [Retrieve Program Funding Source](https://www.marqeta.com/docs/core-api/program-funding-sources#getFundingsourcesProgramToken)
+
+Use this call to retrieve a Program Funding Source:
+
+```typescript
+const resp = await client.fundingProgram.retrieve(
+  '7c745516-21bf-4cf1-8a77-b75ebf9af125',
+)
+```
+
+The response will look something like this:
+
+```javascript
+ {
+  "success": true,
+  "funding": {
+    "name": "funding-test",
+    "active": true,
+    "token": "7c745516-21bf-4cf1-8a77-b75ebf9af125",
+    "createdTime": "2022-06-09T18:06:07Z",
+    "lastModifiedTime": "2022-06-09T18:06:07Z",
+    "account": "12.003.001.000000"
+  }
+} 
+```
+
+#### [Update Program Funding Source](https://www.marqeta.com/docs/core-api/program-funding-sources#putFundingsourcesProgramToken)
+
+Use this call to update a Program Funding Source:
+
+```typescript
+const resp = await client.fundingProgram.retrieve({
+  name: 'updated-funding-test',
+  active: true,
+  token: '7c745516-21bf-4cf1-8a77-b75ebf9af125',
+  createdTime: '2022-06-09T18:06:07Z',
+  lastModifiedTime: '2022-06-09T18:06:07Z',
+  account: '12.003.001.000000'
+})
+```
+
+The response will look something like this:
+
+```javascript
+{
+  "success": true,
+  "funding": {
+    "name": "updated-funding-test",
+    "active": true,
+    "token": "7c745516-21bf-4cf1-8a77-b75ebf9af125",
+    "createdTime": "2022-06-09T18:06:07Z",
+    "lastModifiedTime": "2022-06-09T18:06:07Z",
+    "account": "12.003.001.000000"
+  }
+} 
+```
+
 ## Development
 
 For those interested in working on the library, there are a few things that
