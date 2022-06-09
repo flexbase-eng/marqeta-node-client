@@ -3525,6 +3525,181 @@ The response will look something like this:
 } 
 ```
 
+### Account Holder Groups Calls
+[documentation](https://www.marqeta.com/docs/core-api/account-holder-groups)
+
+The Account Holder Groups object represents a resource that allows you 
+to configure multiple account holders (user and/or business resources) as a group.
+
+#### [Create Account Holder Groups](https://www.marqeta.com/docs/core-api/account-holder-groups#postAccountholdergroups)
+
+Use this call to create an Account Holder Group:
+
+```typescript
+const resp = await client.accountHolderGroup.create({
+  name: 'account-holder-group-test-kyb',
+})
+```
+
+and the response will be something like this:
+
+```javascript
+{
+  "success": true,
+  "group": {
+    "token": "76bf1703-bb7a-4d78-a395-528c16823c2c",
+    "name": "account-holder-group-test-kyb",
+    "config": {
+      "kycRequired": "NEVER",
+      "isReloadable": true,
+      "preKycControls": {
+        "cashAccessEnabled": false,
+        "internationalEnabled": false,
+        "balanceMax": 1000,
+        "enableNonProgramLoads": false,
+        "isReloadablePreKyc": false
+      }
+    }
+  }
+}
+```
+
+#### [Retrieve Account Holder Groups](https://www.marqeta.com/docs/core-api/account-holder-groups#getAccountholdergroupsToken)
+
+Use this call to retrieve an Account Holder Group:
+
+```typescript
+const resp = await client.accountHolderGroup.retrieve({
+  '76bf1703-bb7a-4d78-a395-528c16823c2c',
+})
+```
+
+The response will look something like this:
+
+```javascript
+{
+  "success": true,
+  "group": {
+    "token": "76bf1703-bb7a-4d78-a395-528c16823c2c",
+    "name": "account-holder-group-test-kyb",
+    "config": {
+      "kycRequired": "NEVER",
+      "isReloadable": true,
+      "preKycControls": {
+        "cashAccessEnabled": false,
+        "internationalEnabled": false,
+        "balanceMax": 1000,
+        "enableNonProgramLoads": false,
+        "isReloadablePreKyc": false
+      }
+    }
+  }
+}
+```
+
+#### [Update Account Holder Groups](https://www.marqeta.com/docs/core-api/account-holder-groups#putAccountholdergroupsToken)
+
+Use this call to update an Account Holder Group using an updated Account Holder Group object:
+
+```typescript
+const resp = await client.accountHolderGroup.update({
+  "token": "76bf1703-bb7a-4d78-a395-528c16823c2c",
+  "name": "updated-account-holder-group-test-kyb",
+  "config": {
+    "kycRequired": "NEVER",
+    "isReloadable": true,
+    "preKycControls": {
+      "cashAccessEnabled": false,
+      "internationalEnabled": false,
+      "balanceMax": 1000,
+      "enableNonProgramLoads": false,
+      "isReloadablePreKyc": false
+    }
+  }
+})
+```
+
+The response will look like this:
+
+```javascript
+{
+  "success": true,
+  "group": {
+    "token": "76bf1703-bb7a-4d78-a395-528c16823c2c",
+    "name": "updated-accountholder-group-test-kyb",
+    "config": {
+      "kycRequired": "NEVER",
+      "isReloadable": true,
+      "preKycControls": {
+        "cashAccessEnabled": false,
+        "internationalEnabled": false,
+        "balanceMax": 1000,
+        "enableNonProgramLoads": false,
+        "isReloadablePreKyc": false
+      }
+    }
+  }
+}
+```
+
+#### [List Account Holder Groups](https://www.marqeta.com/docs/core-api/account-holder-groups#putAccountholdergroupsToken)
+
+Use this endpoint to get a list of Account Holder Groups:
+
+```typescript
+const resp = await client.accountHolderGroup.list({ 
+  count: 2,
+  startIndex: 0,
+  sortBy: 'createdTime',
+})
+```
+
+The response will look something like this:
+
+```javascript
+{
+  "success": true,
+  "groups": {
+    "count": 2,
+    "startIndex": 0,
+    "endIndex": 1,
+    "isMore": true,
+    "data": [
+      {
+        "token": "76bf1703-bb7a-4d78-a395-528c16823c2c",
+        "name": "updated-accountholder-group-test-kyb",
+        "config": {
+          "kycRequired": "NEVER",
+          "isReloadable": true,
+          "preKycControls": {
+            "cashAccessEnabled": false,
+            "internationalEnabled": false,
+            "balanceMax": 1000,
+            "enableNonProgramLoads": false,
+            "isReloadablePreKyc": false
+          }
+        }
+      },
+      {
+        "token": "a22b1d9a-1619-45e3-9bed-b960930fcde4",
+        "name": "account-holder-group-test-kyb",
+        "config": {
+          "kycRequired": "NEVER",
+          "isReloadable": true,
+          "preKycControls": {
+            "cashAccessEnabled": false,
+            "internationalEnabled": false,
+            "balanceMax": 1000,
+            "enableNonProgramLoads": false,
+            "isReloadablePreKyc": false
+          }
+        }
+      }
+    ]
+  }
+}
+```
+
 ## Development
 
 For those interested in working on the library, there are a few things that
