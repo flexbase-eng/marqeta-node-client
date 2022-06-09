@@ -14,106 +14,114 @@ import { Marqeta } from '../src'
 
   const mockPin = {
     cardToken: '',
-    cardTokenType: '',
+    cardtokenType: '',
     controlToken: '',
+    controltokenType: '',
     cardholderVerificationMethod: '',
     pin: '',
   }
 
-  console.log('getting a list of users...')
+  let newCard, user, controlToken, product, products, upsertPin
 
-  let newCard, user, pin
+  console.log('getting Marqeta user...')
   const users = await client.user.list()
 
   if (users?.userList?.count && Array.isArray(users?.userList?.data)) {
-    console.log('getting Card Products...')
-    const products = await client.cardProduct.list()
+    products = await client.cardProduct.list()
     user = users?.userList?.data.pop()
-
-
-    if (products?.cardProducts?.count
-      && Array.isArray(products?.cardProducts?.data)) {
-      const product = products?.cardProducts?.data.pop()
-      console.log('creating new card PIN...')
-
-      if (user?.token && product?.token) {
-        console.log('transitioning user to ACTIVE status...')
-
-        console.log('creating a new Card PIN Control Token...')
-        mockCard.userToken = user.token
-        mockCard.cardProductToken = product.token
-        newCard = await client.card.create(mockCard)
-
-        if (newCard.success && newCard?.card?.token) {
-
-          mockPin.cardToken = newCard.card.token
-          pin = await client.cardPin.createControlToken(mockPin)
-
-          if (pin.success) {
-            console.log('Success! Card PIN Control Token created.')
-          } else {
-            console.log('Error! Unable to create card PIN Control Token.')
-            console.log(pin)
-          }
-
-          console.log('creating and setting card PIN...')
-
-          if (pin?.cardPin?.controlToken) {
-            mockPin.pin = '1234'
-            mockPin.controlToken = pin.cardPin.controlToken
-            const upsertPin = await client.cardPin.upsert(mockPin)
-
-            if (upsertPin?.success) {
-              console.log('Success! Card PIN was set successfully.')
-            } else {
-              console.log('Error! Unable to set Card PIN.')
-              console.log(upsertPin)
-            }
-          } else {
-            console.log('Error! Empty card PIN control token .')
-            console.log(pin)
-          }
-
-          console.log('revealing card PIN...')
-
-          if (pin?.cardPin?.controlToken) {
-            mockPin.controlToken = pin.cardPin.controlToken
-            mockPin.cardholderVerificationMethod = 'BIOMETRIC_FACE'
-            console.log(mockPin)
-            const revealPin = await client.cardPin.revealPin(mockPin)
-
-            if (revealPin?.success) {
-              console.log('Success! Card PIN was successfully revealed.')
-            } else {
-              console.log('Error! Unable to reveal Card PIN.')
-              console.log(revealPin)
-            }
-          } else {
-            console.log('Error! Empty card PIN control token .')
-            console.log(pin)
-          }
-
-        } else {
-          console.log('Error! Empty new card token Id.')
-          console.log(newCard)
-        }
-
-      }
-      else if (!product?.token) {
-        console.log('Error! Empty product token Id.')
-        console.log(product)
-      }
-      else if (!user?.token) {
-        console.log('Error! Empty user token Id.')
-        console.log(user)
-      }
-    } else {
-      console.log('Error! No Card Products found.')
-      console.log(products)
-    }
   } else {
     console.log('Error! No users were found.')
     console.log(users)
+  }
+
+  console.log('getting Card Products...')
+
+  if (products?.cardProducts?.count
+    && Array.isArray(products?.cardProducts?.data)) {
+    product = products?.cardProducts?.data.pop()
+  } else {
+    console.log('Error! No Card Products found.')
+    console.log(products)
+  }
+
+  console.log('creating a new Card...')
+
+  if (user?.token && product?.token) {
+    mockCard.userToken = user.token
+    mockCard.cardProductToken = product.token
+    newCard = await client.card.create(mockCard)
+
+    if (!newCard?.card?.token) {
+      console.log('Error! Unable to create new Card.')
+      console.log(newCard)
+    }
+  } else if (!product?.token) {
+    console.log('Error! Empty product token Id.')
+    console.log(product)
+  } else if (!user?.token) {
+    console.log('Error! Empty user token Id.')
+    console.log(user)
+  }
+
+  console.log('creating a new Card PIN Control Token...')
+
+  if (newCard?.card?.token) {
+    mockPin.cardToken = newCard.card.token
+    mockPin.controltokenType = 'SET_PIN'
+    console.log(`${JSON.stringify(mockPin)}\n`)
+    controlToken = await client.cardPin.createControlToken(mockPin)
+    console.log(`${JSON.stringify(controlToken)}\n`)
+
+    if (controlToken.success) {
+      console.log('Success! Card PIN Control Token created.')
+    } else {
+      console.log('Error! Unable to create card PIN Control Token.')
+      console.log(controlToken)
+    }
+  } else {
+    console.log('Error! Empty Card token Id.')
+    console.log(newCard)
+  }
+
+  console.log('creating and setting card PIN...')
+
+  if (controlToken?.cardPin?.controlToken) {
+    mockPin.pin = '1234'
+    mockPin.controlToken = controlToken.cardPin.controlToken
+    console.log(`${JSON.stringify(mockPin)}\n`)
+    upsertPin = await client.cardPin.upsert(mockPin)
+    console.log(`${JSON.stringify(upsertPin)}\n`)
+
+    if (upsertPin?.success) {
+      console.log('Success! Card PIN was set successfully.')
+    } else {
+      console.log('Error! Unable to set Card PIN.')
+      console.log(upsertPin)
+    }
+  } else {
+    console.log('Error! Empty Control token Id.')
+    console.log(controlToken)
+  }
+
+  console.log('revealing card PIN...')
+
+  if (controlToken?.cardPin?.controlToken) {
+    mockPin.controlToken = controlToken.cardPin.controlToken
+    mockPin.cardholderVerificationMethod = 'LOGIN'
+    console.log(mockPin)
+    console.log(`${JSON.stringify(mockPin)}\n`)
+    const revealPin = await client.cardPin.revealPin(mockPin)
+    console.log(`${JSON.stringify(revealPin)}\n`)
+
+    if (revealPin?.success) {
+      console.log('Success! Card PIN was successfully revealed.')
+    } else {
+      console.log('Error! Unable to reveal Card PIN.')
+      console.log(revealPin)
+    }
+  } else {
+    console.log('Error! Empty Card PIN.')
+    console.log(newCard)
   }
 
 })()

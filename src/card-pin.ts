@@ -30,12 +30,12 @@ export class CardPinApi {
   }> {
     const {
       cardToken,
-      controltokenType,
+      cardTokenType,
     } = cardPin
     const resp = await this.client.fire('POST',
       'pins/controltoken',
       undefined,
-      { cardToken, controltokenType }
+      { cardToken, cardTokenType }
     )
     // catch any errors...
     if (resp?.payload?.errorCode) {
@@ -57,7 +57,6 @@ export class CardPinApi {
    */
   async upsert(cardPin: Partial<CardPin>): Promise<{
     success: boolean,
-    cardPin?: CardPin,
     error?: MarqetaError,
   }> {
     const {
@@ -80,7 +79,7 @@ export class CardPinApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, cardPin: { ...resp.payload } }
+    return { success: !resp?.payload?.errorCode }
   }
 
   /*
@@ -90,7 +89,6 @@ export class CardPinApi {
    */
   async revealPin(cardPin: Partial<CardPin>): Promise<{
     success: boolean,
-    cardPin?: CardPin,
     error?: MarqetaError,
   }> {
     const {
@@ -113,6 +111,6 @@ export class CardPinApi {
         },
       }
     }
-    return { success: !resp?.payload?.errorCode, cardPin: { ...resp.response } }
+    return { success: !resp?.payload?.errorCode }
   }
 }
