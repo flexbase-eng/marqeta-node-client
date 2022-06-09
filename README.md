@@ -3370,6 +3370,71 @@ and the result will look something like this:
 }
 ```
 
+### Card PIN Calls
+[documentation](https://www.marqeta.com/docs/core-api/pins)
+
+> Use this endpoint to create, update, or reveal a personal 
+> identification number (PIN) for a card.
+
+#### [Create Card PIN Control Token](https://www.marqeta.com/docs/core-api/pins#postPinsControltoken)
+
+A Control Token is required in order to create a Card PIN.  Use this call
+to create a Card PIN control token:
+
+```typescript
+const resp = await client.cardPin.createControlToken({
+  cardToken: '27419f5e-deef-4016-9c2a-58bfee6cef03',
+})
+```
+
+and the response will look something like this:
+
+```javascript
+{
+  "success": true,
+  "cardPin": {
+    "controlToken": "66a35e5b-95df-4e26-86a4-f96f604fca08"
+  }
+}
+```
+
+#### [Create Card PIN Control Token](https://www.marqeta.com/docs/core-api/pins#putPins)
+
+Use this call to create, or update, a Card PIN:
+
+```typescript
+const resp = await client.cardPin.upsert(
+        cardToken: '27419f5e-deef-4016-9c2a-58bfee6cef03',
+        pin: '1234',
+)
+```
+
+The response will look something like this:
+
+```javascript
+{
+  "success":true
+}
+```
+
+#### [Reveal Card PIN](https://www.marqeta.com/docs/core-api/pins#revealPins)
+
+Use this call to reveal the PIN of an existing, active:
+
+```typescript
+const resp = await client.cardPin.reveal(
+  cardToken: '27419f5e-deef-4016-9c2a-58bfee6cef03',
+  pin: '1234',
+)
+```
+The response will look like this:
+
+```javascript
+{
+  "success":true
+}
+```
+
 ## Development
 
 For those interested in working on the library, there are a few things that
