@@ -61,7 +61,7 @@ export class FundingGatewayApi {
    * Function that takes a funding source token Id, sends that to Marqeta,
    * which returns the funding source information.
    */
-  async get(token: string): Promise<{
+  async retrieve(token: string): Promise<{
     success: boolean,
     fundingGateway?: FundingGateway,
     error?: MarqetaError,
