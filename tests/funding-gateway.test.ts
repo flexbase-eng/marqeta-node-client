@@ -19,7 +19,9 @@ import { Marqeta } from '../src'
   }
 
   console.log('creating funding gateway source...')
+  console.log(`${JSON.stringify(mockSource)}`)
   const funding = await client.fundingGatewayApi.create(mockSource)
+  console.log(`${JSON.stringify(funding)}`)
   mockSource.basicAuthPassword = mockSource.basicAuthPassword.slice(0, 20)
   if (funding.success && funding?.fundingGateway?.token) {
     console.log('Success! Funding gateway source created.')
@@ -31,7 +33,8 @@ import { Marqeta } from '../src'
   console.log('retrieving funding gateway source...')
   let found
   if (funding?.fundingGateway?.token) {
-    found = await client.fundingGatewayApi.get(funding?.fundingGateway?.token)
+    found = await client.fundingGatewayApi.retrieve(funding?.fundingGateway?.token)
+    console.log(`${JSON.stringify(found)}`)
     if (found.success && found?.fundingGateway?.token) {
       console.log('Success! Funding gateway retrieved.')
     } else {
@@ -48,7 +51,9 @@ import { Marqeta } from '../src'
     const foundName = found.fundingGateway.name
     found.fundingGateway.name = 'updated_name_' + Math.floor(65536 * 100) + 1,
     found.fundingGateway.name = found.fundingGateway.name.slice(0, 40)
+    console.log(`${JSON.stringify(found)}`)
     const updated = await client.fundingGatewayApi.update(found.fundingGateway)
+    console.log(`${JSON.stringify(updated)}`)
     if (updated.success && updated?.fundingGateway?.token) {
       console.log('Success! Funding gateway name changed from "' + foundName +
         '" to "' + found.fundingGateway.name + '"')
