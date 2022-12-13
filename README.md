@@ -3438,8 +3438,8 @@ The response will look like this:
 ### Program Funding Source Calls
 [documentation](https://www.marqeta.com/docs/core-api/program-funding-sources)
 
-The Program Funding source object represents bank account information from 
-which funds are drawn for JIT (Just-in-Time) funded transactions. 
+> The Program Funding source object represents bank account information from 
+> which funds are drawn for JIT (Just-in-Time) funded transactions. 
 
 #### [Create Program Funding Source](https://www.marqeta.com/docs/core-api/program-funding-sources#postFundingsourcesProgram)
 
@@ -3528,8 +3528,8 @@ The response will look something like this:
 ### Account Holder Groups Calls
 [documentation](https://www.marqeta.com/docs/core-api/account-holder-groups)
 
-The Account Holder Groups object represents a resource that allows you 
-to configure multiple account holders (user and/or business resources) as a group.
+> The Account Holder Groups object represents a resource that allows you 
+> to configure multiple account holders (user and/or business resources) as a group.
 
 #### [Create Account Holder Groups](https://www.marqeta.com/docs/core-api/account-holder-groups#postAccountholdergroups)
 
@@ -3696,6 +3696,139 @@ The response will look something like this:
         }
       }
     ]
+  }
+}
+```
+
+### Funding Gateway Calls
+[documentation](https://www.marqeta.com/docs/core-api/program-gateway-funding-sources)
+
+> A program gateway funding source represents a bank account from which funds are drawn 
+> for Gateway Just-in-Time (JIT) Funding transactions.
+
+
+#### [Create Funding Gateway](https://www.marqeta.com/docs/core-api/program-gateway-funding-sources#postFundingsourcesProgramgateway)
+
+Use this call to create a Funding Gateway source:
+
+```typescript
+const resp = await client.fundingGatewayApi.create({
+  name: "funding_gate_way_test_65536001",
+  url: "https://www.ipsumlorem.com",
+  token: "",
+  basicAuthUsername: "ipsum_lorem",
+  basicAuthPassword: "abbykj26stringzIl2-Mzk65536001",
+  customHeader: {
+    X_header_name: "x_header_value"
+  }
+})
+```
+
+and the response will look something like this:
+
+```javascript
+{
+  "success": true,
+  "fundingGateway": {
+    "url": "https://www.ipsumlorem.com",
+    "version": "2.0",
+    "name": "funding_gate_way_test_65536001",
+    "active": true,
+    "token": "8faa64cb-20db-42c9-83f3-4393f1fc7819",
+    "createdTime": "2022-06-10T13:22:11Z",
+    "lastModifiedTime": "2022-06-10T13:22:11Z",
+    "account": "12.003.001.000000",
+    "basicAuthUsername": "ipsum_lorem",
+    "basicAuthPassword": "abbykj26stringzIl2-Mzk65536001",
+    "timeoutMillis": 3000,
+    "customHeader": {
+      "xHeaderName": "x_header_value"
+    },
+    "useMtls": false
+  }
+}
+```
+
+#### [Retrieve Funding Gateway](https://www.marqeta.com/docs/core-api/program-gateway-funding-sources#getFundingsourcesProgramgatewayToken)
+
+Use this call to retrieve a Funding Gateway source:
+
+```typescript
+const resp = await client.fundingGatewayApi.retrieve(
+  '8faa64cb-20db-42c9-83f3-4393f1fc7819'
+)
+```
+
+and the response will look something like this:
+
+```javascript
+{
+  "success": true,
+  "fundingGateway": {
+    "url": "https://www.ipsumlorem.com",
+    "version": "2.0",
+    "name": "funding_gate_way_test_65536001",
+    "active": true,
+    "token": "8faa64cb-20db-42c9-83f3-4393f1fc7819",
+    "createdTime": "2022-06-10T13:22:11Z",
+    "lastModifiedTime": "2022-06-10T13:22:11Z",
+    "account": "12.003.001.000000",
+    "basicAuthUsername": "ipsum_lorem",
+    "basicAuthPassword": "abbykj26stringzIl2-Mzk65536001",
+    "timeoutMillis": 3000,
+    "customHeader": {
+      "xHeaderName": "x_header_value"
+    },
+    "useMtls": false
+  }
+}
+```
+
+#### [Update Funding Gateway](https://www.marqeta.com/docs/core-api/program-gateway-funding-sources#putFundingsourcesProgramgatewayToken)
+
+Use this call to update a Funding Gateway source:
+
+```typescript
+const resp = await client.fundingGatewayApi.update({
+  url: 'https://www.ipsumlorem.com',
+  version: '2.0',
+  name: 'updated_name_65536001',
+  active: true,
+  token: '8faa64cb-20db-42c9-83f3-4393f1fc7819',
+  createdTime: '2022-06-10T13:22:11Z',
+  lastModifiedTime: '2022-06-10T13:22:11Z',
+  account: '12.003.001.000000',
+  basicAuthUsername: 'ipsum_lorem',
+  basicAuthPassword: 'abbykj26stringzIl2-Mzk65536001',
+  timeoutMillis: 3000,
+  customHeader: {
+    xHeaderName: 'x_header_value'
+  },
+  useMtls: false
+})
+```
+
+The response will look like this:
+
+```javascript
+{
+  "success": true,
+  "fundingGateway": {
+    "url": "https://www.ipsumlorem.com",
+    "version": "2.0",
+    "name": "updated_name_65536001",
+    "active": true,
+    "token": "8faa64cb-20db-42c9-83f3-4393f1fc7819",
+    "createdTime": "2022-06-10T13:22:11Z",
+    "lastModifiedTime": "2022-06-10T13:22:11Z",
+    "account": "12.003.001.000000",
+    "basicAuthUsername": "ipsum_lorem",
+    "basicAuthPassword": "abbykj26stringzIl2-Mzk65536001",
+    "timeoutMillis": 3000,
+    "customHeader": {
+      "xHeaderName": "x_header_value"
+    },
+    "useMtls": false
   }
 }
 ```
